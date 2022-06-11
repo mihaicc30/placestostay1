@@ -1,0 +1,145 @@
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<%- include('./partials/header') %>
+
+    <%- include ('./partials/messages') %>
+
+
+        <div id="map" style="height:80vh; width: 80vw;margin-top: 6vh;"></div>
+
+
+
+        <script>
+            /*===================================================
+                              OSM  LAYER               
+            ===================================================*/
+            var map = L.map('map')
+
+            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            });
+            osm.addTo(map);
+
+
+            /*===================================================
+                                  MARKERS               
+            ===================================================*/
+            var baseIcon = L.Icon.extend({
+                options: {
+                    iconUrl: "./img/icon1.png", shadowUrl: "./img/icon1shadow.png", iconSize: [15, 25], shadowSize: [25, 35], iconAnchor: [5, 5], shadowAnchor: [6, 6], popupAnchor: [5, -5]
+                }
+            })
+
+            var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
+            var marker = L.marker([51.850998, -2.268142], { icon: starIcon, alt: "Home" }) // for accesability
+            var marker2 = L.marker([51.85144, -2.26681], { icon: starIcon, alt: "Home" })
+
+            var circle = L.circle([51.85344, -2.26381], { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 100 })
+
+            var polygon = L.polygon([[51.8539, -2.2628], [51.8512, -2.2643], [51.8527, -2.26]])
+
+            var markz = L.layerGroup([marker, marker2]).addTo(map);
+            var circlz = L.layerGroup([circle]).addTo(map);
+            var polygonz = L.layerGroup([polygon]).addTo(map);
+            /*===================================================
+                                   GPS              
+            ===================================================*/
+            map.locate({ setView: true, maxZoom: 19 });
+            function onLocationFound(e) {
+                var radius = e.accuracy;
+
+                var gps1 = L.marker(e.latlng).addTo(map)
+                    .bindPopup("You are within " + radius).openPopup();
+
+                var gps2 = L.circle(e.latlng, radius).addTo(map);
+
+            }
+            function onLocationError(e) {
+                alert(e.message);
+            }
+            map.on('locationerror', onLocationError);
+            map.on('locationfound', onLocationFound);
+
+            /*===================================================
+                        TILE LAYER               
+            ===================================================*/
+            L.control.scale({ metric: true, imperial: false, position: 'bottomright' }).addTo(map)
+
+            googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 19,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            googleStreets.addTo(map);
+
+            // Satelite Layer
+            googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 19,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            googleSat.addTo(map);
+
+            googleTraffic = L.tileLayer('http://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+                maxZoom: 19,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            googleTraffic.addTo(map);
+
+            /*===================================================
+                      LAYER CONTROL               
+            ===================================================*/
+
+            var baseLayers = {
+                "Satellite": googleSat,
+                "GoogleMap": googleStreets,
+                "Traffic": googleTraffic,
+                "OpenStreetMap": osm
+            };
+
+            var overlays = {
+                "Marker": markz,
+                "Circle": circlz,
+                "Polygon": polygonz
+            };
+
+            L.control.layers(baseLayers, overlays).addTo(map);
+
+            /*===================================================
+                        SEARCH BUTTON               
+            ===================================================*/
+
+
+            L.Control.geocoder().addTo(map);
+            L.Class.extend({options: {
+            }})
+            /*===================================================
+                        ROUTING       https://www.liedman.net/leaflet-routing-machine/
+            ===================================================*/
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(51.854178, -2.261504),
+                    L.latLng(51.856512, -2.239964)
+                ],
+                show: true, // to put a button
+                units: 'imperial',
+                autoRoute:true,
+                collapsible:true,
+                routeWhileDragging: true,
+                lineOptions: { styles: [ { color: 'blue', opacity: 0.7, weight: 5 } ] },
+                geocoder: L.Control.Geocoder.photon({geocodingQueryParams: {'limit':'5'}}),
+                showAlternatives: true,
+                altLineOptions: { styles: [ { color: 'grey', opacity: 0.8, weight: 5 },{ color: 'grey', opacity: 0.8, weight: 5 }] }
+            }).addTo(map);
+
+        </script>
+        <script>
+            var popup = L.popup();
+
+            function onMapClick(e) {
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent("<div contentEditable='true'>You clicked the map at <br>" + e.latlng.toString() + "<div>")
+                    .openOn(map);
+            }
+
+            map.on('click', onMapClick);
+        </script>
