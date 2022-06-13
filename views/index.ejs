@@ -34,7 +34,7 @@
             var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
             var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
 
-            var marker = L.marker([51.850998, -2.268142], { icon: starIcon, alt: "Home" }) // for accesability
+            var marker = L.marker([51.850998, -2.268142], { icon: starIcon, alt: "Home" }).bindPopup("home").openPopup() // for accesability
             var marker2 = L.marker([51.85144, -2.26681], { icon: starIcon, alt: "Home" })
 
             var circle = L.circle([51.85344, -2.26381], { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 100 })
@@ -176,17 +176,17 @@
 
             map.on('click', onMapClick);
 
-
+            var fromHere
+            var toHere
             function addWP1(param1, param2) {
 
                 var imgz = document.getElementsByTagName('img')
                 for(i=0;i<document.getElementsByTagName('img').length;i++){
                     if(imgz[i].alt == "fromHere") { imgz[i].remove() }
                 }
-                console.log(markz);
                 rout.options.waypoints[0].lat, rout.options.waypoints[0].lng = param2, param1
-                var fromHere = L.marker([param1, param2], { icon: startIcon, alt: "fromHere" }).addTo(map).bindPopup("from location").openPopup();
-                markz.addLayer(fromHere)
+                 fromHere = L.marker([param1, param2], { icon: startIcon, alt: "fromHere" }).addTo(map).bindPopup("from location").openPopup();
+
             }
 
             function addWP2(param1, param2) {
@@ -197,6 +197,6 @@
                 }
 
                 rout.options.waypoints[1].lat, rout.options.waypoints[1].lng = param2, param1
-                var toHere = L.marker([param1, param2], { icon: endIcon,alt: "toHere" }).addTo(map).bindPopup("to location").openPopup();
+                 toHere = L.marker([param1, param2], { icon: endIcon,alt: "toHere" }).addTo(map).bindPopup("to location").openPopup();
             }
         </script>
