@@ -26,11 +26,14 @@
             ===================================================*/
             var baseIcon = L.Icon.extend({
                 options: {
-                    iconUrl: "./img/icon1.png", shadowUrl: "./img/icon1shadow.png", iconSize: [15, 25], shadowSize: [25, 35], iconAnchor: [5, 5], shadowAnchor: [6, 6], popupAnchor: [5, -5]
+                    iconUrl: "./img/icon1.png", iconSize: [15, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
                 }
             })
 
             var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
+            var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
+            var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
+
             var marker = L.marker([51.850998, -2.268142], { icon: starIcon, alt: "Home" }) // for accesability
             var marker2 = L.marker([51.85144, -2.26681], { icon: starIcon, alt: "Home" })
 
@@ -63,7 +66,7 @@
             /*===================================================
                         TILE LAYER               
             ===================================================*/
-            L.control.scale({ metric: true, imperial: false, position: 'bottomright' }).addTo(map)
+            L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map) // scale
 
             googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                 maxZoom: 19,
@@ -91,8 +94,8 @@
             var baseLayers = {
                 "Satellite": googleSat,
                 "GoogleMap": googleStreets,
+                "OpenStreetMap": osm,
                 "Traffic": googleTraffic,
-                "OpenStreetMap": osm
             };
 
             var overlays = {
@@ -101,45 +104,99 @@
                 "Polygon": polygonz
             };
 
-            L.control.layers(baseLayers, overlays).addTo(map);
+            L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
 
             /*===================================================
                         SEARCH BUTTON               
             ===================================================*/
+            var geocoder = L.Control.geocoder({
+                defaultMarkGeocode: false,
+                geocoder
+            })
+                .on('markgeocode', function (e) {
+                    var bbox = e.geocode.bbox;
+                    var poly = L.polygon([
+                        bbox.getSouthEast(),
+                        bbox.getNorthEast(),
+                        bbox.getNorthWest(),
+                        bbox.getSouthWest()
+                    ]).addTo(map);
+                    console.log(e);
+                    map.fitBounds(e.geocode.bbox);
+                })
+                .addTo(map);
 
-
-            L.Control.geocoder().addTo(map);
-            L.Class.extend({options: {
-            }})
+            // L.Class.extend({
+            //     options: {
+            //         steps: true,
+            //     }
+            // })
             /*===================================================
                         ROUTING       https://www.liedman.net/leaflet-routing-machine/
             ===================================================*/
-            L.Routing.control({
+            wayPoint1 = L.latLng(51.854178, -2.261504)
+            wayPoint2 = L.latLng(51.856512, -2.239964)
+            // var wayPoint1 = L.latLng(51.854178, -2.261504)
+            // var wayPoint2 = L.latLng(51.856512, -2.239964)
+            // var bounds = L.latLngBounds(wayPoint1, wayPoint2);
+
+            // var routeControl = L.Routing.control({
+            // }).addTo(map);
+            var rout = L.Routing.control({
+                "mode": "driving",
+                "driving_side": "right",
                 waypoints: [
-                    L.latLng(51.854178, -2.261504),
-                    L.latLng(51.856512, -2.239964)
+                    wayPoint1 = L.latLng(51.854178, -2.261504),
+                    wayPoint2 = L.latLng(51.856512, -2.239964)
                 ],
                 show: true, // to put a button
                 units: 'imperial',
-                autoRoute:true,
-                collapsible:true,
+                autoRoute: true,
+                collapsible: true,
                 routeWhileDragging: true,
-                lineOptions: { styles: [ { color: 'blue', opacity: 0.7, weight: 5 } ] },
-                geocoder: L.Control.Geocoder.photon({geocodingQueryParams: {'limit':'5'}}),
+                lineOptions: { styles: [{ color: 'blue', opacity: 0.7, weight: 5 }] },
+                geocoder: L.Control.Geocoder.nominatim({ geocodingQueryParams: { 'limit': '5' }, 'postcode': { dataset: 'DPA,LPI' } }),
                 showAlternatives: true,
-                altLineOptions: { styles: [ { color: 'grey', opacity: 0.8, weight: 5 },{ color: 'grey', opacity: 0.8, weight: 5 }] }
-            }).addTo(map);
+                altLineOptions: { styles: [{ color: 'grey', opacity: 0.8, weight: 5 }, { color: 'grey', opacity: 0.8, weight: 5 }] }
+            }).addTo(map)
+            var bounds = L.latLngBounds(wayPoint1, wayPoint2);
+            map.fitBounds(bounds)
 
-        </script>
-        <script>
+            // console.log(rout.options.waypoints[0], rout.options.waypoints[1]);
+            //popup
             var popup = L.popup();
 
             function onMapClick(e) {
-                popup
+                L.popup()
                     .setLatLng(e.latlng)
-                    .setContent("<div contentEditable='true'>You clicked the map at <br>" + e.latlng.toString() + "<div>")
+                    .setContent("<p contentEditable='true' id='wpz'>You clicked the map at <br>" + e.latlng.toString() + "</p><br>" +
+                        `<button type='button' class='p-2 mr-1' onclick='addWP1(${e.latlng.lat}, ${e.latlng.lng})'>Add From</button><button class='p-2' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'>Add To</button>`)
                     .openOn(map);
             }
 
             map.on('click', onMapClick);
+
+
+            function addWP1(param1, param2) {
+
+                var imgz = document.getElementsByTagName('img')
+                for(i=0;i<document.getElementsByTagName('img').length;i++){
+                    if(imgz[i].alt == "fromHere") { imgz[i].remove() }
+                }
+                console.log(markz);
+                rout.options.waypoints[0].lat, rout.options.waypoints[0].lng = param2, param1
+                var fromHere = L.marker([param1, param2], { icon: startIcon, alt: "fromHere" }).addTo(map).bindPopup("from location").openPopup();
+                markz.addLayer(fromHere)
+            }
+
+            function addWP2(param1, param2) {
+                
+                var imgz = document.getElementsByTagName('img')
+                for(i=0;i<document.getElementsByTagName('img').length;i++){
+                    if(imgz[i].alt == "toHere") { imgz[i].remove() }
+                }
+
+                rout.options.waypoints[1].lat, rout.options.waypoints[1].lng = param2, param1
+                var toHere = L.marker([param1, param2], { icon: endIcon,alt: "toHere" }).addTo(map).bindPopup("to location").openPopup();
+            }
         </script>
