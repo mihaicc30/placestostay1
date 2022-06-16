@@ -4,6 +4,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const User = require('../models/User');
+const Points = require('../models/Points');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -57,8 +58,16 @@ router.get('/', forwardAuthenticated, (req, res) => {
 })
 
 // Welcome Page
-router.get('/index', (req, res) => {
-  res.render('index')
+router.get('/index', ensureAuthenticated, (req, res) => {
+  var queryz = Points.find({ belongs_to: req.user._id })
+  queryz.exec(function (err, results) {
+    if (err) return handleError(err);
+
+    res.render('index', {
+      user: req.user,
+      points: results,
+    })
+  })
 })
 
 // myprofile_delete page post
@@ -69,4 +78,23 @@ router.post('/myprofile_delete', ensureAuthenticated, (req, res) => {
     req.logout(),
     res.redirect('index'))
 })
+
+router.post("/delete_point", (req, res) => {
+  console.log("ajax call")
+  var queryz = Points.deleteOne({ _id: req.body.pointID })
+  queryz.exec( function (err, results) {
+    if (err) return res.status(400).send(err);
+    console.log( res.status)
+    res.end();
+  })
+});
+
+
+
+
+
+
+
+
+
 module.exports = router;

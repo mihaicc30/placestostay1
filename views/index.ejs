@@ -4,152 +4,203 @@
 
     <%- include ('./partials/messages') %>
 
+            <div id="map" style="height:80vh; width: 80vw;margin-top: 6vh;"></div>
 
-        <div id="map" style="height:80vh; width: 80vw;margin-top: 6vh;"></div>
+            <div class="formBlock" style="display: none;">
+                <form id="form">
+                    <input type="text" name="start" class="input" id="start" placeholder="Choose starting point" />
+                    <input type="text" name="end" class="input" id="destination" placeholder="Choose starting point"
+                        onchange="removeRoute" />
+                    <button type="button" onclick="removeRoute()">Get Directions</button>
+                </form>
+            </div>
 
+<script defer>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            console.log("Geolocation is not supported by this browser.")
+        }
+    }
+    function showPosition(position) {
+        document.getElementById('start').value = [position.coords.latitude, position.coords.longitude]
+    }
+    getLocation()
 
+    /*===================================================
+                    OSM  LAYER               
+    ===================================================*/
 
-        <script>
-            /*===================================================
-                              OSM  LAYER               
-            ===================================================*/
-            var map = L.map('map')
+    var map = L.map('map')
+    var baseIcon = L.Icon.extend({
+        options: {
+            iconUrl: "./img/icon1.png", iconSize: [15, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
+        }
+    })
 
-            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            });
-            osm.addTo(map);
+    var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
+    var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
+    var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
 
+    function addWP1(param1, param2) {
 
-            /*===================================================
-                                  MARKERS               
-            ===================================================*/
-            var baseIcon = L.Icon.extend({
-                options: {
-                    iconUrl: "./img/icon1.png", iconSize: [15, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
-                }
-            })
+        document.getElementById('start').value = [param1, param2]
+        var imgz = document.getElementsByTagName('img')
+        for (i = 0; i < document.getElementsByTagName('img').length; i++) {
+            if (imgz[i].alt == "fromHere") { imgz[i].remove() }
+        }
+        var fromHere = L.marker([param1, param2], { icon: startIcon, alt: "fromHere" }).addTo(map).bindPopup("from location").openPopup();
 
-            var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
-            var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
-            var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
+    }
 
-            var marker = L.marker([51.850998, -2.268142], { icon: starIcon, alt: "Home" }).bindPopup("home").openPopup() // for accesability
-            var marker2 = L.marker([51.85144, -2.26681], { icon: starIcon, alt: "Home" })
+    function addWP2(param1, param2) {
 
-            var circle = L.circle([51.85344, -2.26381], { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 100 })
+        document.getElementById('destination').value = [param1, param2]
+        var imgz = document.getElementsByTagName('img')
+        for (i = 0; i < document.getElementsByTagName('img').length; i++) {
+            if (imgz[i].alt == "toHere") { imgz[i].remove() }
+        }
+        var toHere = L.marker([param1, param2], { icon: endIcon, alt: "toHere" }).addTo(map).bindPopup("to location").openPopup();
+        initializeMap()
+    }
+    function resolveAfterSeconds(time) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve('resolved');
+            }, time);
+        });
+    }
 
-            var polygon = L.polygon([[51.8539, -2.2628], [51.8512, -2.2643], [51.8527, -2.26]])
+    async function initializeMap(e) {
 
-            var markz = L.layerGroup([marker, marker2]).addTo(map);
-            var circlz = L.layerGroup([circle]).addTo(map);
-            var polygonz = L.layerGroup([polygon]).addTo(map);
-            /*===================================================
-                                   GPS              
-            ===================================================*/
-            map.locate({ setView: true, maxZoom: 19 });
-            function onLocationFound(e) {
-                var radius = e.accuracy;
-
-                var gps1 = L.marker(e.latlng).addTo(map)
-                    .bindPopup("You are within " + radius).openPopup();
-
-                var gps2 = L.circle(e.latlng, radius).addTo(map);
-
+        map.remove()
+        console.log("loading...");
+        const result = await resolveAfterSeconds(50);
+        map = L.map('map')
+        map.on('locationerror', onLocationError);
+        map.on('locationfound', onLocationFound);
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        osm.addTo(map);
+        var baseIcon = L.Icon.extend({
+            options: {
+                iconUrl: "./img/icon1.png", iconSize: [25, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
             }
-            function onLocationError(e) {
-                alert(e.message);
-            }
-            map.on('locationerror', onLocationError);
-            map.on('locationfound', onLocationFound);
+        })
 
-            /*===================================================
-                        TILE LAYER               
-            ===================================================*/
-            L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map) // scale
+        var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
+        var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
+        var homeIcon = new baseIcon({ iconUrl: "./img/home.png" })
+        var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
+        
+        // looping through the points from the database to dynamically add the points 
+        // each time the map is called
+        <% if(typeof points != "undefined") { %>  // making sure user is logged in
+        <% counter = 1 %>
+        <% if(points.length>0){ %>
+            <% points.forEach(p => {%>
+                <% if(p.type == "marker"){ %>  // if point is a marker
+                    marker<%=counter%> = L.marker([<%=p.coords%>], { icon: <%=p.icon%>, alt: '<%=p.popup_message%>' }).bindPopup('<%=p.popup_message%><form id="pointFORM"><input id="pointID" name="pointID" value="<%=p._id%>"><input id="submitBtn" type="submit">🚫</form> ').openPopup()
+                    <% counter++%>
+                    <% } %>
+                <% if(p.type == "circle"){ %>    // if point is a circle
+                    marker<%=counter%> = L.circle([<%=p.coords%>], { color: '<%=p.color%>', fillColor: '<%=p.fill_color%>', fillOpacity: <%=p.fill_opacity%>, radius: <%=p.radius%> }).bindPopup('<%=p.popup_message%>').openPopup()
+                    <% counter++%>
+                    <% } %>
+                <% if(p.type == "polygon"){ %>    // if point is a polygon
+                    marker<%=counter%> = L.polygon([<%=p.coords%>], ).bindPopup('<%=p.popup_message%>').openPopup()
+                    <% counter++%>
+                    <% } %>
+                <% });%>
+            <% } %>
+            
+        <% } %>
 
-            googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-                maxZoom: 19,
-                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-            });
-            googleStreets.addTo(map);
+        /*===================================================
+                                GROUP LAYER           
+        ===================================================*/
+        <%countz=1%>
+        var markz = L.layerGroup([
+        <% if(typeof points != "undefined") { %>
+            <% points.forEach(marker => {%>
+                marker<%=countz%>,
+                <%countz++%>
+        <% }) %> <%}%>
+        ]).addTo(map)
+        // var circlz = L.layerGroup([circle]).addTo(map);
+        // var polygonz = L.layerGroup([polygon]).addTo(map);
+        /*===================================================
+                                GPS              
+        ===================================================*/
+        map.locate({ setView: true, maxZoom: 19 });
+        function onLocationFound(e) {
+            var radius = e.accuracy;
+            var gps1 = L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + "<br>at " + e.latlng);
+            var gps2 = L.circle(e.latlng, radius).addTo(map);
+        }
+        function onLocationError(e) {
+            alert(e.message);
+        }
+        map.on('locationerror', onLocationError);
+        map.on('locationfound', onLocationFound);
 
-            // Satelite Layer
-            googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-                maxZoom: 19,
-                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-            });
-            googleSat.addTo(map);
+        /*===================================================
+                    TILE LAYER               
+        ===================================================*/
+        L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map) // scale
 
-            googleTraffic = L.tileLayer('http://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
-                maxZoom: 19,
-                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-            });
-            googleTraffic.addTo(map);
+        googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 19,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        googleStreets.addTo(map);
 
-            /*===================================================
-                      LAYER CONTROL               
-            ===================================================*/
+        // Satelite Layer
+        googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 19,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        googleSat.addTo(map);
 
-            var baseLayers = {
-                "Satellite": googleSat,
-                "GoogleMap": googleStreets,
-                "OpenStreetMap": osm,
-                "Traffic": googleTraffic,
-            };
+        googleTraffic = L.tileLayer('http://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+            maxZoom: 19,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        googleTraffic.addTo(map);
 
-            var overlays = {
-                "Marker": markz,
-                "Circle": circlz,
-                "Polygon": polygonz
-            };
+        /*===================================================
+                    LAYER CONTROL               
+        ===================================================*/
 
-            L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
+        var baseLayers = {
+            "Satellite": googleSat,
+            "GoogleMap": googleStreets,
+            "OpenStreetMap": osm,
+            "Traffic": googleTraffic,
+        };
 
-            /*===================================================
-                        SEARCH BUTTON               
-            ===================================================*/
-            var geocoder = L.Control.geocoder({
-                defaultMarkGeocode: false,
-                geocoder
-            })
-                .on('markgeocode', function (e) {
-                    var bbox = e.geocode.bbox;
-                    var poly = L.polygon([
-                        bbox.getSouthEast(),
-                        bbox.getNorthEast(),
-                        bbox.getNorthWest(),
-                        bbox.getSouthWest()
-                    ]).addTo(map);
-                    console.log(e);
-                    map.fitBounds(e.geocode.bbox);
-                })
-                .addTo(map);
+        var overlays = {
+            "Saved Points": markz,
+        };
 
-            // L.Class.extend({
-            //     options: {
-            //         steps: true,
-            //     }
-            // })
-            /*===================================================
-                        ROUTING       https://www.liedman.net/leaflet-routing-machine/
-            ===================================================*/
-            wayPoint1 = L.latLng(51.854178, -2.261504)
-            wayPoint2 = L.latLng(51.856512, -2.239964)
-            // var wayPoint1 = L.latLng(51.854178, -2.261504)
-            // var wayPoint2 = L.latLng(51.856512, -2.239964)
-            // var bounds = L.latLngBounds(wayPoint1, wayPoint2);
+        var layerz = L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
 
-            // var routeControl = L.Routing.control({
-            // }).addTo(map);
+        var wp1 = String(document.getElementById('start').value).split(",")
+        var wp2 = String(document.getElementById('destination').value).split(",")
+        if (wp2.length > 1) {
             var rout = L.Routing.control({
                 "mode": "driving",
                 "driving_side": "right",
                 waypoints: [
-                    wayPoint1 = L.latLng(51.854178, -2.261504),
-                    wayPoint2 = L.latLng(51.856512, -2.239964)
+                    wayPoint1 = L.latLng(wp1),
+                    wayPoint2 = L.latLng(wp2)
                 ],
-                show: true, // to put a button
+                show: true,
                 units: 'imperial',
                 autoRoute: true,
                 collapsible: true,
@@ -159,44 +210,55 @@
                 showAlternatives: true,
                 altLineOptions: { styles: [{ color: 'grey', opacity: 0.8, weight: 5 }, { color: 'grey', opacity: 0.8, weight: 5 }] }
             }).addTo(map)
-            var bounds = L.latLngBounds(wayPoint1, wayPoint2);
-            map.fitBounds(bounds)
+        } else {
+            var rout = L.Routing.control({
+                "mode": "driving",
+                "driving_side": "right",
+                waypoints: [
+                    wayPoint1 = L.latLng(wp1)
+                ],
+                show: true,
+                units: 'imperial',
+                autoRoute: true,
+                collapsible: true,
+                routeWhileDragging: true,
+                lineOptions: { styles: [{ color: 'blue', opacity: 0.7, weight: 5 }] },
+                geocoder: L.Control.Geocoder.nominatim({ geocodingQueryParams: { 'limit': '5' }, 'postcode': { dataset: 'DPA,LPI' } }),
+                showAlternatives: true,
+                altLineOptions: { styles: [{ color: 'grey', opacity: 0.8, weight: 5 }, { color: 'grey', opacity: 0.8, weight: 5 }] }
+            }).addTo(map)
+        }
+        var boundz = L.latLngBounds(wp1, wp2);
+        map.fitBounds(boundz)
 
-            // console.log(rout.options.waypoints[0], rout.options.waypoints[1]);
-            //popup
-            var popup = L.popup();
 
-            function onMapClick(e) {
-                L.popup()
-                    .setLatLng(e.latlng)
-                    .setContent("<p contentEditable='true' id='wpz'>You clicked the map at <br>" + e.latlng.toString() + "</p><br>" +
-                        `<button type='button' class='p-2 mr-1' onclick='addWP1(${e.latlng.lat}, ${e.latlng.lng})'>Add From</button><button class='p-2' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'>Add To</button>`)
-                    .openOn(map);
-            }
+        function onMapClick(e) {
+            L.popup()
+                .setLatLng(e.latlng)
+                .setContent("<div class='popupClick'>Location:<br><p contentEditable='true' id='wpz'>" + e.latlng.lat + "<br>, " + e.latlng.lng + "</p>" +
+                    `<button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="direction" id="directionIcon" style="width:50px; height:50px;background-color:transparent;"></button></div>`)
+                .openOn(map);
+        }
 
-            map.on('click', onMapClick);
+        map.on('click', onMapClick);
 
-            var fromHere
-            var toHere
-            function addWP1(param1, param2) {
 
-                var imgz = document.getElementsByTagName('img')
-                for(i=0;i<document.getElementsByTagName('img').length;i++){
-                    if(imgz[i].alt == "fromHere") { imgz[i].remove() }
-                }
-                rout.options.waypoints[0].lat, rout.options.waypoints[0].lng = param2, param1
-                 fromHere = L.marker([param1, param2], { icon: startIcon, alt: "fromHere" }).addTo(map).bindPopup("from location").openPopup();
+    }
 
-            }
+    initializeMap()
+</script>
 
-            function addWP2(param1, param2) {
-                
-                var imgz = document.getElementsByTagName('img')
-                for(i=0;i<document.getElementsByTagName('img').length;i++){
-                    if(imgz[i].alt == "toHere") { imgz[i].remove() }
-                }
 
-                rout.options.waypoints[1].lat, rout.options.waypoints[1].lng = param2, param1
-                 toHere = L.marker([param1, param2], { icon: endIcon,alt: "toHere" }).addTo(map).bindPopup("to location").openPopup();
-            }
-        </script>
+<script defer>
+$("#pointFORM").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/delete_point",
+        success: function () {
+            alert("The result is success");
+	    },
+        cache: false
+    });
+});
+</script>

@@ -24,3 +24,25 @@
     transform: translateX(-50%);
 
 }
+.leaflet-routing-alt table {
+    display: none;
+}
+.leaflet-popup-content{
+    margin: 5px!important;
+}
+.popupClick{
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+.popupClick > p {
+    margin:0!important;
+}
+.leaflet-popup > a, #directionIcon {
+    font-size: 3em!important;
+    transition: .3s ease;
+}
+.leaflet-popup > a:hover, #directionIcon:hover {
+    transform: scale(1.2);
+    font-weight: bolder;
+}
