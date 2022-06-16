@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <title>Maps</title>
   <script src="config/scripts.js" defer></script>
+  <script src="config/script_ajax_calls.js" defer></script>
   <!-- leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
@@ -36,12 +37,10 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 </head>
-
 <body>
-  <!-- <body oncontextmenu="return false;"> -->
   <div style="display: flex;
   flex-direction: column;
-  align-items: center;height:100vh; width:100vw;overflow:hidden;">
+  align-items: center;height:100vh; width:100vw;overflow:hidden;" >
     <%- body %>
   </div>
 </body>

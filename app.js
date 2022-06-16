@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 // Express session
 app.use(
   session({
-    secret: 't34tg4gh6675ik6f232d32f45yg56oNIN2uniuon2uin2iuo6uh4j6',
+    secret: 't34tg4gh667125ik6f232d32f45yg56oNIN2uniuon2u3in2iuo6uh4j6',
     resave: true,
     saveUninitialized: true,
     maxAge: 24 * 60 * 60 * 1000 // 24 hours, a number representing the milliseconds from Date.now() for expiry
@@ -70,5 +70,3 @@ process.on("SIGHUP", function () {
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, console.log(`Server running on ${PORT}`));
-
-// http://localhost:4444

@@ -1,5 +1,5 @@
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
+<%- include ('./partials/popup') %>
 <%- include('./partials/header') %>
 
     <%- include ('./partials/messages') %>
@@ -9,13 +9,16 @@
             <div class="formBlock" style="display: none;">
                 <form id="form">
                     <input type="text" name="start" class="input" id="start" placeholder="Choose starting point" />
-                    <input type="text" name="end" class="input" id="destination" placeholder="Choose starting point"
-                        onchange="removeRoute" />
+                    <input type="text" name="end" class="input" id="destination" placeholder="Choose starting point" onchange="removeRoute" />
                     <button type="button" onclick="removeRoute()">Get Directions</button>
                 </form>
             </div>
 
 <script defer>
+
+   /*===================================================
+                    ROUTING           
+    ===================================================*/
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
@@ -29,21 +32,11 @@
     getLocation()
 
     /*===================================================
-                    OSM  LAYER               
+                    MAP INIT               
     ===================================================*/
-
     var map = L.map('map')
-    var baseIcon = L.Icon.extend({
-        options: {
-            iconUrl: "./img/icon1.png", iconSize: [15, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
-        }
-    })
 
-    var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
-    var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
-    var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
-
-    function addWP1(param1, param2) {
+    function addWP1(param1, param2) { // waypoint1
 
         document.getElementById('start').value = [param1, param2]
         var imgz = document.getElementsByTagName('img')
@@ -54,17 +47,17 @@
 
     }
 
-    function addWP2(param1, param2) {
+    function addWP2(param1, param2) {// waypoint2
 
         document.getElementById('destination').value = [param1, param2]
         var imgz = document.getElementsByTagName('img')
         for (i = 0; i < document.getElementsByTagName('img').length; i++) {
             if (imgz[i].alt == "toHere") { imgz[i].remove() }
         }
-        var toHere = L.marker([param1, param2], { icon: endIcon, alt: "toHere" }).addTo(map).bindPopup("to location").openPopup();
+        var toHere = L.marker([param1, param2]).addTo(map).bindPopup("to location").openPopup();
         initializeMap()
     }
-    function resolveAfterSeconds(time) {
+    function resolveAfterMSeconds(time) { // delayer
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve('resolved');
@@ -72,29 +65,44 @@
         });
     }
 
-    async function initializeMap(e) {
+    async function initializeMap() {
 
         map.remove()
         console.log("loading...");
-        const result = await resolveAfterSeconds(50);
+        const result = await resolveAfterMSeconds(500);
         map = L.map('map')
         map.on('locationerror', onLocationError);
         map.on('locationfound', onLocationFound);
+
+        /*===================================================
+                    OSM TILE LAYER             
+        ===================================================*/
         var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
         osm.addTo(map);
-        var baseIcon = L.Icon.extend({
-            options: {
-                iconUrl: "./img/icon1.png", iconSize: [25, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
-            }
-        })
+        
 
-        var starIcon = new baseIcon({ iconUrl: "./img/icon1.png" })
+    /*===================================================
+                    ICONS               
+    ===================================================*/
+        var baseIcon = L.Icon.extend({
+                options: {
+                    iconUrl: "./img/icon1.png", iconSize: [25, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
+                }
+            })
+
+        var starIcon = new baseIcon({ iconUrl: "./img/star.png" })
         var startIcon = new baseIcon({ iconUrl: "./img/start.png" })
         var homeIcon = new baseIcon({ iconUrl: "./img/home.png" })
+        var workIcon = new baseIcon({ iconUrl: "./img/work.png" })
+        var parkingIcon = new baseIcon({ iconUrl: "./img/parking.png" })
         var endIcon = new baseIcon({ iconUrl: "./img/end.png" })
         
+        
+    /*===================================================
+                    BUILDING MARKS              
+    ===================================================*/
         // looping through the points from the database to dynamically add the points 
         // each time the map is called
         <% if(typeof points != "undefined") { %>  // making sure user is logged in
@@ -102,11 +110,11 @@
         <% if(points.length>0){ %>
             <% points.forEach(p => {%>
                 <% if(p.type == "marker"){ %>  // if point is a marker
-                    marker<%=counter%> = L.marker([<%=p.coords%>], { icon: <%=p.icon%>, alt: '<%=p.popup_message%>' }).bindPopup('<%=p.popup_message%><form id="pointFORM"><input id="pointID" name="pointID" value="<%=p._id%>"><input id="submitBtn" type="submit">🚫</form> ').openPopup()
+                    marker<%=counter%> = L.marker([<%=p.coords%>], { icon: <%=p.icon%>, alt: 'marker<%=counter%>, <%=p.popup_message%>' }).bindPopup('<%=p.popup_message%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=p._id%>"><button onclick="deleteThisPoint(`<%=p._id%>`,`marker<%=counter%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=p.coords%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
                     <% counter++%>
                     <% } %>
                 <% if(p.type == "circle"){ %>    // if point is a circle
-                    marker<%=counter%> = L.circle([<%=p.coords%>], { color: '<%=p.color%>', fillColor: '<%=p.fill_color%>', fillOpacity: <%=p.fill_opacity%>, radius: <%=p.radius%> }).bindPopup('<%=p.popup_message%>').openPopup()
+                    marker<%=counter%> = L.circle([<%=p.coords%>], { color: '<%=p.color%>', fillColor: '<%=p.fill_color%>', fillOpacity: <%=p.fill_opacity%>, radius: <%=p.radius%> }).bindPopup('<%=p.popup_message%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=p._id%>"><button onclick="deleteThisPoint(`<%=p._id%>`,`marker<%=counter%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=p.coords%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
                     <% counter++%>
                     <% } %>
                 <% if(p.type == "polygon"){ %>    // if point is a polygon
@@ -129,10 +137,8 @@
                 <%countz++%>
         <% }) %> <%}%>
         ]).addTo(map)
-        // var circlz = L.layerGroup([circle]).addTo(map);
-        // var polygonz = L.layerGroup([polygon]).addTo(map);
         /*===================================================
-                                GPS              
+                                GPS / GEOLOCATION              
         ===================================================*/
         map.locate({ setView: true, maxZoom: 19 });
         function onLocationFound(e) {
@@ -187,9 +193,15 @@
         var overlays = {
             "Saved Points": markz,
         };
+        /*===================================================
+                    LAYER BUTTON            
+        ===================================================*/
 
         var layerz = L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
 
+         /*===================================================
+                    ROUTING CONTROL              
+        ===================================================*/
         var wp1 = String(document.getElementById('start').value).split(",")
         var wp2 = String(document.getElementById('destination').value).split(",")
         if (wp2.length > 1) {
@@ -231,34 +243,22 @@
         var boundz = L.latLngBounds(wp1, wp2);
         map.fitBounds(boundz)
 
-
+         /*===================================================
+                    MAP ON CLICK POPUP          
+        ===================================================*/
         function onMapClick(e) {
             L.popup()
                 .setLatLng(e.latlng)
                 .setContent("<div class='popupClick'>Location:<br><p contentEditable='true' id='wpz'>" + e.latlng.lat + "<br>, " + e.latlng.lng + "</p>" +
-                    `<button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="direction" id="directionIcon" style="width:50px; height:50px;background-color:transparent;"></button></div>`)
+                    `</div>
+                    <div><button onclick="openAddMarkModal(${e.latlng.lat}, ${e.latlng.lng})" style="border:none;background-color:transparent;" type="button"><img src="/img/addmark.png" class="popupImgs" alt="Add Mark"></button><button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>`)
                 .openOn(map);
         }
-
         map.on('click', onMapClick);
 
-
+        
     }
 
     initializeMap()
-</script>
 
-
-<script defer>
-$("#pointFORM").submit(function (e) {
-    e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "/delete_point",
-        success: function () {
-            alert("The result is success");
-	    },
-        cache: false
-    });
-});
 </script>

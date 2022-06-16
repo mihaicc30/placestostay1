@@ -79,17 +79,54 @@ router.post('/myprofile_delete', ensureAuthenticated, (req, res) => {
     res.redirect('index'))
 })
 
-router.post("/delete_point", (req, res) => {
-  console.log("ajax call")
-  var queryz = Points.deleteOne({ _id: req.body.pointID })
-  queryz.exec( function (err, results) {
+router.post("/delete_point", (req, res) => { // delete saved mark
+  var queryz = Points.deleteOne({ _id: req.body.point })
+  queryz.exec(function (err, results) {
     if (err) return res.status(400).send(err);
-    console.log( res.status)
+    console.log("deletion success")
     res.end();
   })
 });
 
 
+router.post("/save_point", (req, res) => { // save selected mark
+  console.log("ajax call    time " + new Date())
+  var type = req.body.type;
+
+  if (type == "marker") {
+    var queryz = Points({
+      "type": type,
+      "coords": req.body.coords,
+      "icon": req.body.icon,
+      "alt": req.body.alt,
+      "popup_message": req.body.popup_message,
+      "layer_group": "markz",
+      "belongs_to": req.user._id
+    })
+  }
+  if (type == "circle") {
+    var queryz = Points({
+      "type": type,
+      "coords": req.body.coords,
+      "icon": req.body.icon,
+      "alt": req.body.alt,
+      "color": req.body.color,
+      "fill_color": req.body.fill_color,
+      "fill_opacity": req.body.fill_opacity,
+      "radius": req.body.radius,
+      "popup_message": req.body.popup_message,
+      "layer_group": "markz",
+      "belongs_to": req.user._id
+    })
+  }
+
+  console.log(type);
+  queryz.save(function (err, results) {
+    if (err) return res.status(400).send(err);
+    console.log("save success")
+    res.end();
+  })
+});
 
 
 

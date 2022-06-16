@@ -1,48 +1,131 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Dela+Gothic+One&family=Festive&family=Grand+Hotel&family=Great+Vibes&family=Josefin+Sans:wght@300&family=Lora:ital@1&family=Noto+Sans&display=swap');
 
-*, *::before,*::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Noto Sans', sans-serif!important;
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /*Firefox all */
-    -ms-user-select: none;      /*IE 10+ */
-    -o-user-select: none; 
-    user-select: none; 
+    font-family: 'Noto Sans', sans-serif !important;
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /*Firefox all */
+    -ms-user-select: none;
+    /*IE 10+ */
+    -o-user-select: none;
+    user-select: none;
 }
-.navCenter{
+
+.navCenter {
     display: flex;
     flex-direction: row;
     align-items: baseline;
     gap: 10px;
 }
-.leaflet-control-geocoder  {
-    position: fixed!important;
+
+.leaflet-control-geocoder {
+    position: fixed !important;
     left: 50%;
-    top:5%;
+    top: 5%;
     transform: translateX(-50%);
 
 }
+
 .leaflet-routing-alt table {
     display: none;
 }
-.leaflet-popup-content{
-    margin: 5px!important;
+
+.leaflet-popup-content {
+    margin: 1em 2em 1em 1em !important;
 }
-.popupClick{
+
+.popupClick {
     display: flex;
     flex-direction: column;
     align-items: center
 }
-.popupClick > p {
-    margin:0!important;
+
+.popupClick>p {
+    margin: 0 !important;
 }
-.leaflet-popup > a, #directionIcon {
-    font-size: 3em!important;
+
+.leaflet-popup>a,
+#directionIcon {
     transition: .3s ease;
 }
-.leaflet-popup > a:hover, #directionIcon:hover {
+
+.leaflet-popup>a:hover,
+#directionIcon:hover {
     transform: scale(1.2);
     font-weight: bolder;
+}
+
+.notDisplay {
+    display: none !important;
+}
+
+.popupImgs {
+    padding: 5px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    transition: .3s ease;
+}
+
+.popupImgs:hover {
+    transform: scale(1.2);
+}
+
+.popupHiddenForm>button {
+    background-color: transparent;
+    border: none;
+    margin: 0 5px 0 5px;
+
+}
+
+.show {
+    display: block !important;
+    animation: roadRunnerInLeft .5s;
+}
+
+.hide {
+    animation: roadRunnerOut .5s;
+    display: none !important;
+}
+
+/* .mainModal, .subModal {
+    display: none;
+} */
+
+/* https://codepen.io/designcouch/pen/obvKxm */
+@keyframes roadRunnerInLeft {
+    0% {
+        transform: translateX(-1500px) skewX(30deg) scaleX(1.3);
+    }
+
+    70% {
+        transform: translateX(30px) skewX(0deg) scaleX(.9);
+    }
+
+    100% {
+        transform: translateX(0px) skewX(0deg) scaleX(1);
+    }
+}
+
+@keyframes roadRunnerOut {
+    0% {
+        visibility: visible;
+        transform: translateX(0px) skewX(0deg) scaleX(1);
+    }
+
+    30% {
+        visibility: visible;
+        transform: translateX(-30px) skewX(-5deg) scaleX(.9);
+    }
+
+    100% {
+        visibility: hidden;
+        transform: translateX(1500px) skewX(30deg) scaleX(1.3);
+    }
 }
