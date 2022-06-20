@@ -3,22 +3,16 @@ function deleteThisPoint(pointRef, mark) { // mark deletion
         type: "POST",
         url: "/delete_point",
         data: { "point": pointRef },
-        success: hideMark(mark)
+        success: hideMark()
     })
 }
-function hideMark(mark) { // mark removal so there is no need to refresh the page
-    console.log(mark);
-    var markz = document.getElementsByClassName('leaflet-marker-icon leaflet-zoom-animated leaflet-interactive')
-    for (i = 0; i < markz.length; i++) {
-        if (String(markz[i].attributes.alt.nodeValue).startsWith(mark)) {
-            markz[i].setAttribute('id', 'removeThisOne')
-        };
-    }
-    document.getElementById('removeThisOne').remove()
+function hideMark() { // mark removal so there is no need to refresh the page
+    document.getElementById('current_target').remove()
 }
 
-function insertMarker(userID) { // mark insertion
+function insertMarker(userID, countz) { // mark insertion
     if (document.getElementById('modalMessageInput').value.length > 0) {
+
         var type = document.getElementById('modalTypeMenu').value
         if (type == "marker") {
             $.ajax({
@@ -33,7 +27,7 @@ function insertMarker(userID) { // mark insertion
                     "layer_group": "markz",
                     "belongs_to": userID
                 },
-                success: console.log("success call ajax")
+                // success: showOnMap()
             }) 
             hideModal()
         }
@@ -55,10 +49,11 @@ function insertMarker(userID) { // mark insertion
                     "layer_group": "markz",
                     "belongs_to": userID
                 },
-                success: console.log("success call ajax")
+                // success: showOnMap()
             })
             hideModal()
         }
+        
     }
 
     if (document.getElementById('modalMessageInput').value.length == 0) {

@@ -64,6 +64,7 @@
             }, time);
         });
     }
+       
 
     async function initializeMap() {
 
@@ -88,7 +89,7 @@
     ===================================================*/
         var baseIcon = L.Icon.extend({
                 options: {
-                    iconUrl: "./img/icon1.png", iconSize: [25, 25], iconAnchor: [5, 5], popupAnchor: [5, -5]
+                    iconUrl: "./img/icon1.png", iconSize: [35, 35], iconAnchor: [5, 5], popupAnchor: [5, -5]
                 }
             })
 
@@ -117,10 +118,10 @@
                     marker<%=counter%> = L.circle([<%=p.coords%>], { color: '<%=p.color%>', fillColor: '<%=p.fill_color%>', fillOpacity: <%=p.fill_opacity%>, radius: <%=p.radius%> }).bindPopup('<%=p.popup_message%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=p._id%>"><button onclick="deleteThisPoint(`<%=p._id%>`,`marker<%=counter%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=p.coords%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
                     <% counter++%>
                     <% } %>
-                <% if(p.type == "polygon"){ %>    // if point is a polygon
+               <% if(p.type == "polygon"){ %>    // if point is a polygon
                     marker<%=counter%> = L.polygon([<%=p.coords%>], ).bindPopup('<%=p.popup_message%>').openPopup()
                     <% counter++%>
-                    <% } %>
+                    <% } %> 
                 <% });%>
             <% } %>
             
@@ -255,10 +256,6 @@
                 .openOn(map);
         }
         map.on('click', onMapClick);
-
-        
     }
-
     initializeMap()
-
 </script>

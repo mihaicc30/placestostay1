@@ -58,7 +58,7 @@ router.get('/', forwardAuthenticated, (req, res) => {
 })
 
 // Welcome Page
-router.get('/index', ensureAuthenticated, (req, res) => {
+router.get('/index', (req, res) => {
   var queryz = Points.find({ belongs_to: req.user._id })
   queryz.exec(function (err, results) {
     if (err) return handleError(err);
