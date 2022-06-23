@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
 const User = require('../models/User');
-const Points = require('../models/Points');
+const Accommodation = require('../models/Accommodation');
 
-const dotenv = require('dotenv');
-dotenv.config();
-var db = process.env.mongoURI;
-var admin = process.env.ADMIN_ID;
+const dotenv = require('dotenv').config();
 
 const banned_Chars = ['<', '>', '-', '{', '}', '[', ']', '(', ')', 'script', '<script>', '</script>', 'prompt', 'alert', 'write', 'send', '?', '!', '$', '#', '\`', '\"', '\'', '\;', '\\', '\/'];
 
@@ -53,19 +49,18 @@ router.post('/contact', (req, res) => {
 })
 
 // Welcome Page
-router.get('/', forwardAuthenticated, (req, res) => {
+router.get('/', (req, res) => {
   res.render('index')
 })
 
 // Welcome Page
-router.get('/index', (req, res) => {
-  var queryz = Points.find({ belongs_to: req.user._id })
-  queryz.exec(function (err, results) {
-    if (err) return handleError(err);
-    res.render('index', {
-      user: req.user,
-      points: results,
-    })
+router.get('/index',ensureAuthenticated, async (req, res) => {
+  var queryz = await Accommodation.findAll({raw:true})
+  results = queryz.map(v => Object.assign({}, v))
+  
+  res.render('index', {
+    user: req.user,
+    points: results,
   })
 })
 
@@ -78,53 +73,37 @@ router.post('/myprofile_delete', ensureAuthenticated, (req, res) => {
     res.redirect('index'))
 })
 
-router.post("/delete_point", (req, res) => { // delete saved mark
-  var queryz = Points.deleteOne({ _id: req.body.point })
-  queryz.exec(function (err, results) {
-    if (err) return res.status(400).send(err);
+router.post("/delete_point", async (req, res) => { // delete saved mark
+  var queryz = await Accommodation.destroy({where:{"ID":req.body.point}}).then((result) => {
     console.log("deletion success")
     res.end();
+  }).catch((error) =>{
+    res.status(400).send(error)
   })
 });
 
 
-router.post("/save_point", (req, res) => { // save selected mark
+router.post("/save_point", async (req, res) => { // save selected mark
   console.log("ajax call    time " + new Date())
   var type = req.body.type;
 
-  if (type == "marker") {
-    var queryz = Points({
-      "type": type,
-      "coords": req.body.coords,
-      "icon": req.body.icon,
-      "alt": req.body.alt,
-      "popup_message": req.body.popup_message,
-      "layer_group": "markz",
-      "belongs_to": req.user._id
-    })
-  }
-  if (type == "circle") {
-    var queryz = Points({
-      "type": type,
-      "coords": req.body.coords,
-      "icon": req.body.icon,
-      "alt": req.body.alt,
-      "color": req.body.color,
-      "fill_color": req.body.fill_color,
-      "fill_opacity": req.body.fill_opacity,
-      "radius": req.body.radius,
-      "popup_message": req.body.popup_message,
-      "layer_group": "markz",
-      "belongs_to": req.user._id
-    })
-  }
-
-  console.log(type);
-  queryz.save(function (err, results) {
-    if (err) return res.status(400).send(err);
+  const createMark = await Accommodation.create({
+    "name": req.body.name,
+    "type": req.body.type,
+    "location": req.body.location,
+    "latitude": req.body.latitude,
+    "longitude": req.body.longitude,
+    "icon": req.body.icon,
+    "photo": req.body.photo,
+    "description": req.body.description
+  }).then((result) => {
     console.log("save success")
     res.end();
+  }).catch((error) =>{
+    res.status(400).send(error)
   })
+
+   
 });
 
 

@@ -11,15 +11,12 @@
     "express-session": "^1.17.2",
     "leaflet": "^1.8.0",
     "leaflet-routing-machine": "^3.2.12",
-    "mongoose": "^6.2.5",
-    "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.16",
-    "octokit": "^1.7.1",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
-    "stripe": "^9.2.0"
+    "sequelize": "^6.21.0"
   },
   "name": "giftcardshop",
   "version": "3.3.3",

@@ -11,53 +11,49 @@ function hideMark() { // mark removal so there is no need to refresh the page
 }
 
 function insertMarker(userID, countz) { // mark insertion
-    if (document.getElementById('modalMessageInput').value.length > 0) {
+    if (document.getElementById('modalName').value.length > 0 &&
+        document.getElementById('modalLocation').value.length > 0 &&
+        document.getElementById('modalMessageInput').value.length > 0
+    ) {
+        $.ajax({
+            type: "POST",
+            url: "/save_point",
+            data: {
 
-        var type = document.getElementById('modalTypeMenu').value
-        if (type == "marker") {
-            $.ajax({
-                type: "POST",
-                url: "/save_point",
-                data: {
-                    "type": document.getElementById('modalTypeMenu').value,
-                    "coords": document.getElementById('modalCoords').innerHTML,
-                    "icon": document.getElementById('modalIconMenu').value,
-                    "alt": document.getElementById('modalMessageInput').value,
-                    "popup_message": document.getElementById('modalMessageInput').value,
-                    "layer_group": "markz",
-                    "belongs_to": userID
-                },
-                // success: showOnMap()
-            }) 
-            hideModal()
-        }
-        if (type == "circle") {
-            $.ajax({
-                type: "POST",
-                url: "/save_point",
-                data: {
-                    "type": document.getElementById('modalTypeMenu').value,
-                    "coords": document.getElementById('modalCoords').innerHTML,
-                    "icon": document.getElementById('modalIconMenu').value,
-                    "alt": document.getElementById('modalMessageInput').value,
-                    "color": document.getElementById('circleColor').value,
-                    "fill_color": document.getElementById('circleFillColor').value,
-                    "fill_opacity": document.getElementById('circleOpacity').value,
-                    "radius": document.getElementById('circleRadius').value,
-                    "popup_message": document.getElementById('modalMessageInput').value,
-                    "layer_group": "markz",
-                    "belongs_to": userID
-                },
-                // success: showOnMap()
-            })
-            hideModal()
-        }
-        
+                "name": document.getElementById('modalName').value,
+                "type": String(document.getElementById('modalIconMenu').value).substring(4),
+                "location": document.getElementById('modalLocation').value,
+                "latitude": document.getElementById('modalCoordsLat').innerHTML,
+                "longitude": document.getElementById('modalCoordsLon').innerHTML,
+                "icon": document.getElementById('modalIconMenu').value,
+                "photo": document.getElementById('modalImage').value,
+                "description": document.getElementById('modalMessageInput').value,
+            },
+            // success: showOnMap()
+        })
+        hideModal()
     }
 
     if (document.getElementById('modalMessageInput').value.length == 0) {
         document.getElementById('modalMessageInput').style.border = "2px solid red";
+        document.getElementById('error3').style.visibility = "visible";
+    } else {
+        document.getElementById('error3').style.visibility = 'hidden'
+        document.getElementById('modalMessageInput').style.border = "1px solid black";
+    }
+    if (document.getElementById('modalName').value.length == 0) {
+        document.getElementById('modalName').style.border = "2px solid red";
         document.getElementById('error1').style.visibility = "visible";
+    } else {
+        document.getElementById('error1').style.visibility = 'hidden'
+        document.getElementById('modalName').style.border = "1px solid black";
+    }
+    if (document.getElementById('modalLocation').value.length == 0) {
+        document.getElementById('modalLocation').style.border = "2px solid red";
+        document.getElementById('error2').style.visibility = "visible";
+    } else {
+        document.getElementById('error2').style.visibility = 'hidden'
+        document.getElementById('modalLocation').style.border = "1px solid black";
     }
 
 }

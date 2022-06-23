@@ -98,6 +98,11 @@
     position: absolute;
     top:5%;
 }
+.popupImg{ /* 4:5 ratio */
+    height:175px;
+    width:140px;
+    background-color: red;
+}
 
 /* https://codepen.io/designcouch/pen/obvKxm */
 @keyframes roadRunnerInLeft {

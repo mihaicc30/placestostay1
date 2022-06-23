@@ -1,29 +1,25 @@
+const dotenv = require('dotenv').config();
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('cookie-session');
 const app = express();
 
 
-const con = require('./config/mysql_conn');
+const sequelize = require("./models/Database")
+const User = require("./models/User")
+
+sequelize.sync().then(result =>{
+  console.log("MySQL Connected "+new Date())
+}).catch(err => {
+  console.log(err)
+})
 
 app.use(express.json());
 
 //passport config
 require('./config/passport')(passport);
-
-const dotenv = require('dotenv');
-dotenv.config();
-const db = process.env.mongoURI;
-
-//MongoDB test connectionn
-mongoose.connect(db,{   
-  useNewUrlParser: true,
-  useUnifiedTopology: true})
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
 
 
 //ejs config
@@ -74,4 +70,4 @@ process.on("SIGHUP", function () {
 })
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, console.log(`Server running on ${PORT}`));
+app.listen(PORT, console.log(`NodeJS Server running on ${PORT}`));

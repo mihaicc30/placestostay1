@@ -3,13 +3,11 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-// Load User model
-const User = require('../models/User');
 const { forwardAuthenticated } = require('../config/auth');
-
-const dotenv = require('dotenv');
-dotenv.config();
-var db = process.env.mongoURI;
+// Load User model
+const mysql = require('mysql2');
+const User = require('../models/User');
+const dotenv = require('dotenv').config();
 
 
 // Login Page
@@ -19,7 +17,7 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
 // Register
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   const { name, email, password, password2 } = req.body;
   let errors = [];
 
@@ -44,43 +42,38 @@ router.post('/register', (req, res) => {
       password2
     });
   } else {
-    User.findOne({ email: email }).then(user => {
-      if (user) {
-        errors.push({ msg: 'Email already exists' });
-        res.render('register', {
-          errors,
-          name,
-          email,
-          password,
-          password2
-        });
-      } else {
-        const newUser = new User({
-          name,
-          email,
-          password
-        });
 
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser
-              .save()
-              .then(user => {
-                req.flash(
-                  'success_msg',
-                  'You are now registered and can log in');
-                res.redirect('/users/login');
-              })
-              .catch(err => console.log(err));
-          });
-        });
-      }
-    });
+    const user = await User.findOne({ where: {username:email} });
+    
+    if (user !== null) {
+      errors.push({ msg: 'Email already exists' });
+      res.render('register', {
+        errors,
+        name,
+        email,
+        password,
+        password2
+      });
+
+    } else {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) throw err;
+          const newUser = User.create({
+            username: email,
+            password: hash
+          }).then(newUser => {
+            req.flash(
+              'success_msg',
+              'You are now registered and can log in');
+            res.redirect('/users/login');
+          })
+            .catch(err => console.log(err));
+        })
+      })
+    }
   }
-});
-
+})
 // Login
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {

@@ -5,41 +5,30 @@
         <div style="max-width:40vw">
             <div style="height:10vh"></div>
             <div style="height:40vh;z-index: 999999999;">
-                <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
-                <div id="modalType" style="padding:10px;background-color:white;overflow: hidden">Type:
-                    <select name="modalTypeMenu" id="modalTypeMenu" onchange="hideOrShowModalElements()">
-                        <option selected disabled value="">Select Type</option>
-                        <option value="marker">🚩Point</option>
-                        <option value="circle">🟡Area</option>
-                    </select>
-                </div>
+
+                <div hidden id="modalCoordsLat" style="padding:10px;background-color:white;overflow: hidden"></div>
+                <div hidden id="modalCoordsLon" style="padding:10px;background-color:white;overflow: hidden"></div>
+
                 <div id="modalIcon" style="padding:10px;background-color:white;overflow: hidden">Icon:
                     <select name="modalIconMenu" id="modalIconMenu">
-                        <option value="starIcon">🌟Star</option>
-                        <option value="homeIcon">🏠Home</option>
-                        <option value="workIcon">🏢Work</option>
-                        <option value="parkingIcon">🅿Parking</option>
+                        <option value="iconHotel">🏨Hotel</option>
+                        <option value="iconBnB">🏨B&B</option>
+                        <option value="iconHostel">🏢Hostel</option>
+                        <option value="iconRBnB">🏡RB&B</option>
+                        <option value="iconStar">🌟Star</option>
+                        <option value="iconParking">🅿Parking</option>
                     </select>
                 </div>
 
-                <div id="circleColor" class="circleColor" style="padding:10px;background-color:white;overflow: hidden">Border
-                    Color:<input onchange="showColorChange()" type="color" name="circleColor" id="circleColor">
-                </div>
-                <div id="circleFillColor" class="circleFillColor" style="padding:10px;background-color:white;overflow: hidden">Fill
-                    Color:<input onchange="showColorChange()" type="color" name="circleFillColor"
-                        id="circleFillColor"></div>
-                <div id="circleOpacity" class="circleOpacity"
-                    style="padding:10px;background-color:white;overflow: hidden; display:flex;">Fill Opacity:<input
-                        onchange="showColorChange()" type="range" min="0" max="1" step="0.01" value="0.1"
-                        name="circleOpacity" id="circleOpacity"></div>
-                <div id="circleRadius" class="circleRadius"
-                    style="padding:10px;background-color:white;overflow: hidden; display:flex;">Radius<input
-                        onchange="showColorChange()" type="range" min="50" max="1000" step="1" value="5"
-                        name="circleRadius" id="circleRadius"></div>
+                <div style="padding:10px;background-color:white;overflow: hidden"><input required type="text" id="modalName" placeholder="Name.."><span id="error1"
+                    style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span></div>
+                <div style="padding:10px;background-color:white;overflow: hidden"><input required type="text" id="modalLocation" placeholder="Location.."><span id="error2"
+                    style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span></div>
+                <div id="modalImg" style="padding:10px;background-color:white;overflow: hidden"><input type="text" id="modalImage" placeholder="Image.."></div>
 
                 <div id="modalMessage" style="padding:10px;background-color:white;overflow: hidden">
-                    <input type="text" name="modalMessageInput" id="modalMessageInput" placeholder="Description"
-                        required><span id="error1"
+                    <input required type="text" name="modalMessageInput" id="modalMessageInput" placeholder="Description"
+                        required><span id="error3"
                         style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span>
                 </div>
 
@@ -47,8 +36,6 @@
                 
                 
             </div>
-            <span id="span"
-                style="width:50px; height:50px;display: block;background-color: red;border-radius: 50%;overflow: visible;position: absolute; right:-150%;bottom:10%;"></span>
         </div>
     </div>
     <div style="width:100vw;height:100vh;position:fixed;left:34%;" onclick="hideModal()"></div>
