@@ -4,10 +4,25 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Accommodation = require('../models/Accommodation');
+const Acc_bookings = require('../models/Acc_bookings');
 
 const dotenv = require('dotenv').config();
 
 const banned_Chars = ['<', '>', '-', '{', '}', '[', ']', '(', ')', 'script', '<script>', '</script>', 'prompt', 'alert', 'write', 'send', '?', '!', '$', '#', '\`', '\"', '\'', '\;', '\\', '\/'];
+
+
+
+// book this
+router.post('/book_this',  (req, res) => {
+  Acc_bookings.create({
+    "accID": req.body.accID,
+    "thedate": String(req.body.thedate).replace("-","").replace("-",""),
+    "username": req.body.username,
+    "npeople": req.body.npeople
+  })
+  console.log("booking success")
+  res.end();
+});
 
 // Contact page
 router.get('/contact', (req, res) => //, ensureAuthenticated
@@ -85,8 +100,6 @@ router.post("/delete_point", async (req, res) => { // delete saved mark
 
 router.post("/save_point", async (req, res) => { // save selected mark
   console.log("ajax call    time " + new Date())
-  var type = req.body.type;
-
   const createMark = await Accommodation.create({
     "name": req.body.name,
     "type": req.body.type,

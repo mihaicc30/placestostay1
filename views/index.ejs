@@ -1,5 +1,6 @@
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <%- include ('./partials/popup') %>
+<%- include ('./partials/popup2') %>
 <%- include('./partials/header') %>
 
     
@@ -115,7 +116,7 @@
         <% counter = 1 %>
      <% if(points.length>0){ %>
          <% points.forEach(p => {%>
-                  marker<%=counter%> = L.marker([<%=p.latitude%>,<%=p.longitude%>], { icon: <%=p.icon%>, alt: 'marker<%=counter%>, <%=p.description%>' }).bindPopup('<img class="popupImg" src="./<%=p.img%>"><br><%=p.description%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=p.ID%>"><button onclick="deleteThisPoint(`<%=p.ID%>`,`marker<%=counter%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=p.latitude%>,<%=p.longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="alert(<%=p.ID%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
+                  marker<%=counter%> = L.marker([<%=p.latitude%>,<%=p.longitude%>], { icon: <%=p.icon%>, alt: 'marker<%=counter%>, <%=p.description%>' }).bindPopup('<img class="popupImg" src="./<%=p.img%>"><br><%=p.description%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=p.ID%>"><button onclick="deleteThisPoint(`<%=p.ID%>`,`marker<%=counter%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=p.latitude%>,<%=p.longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=p.ID%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
                   <% counter++%>
              <% });%>
          <% } %>

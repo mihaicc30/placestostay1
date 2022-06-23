@@ -1,0 +1,31 @@
+<% if(typeof user =="object" ) {%>
+<div class="mainModal2 hideMe" id="mainModal2" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.568);z-index:9999">
+    <div class="subModal2 hideMe" id="subModal2" style="background-color:rgb(0 255 26 / 33%);position:fixed;height:100vh; width:40vw;left:-7%;top:0%;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row">
+        <div style="width:11vw;height:50px"></div>
+        <div style="max-width:40vw">
+            <div style="height:10vh"></div>
+            <div style="height:40vh;z-index: 999999999;">
+                <div id="hotelID" style="padding:10px;background-color:white;overflow: hidden"></div>
+                <div style="padding:10px;background-color:white;overflow: hidden;display: flex;"><input id="numberOfPeople" style="width: 50px;" type="number" value="1">/<input style="width: 50px;" type="number"></div>
+                <div style="padding:10px;background-color:white;overflow: hidden"><input type="date" id="dateOfBooking"></div>
+                <div id="bookingUser" style="padding:10px;background-color:white;overflow: hidden"><%=user[0]["dataValues"].username%></div>
+                <button class="py-2 px-5" type="button" onclick="completeBooking()" id="insertSpecialButton2">✔ Save</button>
+                <script>
+                    document.getElementById("dateOfBooking").setAttribute('min', new Date().toISOString().slice(0, 10));
+                    document.getElementById("dateOfBooking").setAttribute('value', new Date().toISOString().slice(0, 10));
+                </script>
+                
+            </div>
+        </div>
+    </div>
+    <div style="width:100vw;height:100vh;position:fixed;left:34%;" onclick="hideModal()"></div>
+</div>
+
+<%} else { %>
+<div class="mainModal2 hideMe" id="mainModal2" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.77);z-index:9999">
+    <div class="subModal2 hideMe" id="subModal2" style="background-color:rgb(255 255 255 / 64%);position:fixed;height:100vh; width:30vw;left:50%;top:0%;z-index:10000;display: flex!important;flex-direction: row;transform: translateX(-50%);justify-content: center;align-items: center">
+        <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
+            <%- include ('../login') %>
+    </div>
+</div>
+<%}%>

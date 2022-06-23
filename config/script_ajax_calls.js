@@ -1,9 +1,24 @@
+function completeBooking(){
+    $.ajax({
+        type: "POST",
+        url: "/book_this",
+        data: {
+            "accID": document.getElementById('hotelID').innerHTML ,
+            "thedate": document.getElementById('dateOfBooking').value ,
+            "username": document.getElementById('bookingUser').innerHTML ,
+            "npeople": document.getElementById('numberOfPeople').value 
+        },
+        success: console.log("success book this")
+    })
+    hideModal2()
+}
+
 function deleteThisPoint(pointRef, mark) { // mark deletion
     $.ajax({
         type: "POST",
         url: "/delete_point",
         data: { "point": pointRef },
-        success: hideMark()
+        success: [console.log("success delete this"),hideMark()]
     })
 }
 function hideMark() { // mark removal so there is no need to refresh the page

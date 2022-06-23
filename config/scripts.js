@@ -17,6 +17,21 @@ function openAddMarkModal(lat, lon) {
         document.getElementById('modalLocation').value=""
         document.getElementById('modalMessageInput').value=""
 }
+
+function hideModal2() {
+    document.getElementById('mainModal2').classList.remove("showMe")
+    document.getElementById('mainModal2').classList.add("hideMe")
+    document.getElementById('subModal2').classList.remove("showMe")
+    document.getElementById('subModal2').classList.add("hideMe")
+}
+function openAddMarkModal2(hotelID) {
+        document.getElementById('mainModal2').classList.remove("hideMe")
+        document.getElementById('subModal2').classList.remove("hideMe")
+        document.getElementById('mainModal2').classList.add("showMe")
+        document.getElementById('subModal2').classList.add("showMe")
+        document.getElementById('hotelID').innerText = hotelID 
+
+}
 var baseIcon = L.icon({
     iconUrl: './img/temp.png',
     iconSize: [35, 35],
