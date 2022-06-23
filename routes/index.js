@@ -62,7 +62,6 @@ router.get('/index', (req, res) => {
   var queryz = Points.find({ belongs_to: req.user._id })
   queryz.exec(function (err, results) {
     if (err) return handleError(err);
-
     res.render('index', {
       user: req.user,
       points: results,

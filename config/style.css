@@ -84,19 +84,20 @@
 
 }
 
-.show {
+.showMe {
     display: block !important;
     animation: roadRunnerInLeft .5s;
 }
 
-.hide {
+.hideMe {
     animation: roadRunnerOut .5s;
     display: none !important;
 }
 
-/* .mainModal, .subModal {
-    display: none;
-} */
+.alert{
+    position: absolute;
+    top:5%;
+}
 
 /* https://codepen.io/designcouch/pen/obvKxm */
 @keyframes roadRunnerInLeft {

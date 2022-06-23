@@ -1,71 +1,64 @@
 <% if(typeof user =="object" ) {%>
-    <div class="mainModal hide" id="mainModal"
-        style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.568);z-index:9999">
-        <div class="subModal hide" id="subModal"
-            style="background-color:rgb(0 255 26 / 33%);position:fixed;height:100vh; width:40vw;left:-7%;top:0%;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row">
-            <div style="width:11vw;height:50px"></div>
-            <div style="width:25vw">
-                <div style="height:10vh"></div>
-                <div style="height:40vh;z-index: 999999999;">
-                    <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
-
-                    <div id="modalType" style="padding:10px;background-color:white;overflow: hidden">Type:
-                        <select name="modalTypeMenu" id="modalTypeMenu">
-                            <option value="marker">🚩Point</option>
-                            <option value="circle">🟡Area</option>
-                            <option value="polygon">🗺MultiPoint</option>
-                        </select>
-                    </div>
-                    <div id="modalIcon" style="padding:10px;background-color:white;overflow: hidden">Icon:
-                        <select name="modalIconMenu" id="modalIconMenu">
-                            <option value="starIcon">🌟Star</option>
-                            <option value="homeIcon">🏠Home</option>
-                            <option value="workIcon">🏢Work</option>
-                            <option value="parkingIcon">🅿Parking</option>
-                        </select>
-                    </div>
-
-                    <div class="circleColor" style="padding:10px;background-color:white;overflow: hidden">Border
-                        Color:<input onchange="showColorChange()" type="color" name="circleColor" id="circleColor">
-                    </div>
-                    <div class="circleFillColor" style="padding:10px;background-color:white;overflow: hidden">Fill
-                        Color:<input onchange="showColorChange()" type="color" name="circleFillColor"
-                            id="circleFillColor"></div>
-                    <div class="circleOpacity"
-                        style="padding:10px;background-color:white;overflow: hidden; display:flex;">Fill Opacity:<input
-                            onchange="showColorChange()" type="range" min="0" max="1" step="0.01" value="0.1"
-                            name="circleOpacity" id="circleOpacity"></div>
-                    <div class="circleRadius"
-                        style="padding:10px;background-color:white;overflow: hidden; display:flex;">Radius<input
-                            onchange="showColorChange()" type="range" min="50" max="1000" step="1" value="5"
-                            name="circleRadius" id="circleRadius"></div>
-
-                    <div id="modalMessage" style="padding:10px;background-color:white;overflow: hidden">
-                        <input type="text" name="modalMessageInput" id="modalMessageInput" placeholder="Description"
-                            required><span id="error1"
-                            style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span>
-                    </div>
-
-                    <button class="py-2 px-5" type="button" onclick="insertMarker('<%=user._id%>')">✔ Save</button>
-                    
-                    
+<div class="mainModal hideMe" id="mainModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.568);z-index:9999">
+    <div class="subModal hideMe" id="subModal" style="background-color:rgb(0 255 26 / 33%);position:fixed;height:100vh; width:40vw;left:-7%;top:0%;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row">
+        <div style="width:11vw;height:50px"></div>
+        <div style="max-width:40vw">
+            <div style="height:10vh"></div>
+            <div style="height:40vh;z-index: 999999999;">
+                <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
+                <div id="modalType" style="padding:10px;background-color:white;overflow: hidden">Type:
+                    <select name="modalTypeMenu" id="modalTypeMenu" onchange="hideOrShowModalElements()">
+                        <option selected disabled value="">Select Type</option>
+                        <option value="marker">🚩Point</option>
+                        <option value="circle">🟡Area</option>
+                    </select>
                 </div>
-                <span id="span"
-                    style="width:50px; height:50px;display: block;background-color: red;border-radius: 50%;overflow: visible;position: absolute; right:-150%;bottom:10%;"></span>
+                <div id="modalIcon" style="padding:10px;background-color:white;overflow: hidden">Icon:
+                    <select name="modalIconMenu" id="modalIconMenu">
+                        <option value="starIcon">🌟Star</option>
+                        <option value="homeIcon">🏠Home</option>
+                        <option value="workIcon">🏢Work</option>
+                        <option value="parkingIcon">🅿Parking</option>
+                    </select>
+                </div>
+
+                <div id="circleColor" class="circleColor" style="padding:10px;background-color:white;overflow: hidden">Border
+                    Color:<input onchange="showColorChange()" type="color" name="circleColor" id="circleColor">
+                </div>
+                <div id="circleFillColor" class="circleFillColor" style="padding:10px;background-color:white;overflow: hidden">Fill
+                    Color:<input onchange="showColorChange()" type="color" name="circleFillColor"
+                        id="circleFillColor"></div>
+                <div id="circleOpacity" class="circleOpacity"
+                    style="padding:10px;background-color:white;overflow: hidden; display:flex;">Fill Opacity:<input
+                        onchange="showColorChange()" type="range" min="0" max="1" step="0.01" value="0.1"
+                        name="circleOpacity" id="circleOpacity"></div>
+                <div id="circleRadius" class="circleRadius"
+                    style="padding:10px;background-color:white;overflow: hidden; display:flex;">Radius<input
+                        onchange="showColorChange()" type="range" min="50" max="1000" step="1" value="5"
+                        name="circleRadius" id="circleRadius"></div>
+
+                <div id="modalMessage" style="padding:10px;background-color:white;overflow: hidden">
+                    <input type="text" name="modalMessageInput" id="modalMessageInput" placeholder="Description"
+                        required><span id="error1"
+                        style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span>
+                </div>
+
+                <button class="py-2 px-5" type="button" onclick="insertMarker('<%=user._id%>')" id="insertSpecialButton">✔ Save</button>
+                
+                
             </div>
+            <span id="span"
+                style="width:50px; height:50px;display: block;background-color: red;border-radius: 50%;overflow: visible;position: absolute; right:-150%;bottom:10%;"></span>
         </div>
-        <div style="width:100vw;height:100vh;position:fixed;left:34%;" onclick="hideModal()"></div>
     </div>
+    <div style="width:100vw;height:100vh;position:fixed;left:34%;" onclick="hideModal()"></div>
+</div>
 
 <%} else { %>
-
-    <div class="mainModal hide" id="mainModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.77);z-index:9999">
-        <div class="subModal hide" id="subModal" style="background-color:rgb(255 255 255 / 64%);position:fixed;height:100vh; width:30vw;left:50%;top:0%;z-index:10000;display: flex!important;flex-direction: row;transform: translateX(-50%);justify-content: center;align-items: center">
-            <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
+<div class="mainModal hideMe" id="mainModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.77);z-index:9999">
+    <div class="subModal hideMe" id="subModal" style="background-color:rgb(255 255 255 / 64%);position:fixed;height:100vh; width:30vw;left:50%;top:0%;z-index:10000;display: flex!important;flex-direction: row;transform: translateX(-50%);justify-content: center;align-items: center">
+        <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
             <%- include ('../login') %>
-
-        </div>
     </div>
-
-
-    <%}%>
+</div>
+<%}%>

@@ -6,6 +6,11 @@ const flash = require('connect-flash');
 const session = require('cookie-session');
 const app = express();
 
+
+const con = require('./config/mysql_conn');
+
+app.use(express.json());
+
 //passport config
 require('./config/passport')(passport);
 
@@ -33,7 +38,7 @@ app.use(
     secret: 't34tg4gh667125ik6f232d32f45yg56oNIN2uniuon2u3in2iuo6uh4j6',
     resave: true,
     saveUninitialized: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours, a number representing the milliseconds from Date.now() for expiry
+    maxAge: 6 * 60 * 60 * 1000 // 6 hours, a number representing the milliseconds from Date.now() for expiry
   })
 );
 // Passport middleware

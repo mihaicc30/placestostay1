@@ -1,6 +1,6 @@
 <div class="header">
 
-    <div class="navCenter ">
+    <div class="navCenter mb-3">
         <%if(typeof user != "object"){%>
         <a href="/"                 class="btn btn-secondary btn-block" >Home       </a>
         <a href="/users/register"   class="btn btn-primary btn-block"   >Register   </a>
@@ -11,6 +11,6 @@
         <a href="/users/logout"     class="btn btn-secondary btn-block" >Logout     </a>
         <%}%>
 
+        <%- include ('./messages') %>
     </div>
-
 </div>

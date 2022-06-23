@@ -32,7 +32,6 @@ function insertMarker(userID, countz) { // mark insertion
             hideModal()
         }
         if (type == "circle") {
-            console.log(document.getElementById('circleFillColor').value);
             $.ajax({
                 type: "POST",
                 url: "/save_point",
