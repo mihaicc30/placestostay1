@@ -10,6 +10,8 @@ const app = express();
 const sequelize = require("./models/Database")
 const User = require("./models/User")
 
+
+// MySQL Connection
 sequelize.sync().then(result =>{
   console.log("MySQL Connected "+new Date())
 }).catch(err => {

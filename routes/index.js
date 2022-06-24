@@ -5,7 +5,9 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Accommodation = require('../models/Accommodation');
 const Acc_bookings = require('../models/Acc_bookings');
-
+const Acc_dates = require('../models/Acc_dates');
+const Sequelize = require("sequelize")
+const Op = Sequelize.Op;
 const dotenv = require('dotenv').config();
 
 const banned_Chars = ['<', '>', '-', '{', '}', '[', ']', '(', ')', 'script', '<script>', '</script>', 'prompt', 'alert', 'write', 'send', '?', '!', '$', '#', '\`', '\"', '\'', '\;', '\\', '\/'];
@@ -120,7 +122,48 @@ router.post("/save_point", async (req, res) => { // save selected mark
 });
 
 
+// ACCOMMODATIONS //
+router.get('/api/acc', (req,res)=> { 
+  Accommodation.findAll().then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/:location', (req,res)=> { 
+  Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/:location/:type', (req,res)=> { 
+  Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+      res.json(results);
+  })
+});
+// BOOKINGS //
+router.get('/api/bookings', (req,res)=> { 
+  Acc_bookings.findAll().then((results)=>{
+      res.json(results);
+  })
+});
 
+router.post('/api/bookings/:acc_id/:npeople/:date', (req,res)=> { 
+  Acc_bookings.findAll()
+  
+    // .then((results)=>{
+    //   res.json(results);
+  // })
+});
+// USERS //
+router.get('/api/users', (req,res)=> {  
+  User.findAll().then((results)=>{
+      res.json(results);
+  })
+});
+// BOOKING DATES //
+router.get('/api/dates', (req,res)=> {  // mysql table > acc_dates
+  Acc_dates.findAll().then((results)=>{
+      res.json(results);
+  })
+});
 
 
 
