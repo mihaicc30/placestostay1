@@ -1,4 +1,5 @@
 <% if(typeof user =="object" ) {%>
+    <% user = JSON.parse(JSON.stringify(user)) %>
 <div class="mainModal hideMe" id="mainModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.568);z-index:9999">
     <div class="subModal hideMe" id="subModal" style="background-color:rgb(0 255 26 / 33%);position:fixed;height:100vh; width:40vw;left:-7%;top:0%;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row">
         <div style="width:11vw;height:50px"></div>
@@ -11,10 +12,10 @@
 
                 <div id="modalIcon" style="padding:10px;background-color:white;overflow: hidden">Icon:
                     <select name="modalIconMenu" id="modalIconMenu">
-                        <option value="iconHotel">🏨Hotel</option>
-                        <option value="iconBnB">🏨B&B</option>
-                        <option value="iconHostel">🏢Hostel</option>
-                        <option value="iconRBnB">🏡RB&B</option>
+                        <option value="iconHotel">🏬Hotel</option>
+                        <option value="iconBnB">🕌B&B</option>
+                        <option value="iconHostel">🏣Hostel</option>
+                        <option value="iconRBnB">💒RB&B</option>
                         <option value="iconStar">🌟Star</option>
                         <option value="iconParking">🅿Parking</option>
                     </select>
@@ -24,15 +25,18 @@
                     style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span></div>
                 <div style="padding:10px;background-color:white;overflow: hidden"><input required type="text" id="modalLocation" placeholder="Location.."><span id="error2"
                     style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span></div>
-                <div id="modalImg" style="padding:10px;background-color:white;overflow: hidden"><input type="text" id="modalImage" placeholder="Image.."></div>
+                <div id="modalImg" style="padding:10px;background-color:white;overflow: hidden">
+                    <form >
+                        <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload"> 
+                    </form>
+                </div>
 
                 <div id="modalMessage" style="padding:10px;background-color:white;overflow: hidden">
                     <input required type="text" name="modalMessageInput" id="modalMessageInput" placeholder="Description"
                         required><span id="error3"
                         style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span>
                 </div>
-
-                <button class="py-2 px-5" type="button" onclick="insertMarker('<%=user._id%>')" id="insertSpecialButton">✔ Save</button>
+                <button class="py-2 px-5" type="button" onclick="insertMarker('<%=user[0].ID%>')" id="insertSpecialButton">✔ Save</button>
                 
                 
             </div>

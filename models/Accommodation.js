@@ -27,18 +27,6 @@ const Accommodation = sequelize.define('accommodation', {
   longitude: {
     type: Sequelize.FLOAT,
     defaultValue: 0
-  },
-  icon: {
-    type: Sequelize.STRING,
-    defaultValue: 0
-  },
-  photo: {
-    type: Sequelize.STRING,
-    defaultValue: 0
-  },
-  description: {
-    type: Sequelize.STRING,
-    defaultValue: 0
   }
 }
 ,

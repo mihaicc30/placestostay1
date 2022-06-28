@@ -1,16 +1,31 @@
 <div class="header">
 
     <div class="navCenter mb-3">
-        <%if(typeof user != "object"){%>
-        <a href="/"                 class="btn btn-secondary btn-block" >Home       </a>
-        <a href="/users/register"   class="btn btn-primary btn-block"   >Register   </a>
-        <a href="/users/login"      class="btn btn-secondary btn-block" >Login      </a>
+        <a href="/" class="btn btn-secondary btn-block">Home</a>
+        <%if(typeof user !="object" ){%>
+            <a href="/users/register" class="btn btn-primary btn-block mt-3">Register</a>
+            <a href="/users/login" class="btn btn-secondary btn-block mt-3">Login</a>
         <%}%>
-        <%if(typeof user == "object"){%>
-        <a href="/index"                 class="btn btn-secondary btn-block" >Home       </a>
-        <a href="/users/logout"     class="btn btn-secondary btn-block" >Logout     </a>
-        <%}%>
+    
 
+    </div>
+    <div class="navCenter mb-3">
+    
+    <%if(typeof user=="object" ){%>
+        <div class="userProfile">
+            <div>
+                
+                <p class="profileSpace"><a href="/profile" class="profileSpace btn btn-secondary btn-block mt-3" style="border-radius: 50%;width: 50px;"><%=user[0]["dataValues"]["username"][0].toUpperCase()%></a>Welcome back,<br><%=user[0]["dataValues"]["username"]%>!</p>
+                <div class="userFadeDownMenu">
+                    <a href="/myprofile" class="btn btn-secondary btn-block mt-3">Profile</a>
+                    <a href="/users/logout" class="btn btn-secondary btn-block mt-3">Logout</a>
+                </div>
+            </div>
+        </div>
+    <%}%>
+
+    </div>
+    <div style="position:fixed; top:5%;left: 50%;">
         <%- include ('./messages') %>
     </div>
 </div>

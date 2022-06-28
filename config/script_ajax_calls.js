@@ -1,7 +1,7 @@
 function completeBooking(){
     $.ajax({
         type: "POST",
-        url: "/book_this",
+        url: "/book",
         data: {
             "accID": document.getElementById('hotelID').innerHTML ,
             "thedate": document.getElementById('dateOfBooking').value ,
@@ -25,7 +25,7 @@ function hideMark() { // mark removal so there is no need to refresh the page
     document.getElementById('current_target').remove()
 }
 
-function insertMarker(userID, countz) { // mark insertion
+function insertMarker(userID) { // mark insertion
     if (document.getElementById('modalName').value.length > 0 &&
         document.getElementById('modalLocation').value.length > 0 &&
         document.getElementById('modalMessageInput').value.length > 0
@@ -41,7 +41,7 @@ function insertMarker(userID, countz) { // mark insertion
                 "latitude": document.getElementById('modalCoordsLat').innerHTML,
                 "longitude": document.getElementById('modalCoordsLon').innerHTML,
                 "icon": document.getElementById('modalIconMenu').value,
-                "photo": document.getElementById('modalImage').value,
+                "photo": document.getElementById('avatar_url').value,
                 "description": document.getElementById('modalMessageInput').value,
             },
             // success: showOnMap()

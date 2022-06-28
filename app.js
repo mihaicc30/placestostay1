@@ -5,6 +5,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('cookie-session');
 const app = express();
+const router = express.Router();
 
 
 const sequelize = require("./models/Database")
@@ -55,8 +56,10 @@ app.use(function(req, res, next) {
 // Routes
 app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/users.js'));
+
 app.use('/config', express.static(__dirname+'/config'));
 app.use('/img', express.static(__dirname+'/img'));
+
 
 
 app.all('*', (req, res) => {

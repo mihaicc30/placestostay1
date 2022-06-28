@@ -6,10 +6,12 @@
             <div style="height:10vh"></div>
             <div style="height:40vh;z-index: 999999999;">
                 <div id="hotelID" style="padding:10px;background-color:white;overflow: hidden"></div>
-                <div style="padding:10px;background-color:white;overflow: hidden;display: flex;"><input id="numberOfPeople" style="width: 50px;" type="number" value="1">/<input style="width: 50px;" type="number"></div>
+                <div style="padding:10px;background-color:white;overflow: hidden;display: flex;">
+                    <input id="numberOfPeople" style="width: 50px;" type="number" value="1" min="1">/
+                    <input style="width: 50px;" type="number"></div>
                 <div style="padding:10px;background-color:white;overflow: hidden"><input type="date" id="dateOfBooking"></div>
                 <div id="bookingUser" style="padding:10px;background-color:white;overflow: hidden"><%=user[0]["dataValues"].username%></div>
-                <button class="py-2 px-5" type="button" onclick="completeBooking()" id="insertSpecialButton2">✔ Save</button>
+                <button class="py-2 px-5" type="button" onclick="completeBooking()" id="insertSpecialButton2">🥂Book!</button>
                 <script>
                     document.getElementById("dateOfBooking").setAttribute('min', new Date().toISOString().slice(0, 10));
                     document.getElementById("dateOfBooking").setAttribute('value', new Date().toISOString().slice(0, 10));
@@ -18,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div style="width:100vw;height:100vh;position:fixed;left:34%;" onclick="hideModal()"></div>
+    <div style="width:100vw;height:100vh;position:fixed;left:34%;" onclick="hideModal2()"></div>
 </div>
 
 <%} else { %>

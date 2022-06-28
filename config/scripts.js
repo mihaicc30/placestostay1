@@ -1,4 +1,3 @@
-
 function hideModal() {
     document.getElementById('mainModal').classList.remove("showMe")
     document.getElementById('mainModal').classList.add("hideMe")
@@ -37,23 +36,14 @@ var baseIcon = L.icon({
     iconSize: [35, 35],
     iconAnchor: [5, 5],
     popupAnchor: [5, -5]
-});
-
-var baseIcon = L.icon({
-    iconUrl: './img/test.gif',
-    iconSize: [35, 35],
-    iconAnchor: [5, 5],
-    popupAnchor: [5, -5]
-});
+})
 
 
 function checkAndHideModal(e){
     // for ajax management calls   -> script_ajax_calls.js
     var currentTarget = e.target
-    if(
-        (String(currentTarget).startsWith("[object HTMLImageElement]") || String(currentTarget).startsWith("[object SVGPathElement]")) 
-        && String(currentTarget.classList).startsWith("leaflet")
-     ){
+    if( (String(currentTarget).startsWith("[object HTMLImageElement]") || String(currentTarget).startsWith("[object SVGPathElement]")) 
+        && String(currentTarget.classList).startsWith("leaflet")){
         if(document.querySelectorAll('#current_target').length > 0 ){
             var beforeTarget = document.getElementById('current_target')
             beforeTarget.removeAttribute("id")
@@ -70,7 +60,7 @@ function checkAndHideModal(e){
     }
     //
 
-    var modal =document.getElementById('mainModal').classList
+    var modal = document.getElementById('mainModal').classList
 
     if(e.key == "Escape"){
         if( modal == "mainModal Me"){

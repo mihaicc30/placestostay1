@@ -24,7 +24,8 @@ const User = sequelize.define('acc_users', {
 ,
   {
     freezeTableName: true,
-    timestamps: false
+    timestamps: false,
+    raw:true
   }
   )
 

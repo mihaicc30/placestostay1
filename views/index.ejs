@@ -5,15 +5,12 @@
 
     
 
-            <div id="map" style="position:absolute;height:80vh; width: 90vw;bottom:5%;"></div>
+<div class="mainProfileDiv"></div>
+<div id="map" style="position:absolute;height:80vh; width: 90vw;bottom:5%;"></div>
 
-            <div class="formBlock" style="display: none;">
-                <form id="form">
-                    <input type="text" name="start" class="input" id="start" placeholder="Choose starting point" />
-                    <input type="text" name="end" class="input" id="destination" placeholder="Choose starting point" onchange="removeRoute" />
-                    <button type="button" onclick="removeRoute()">Get Directions</button>
-                </form>
-            </div>
+<input hidden type="text" name="start" class="input" id="start" placeholder="Choose starting point" />
+<input hidden type="text" name="end" class="input" id="destination" placeholder="Choose starting point" />
+
 
 
 
@@ -101,39 +98,78 @@
      var homeIcon = new baseIcon({ iconUrl: "./img/home.png" })
      var workIcon = new baseIcon({ iconUrl: "./img/work.png" })
      var parkingIcon = new baseIcon({ iconUrl: "./img/parking.png" })
+     var iconParking = new baseIcon({ iconUrl: "./img/parking.png" })
      
      var iconHotel = new baseIcon({ iconUrl: "./img/work.png" })
-     var iconHostel = new baseIcon({ iconUrl: "./img/work.png" })
-     var iconBnB = new baseIcon({ iconUrl: "./img/work.png" })
-     var iconRBnB = new baseIcon({ iconUrl: "./img/work.png" })
+     var iconHostel = new baseIcon({ iconUrl: "./img/hostel.png" })
+     var iconBnB = new baseIcon({ iconUrl: "./img/bnb.png" })
+     var iconRBnB = new baseIcon({ iconUrl: "./img/rbnb.png" })
      
  /*===================================================
                  BUILDING MARKS              
  ===================================================*/
      // looping through the points from the database to dynamically add the points 
      // each time the map is called
-     <% if(typeof points !== "undefined") { %>  // making sure user is logged in
-        <% counter = 1 %>
-     <% if(points.length>0){ %>
-         <% points.forEach(p => {%>
-                  marker<%=counter%> = L.marker([<%=p.latitude%>,<%=p.longitude%>], { icon: <%=p.icon%>, alt: 'marker<%=counter%>, <%=p.description%>' }).bindPopup('<img class="popupImg" src="./<%=p.img%>"><br><%=p.description%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=p.ID%>"><button onclick="deleteThisPoint(`<%=p.ID%>`,`marker<%=counter%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=p.latitude%>,<%=p.longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=p.ID%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
-                  <% counter++%>
-             <% });%>
-         <% } %>
+     
+     <% for (let c = 0; c < points.length; c++) { %>
+            marker<%=c%> = L.marker([<%=points[c].latitude%>,<%=points[c].longitude%>],{ <%if(String(points[c].icon).length > 4){%>icon: <%=points[c].icon%>,<%}%> alt: 'marker<%=c%>', <%if(String(points[c].description).length > 4){%>description:'<%=points[c].description%>'<%}%> } )
+            .bindPopup('<%if(String(points[c].photo).length > 4){%><img class="popupImg" src="<%=points[c].photo%>"><%}%><br><%if(String(points[c].description).length > 0){%><%=points[c].description%><%}%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=points[c].ID%>"><button onclick="deleteThisPoint(`<%=points[c].ID%>`,`marker<%=c%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=points[c].latitude%>,<%=points[c].longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=points[c].ID%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
      <% } %>
-
+                   
      /*===================================================
                              GROUP LAYER           
      ===================================================*/
-     
      <%countz=1%>
-        var markz = L.layerGroup([
-        <% if(typeof points != "undefined") { %>
-            <% points.forEach(marker => {%>
-                marker<%=countz%>,
-                <%countz++%>
-        <% }) %> <%}%>
-        ]).addTo(map)
+    var hotels = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "Hotel"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+    <% } %> <%}%>
+    ]).addTo(map)
+    
+    var bnbs = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "BnB"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+    <% } %> <%}%>
+    ]).addTo(map)
+    
+    var rbnbs = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "RBnB"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+    <% } %> <%}%>
+    ]).addTo(map)
+
+    var hostels = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "Hostel"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+    <% } %> <%}%>
+    ]).addTo(map)
+
+    var other = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type != "Hotel" && points[c].type != "Hostel" && points[c].type != "RBnB" && points[c].type != "BnB" ){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+    <% } %> <%}%>
+    ]).addTo(map)
+    
      /*===================================================
                              GPS / GEOLOCATION              
      ===================================================*/
@@ -188,7 +224,11 @@
      };
 
      var overlays = {
-         "Saved Points": markz,
+         "Hotels": hotels,
+         "B&B": bnbs,
+         "AirBnB": rbnbs,
+         "Hostels": hostels,
+         "Others": other,
      };
      /*===================================================
                  LAYER BUTTON            
@@ -246,9 +286,9 @@
      function onMapClick(e) {
          L.popup()
              .setLatLng(e.latlng)
-             .setContent("<div class='popupClick'>Location:<br><p contentEditable='true' id='wpz'>" + e.latlng.lat + "<br>, " + e.latlng.lng + "</p>" +
+             .setContent("<div class='popupClick'>Location:<br><p contentEditable='true' id='wpz'>" + e.latlng.lat +", "+  e.latlng.lng + "</p>" +
                  `</div>
-                 <div><button onclick="openAddMarkModal(${e.latlng.lat}, ${e.latlng.lng})" style="border:none;background-color:transparent;" type="button"><img src="/img/addmark.png" class="popupImgs" alt="Add Mark"></button><button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>`)
+                 <div style="display: flex;justify-content: center;"><button onclick="openAddMarkModal(${e.latlng.lat}, ${e.latlng.lng})" style="border:none;background-color:transparent;" type="button"><img src="/img/addmark.png" class="popupImgs" alt="Add Mark"></button><button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>`)
              .openOn(map);
      }
      map.on('click', onMapClick);
