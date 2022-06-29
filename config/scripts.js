@@ -12,9 +12,9 @@ function openAddMarkModal(lat, lon) {
 
         document.getElementById('modalCoordsLat').innerText = lat 
         document.getElementById('modalCoordsLon').innerText = lon
-        document.getElementById('modalName').value=""
-        document.getElementById('modalLocation').value=""
-        document.getElementById('modalMessageInput').value=""
+        document.getElementById('avatar_url').innerText = "" 
+        document.getElementById('modalName').innerText = "" 
+        document.getElementById('modalMessageInput').innerText = "" 
 }
 
 function hideModal2() {
@@ -29,6 +29,7 @@ function openAddMarkModal2(hotelID) {
         document.getElementById('mainModal2').classList.add("showMe")
         document.getElementById('subModal2').classList.add("showMe")
         document.getElementById('hotelID').innerText = hotelID 
+        
 
 }
 var baseIcon = L.icon({
@@ -50,14 +51,14 @@ function checkAndHideModal(e){
         }
         currentTarget.setAttribute("id", "current_target")
     };
-    if(currentTarget.id == "insertSpecialButton"){
-        // var type = document.getElementById('modalTypeMenu').value
-        var coordslat = document.getElementById('modalCoordsLat').innerHTML
-        var coordslon = document.getElementById('modalCoordsLon').innerHTML
-        var alt = document.getElementById('modalMessageInput').value
+    // if(currentTarget.id == "insertSpecialButton"){
+    //     // var type = document.getElementById('modalTypeMenu').value
+    //     var coordslat = document.getElementById('modalCoordsLat').innerHTML
+    //     var coordslon = document.getElementById('modalCoordsLon').innerHTML
+    //     var alt = document.getElementById('modalMessageInput').value
 
-        L.marker([coordslat,coordslon], { "icon": baseIcon, "alt": `marker999, ${alt}` }).addTo(map)
-    }
+    //     L.marker([coordslat,coordslon], { "icon": baseIcon, "alt": `marker999, ${alt}` }).addTo(map)
+    // }
     //
 
     var modal = document.getElementById('mainModal').classList

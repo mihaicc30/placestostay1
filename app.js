@@ -5,12 +5,9 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('cookie-session');
 const app = express();
-const router = express.Router();
 
 
 const sequelize = require("./models/Database")
-const User = require("./models/User")
-
 
 // MySQL Connection
 sequelize.sync().then(result =>{

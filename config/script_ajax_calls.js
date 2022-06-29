@@ -27,8 +27,7 @@ function hideMark() { // mark removal so there is no need to refresh the page
 
 function insertMarker(userID) { // mark insertion
     if (document.getElementById('modalName').value.length > 0 &&
-        document.getElementById('modalLocation').value.length > 0 &&
-        document.getElementById('modalMessageInput').value.length > 0
+        document.getElementById('modalLocation').value.length > 0
     ) {
         $.ajax({
             type: "POST",
@@ -44,18 +43,12 @@ function insertMarker(userID) { // mark insertion
                 "photo": document.getElementById('avatar_url').value,
                 "description": document.getElementById('modalMessageInput').value,
             },
-            // success: showOnMap()
+            success: console.log("ajax save point")
         })
         hideModal()
     }
 
-    if (document.getElementById('modalMessageInput').value.length == 0) {
-        document.getElementById('modalMessageInput').style.border = "2px solid red";
-        document.getElementById('error3').style.visibility = "visible";
-    } else {
-        document.getElementById('error3').style.visibility = 'hidden'
-        document.getElementById('modalMessageInput').style.border = "1px solid black";
-    }
+    
     if (document.getElementById('modalName').value.length == 0) {
         document.getElementById('modalName').style.border = "2px solid red";
         document.getElementById('error1').style.visibility = "visible";

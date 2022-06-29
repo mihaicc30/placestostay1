@@ -86,7 +86,6 @@ router.post("/save_point", async (req, res) => { // save selected mark
     "longitude": req.body.longitude
   }).then(async(result) => {
     var accID = JSON.parse(JSON.stringify(result)).ID
-    console.log(accID)
     await Accommodation_details.create({
       "ID":accID,
       "icon": req.body.icon,
