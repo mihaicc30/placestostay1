@@ -25,6 +25,10 @@ const Accommodation_details = sequelize.define('accommodation_details', {
   description: {
     type: Sequelize.STRING,
     defaultValue: 0
+  },
+  price: {
+    type: Sequelize.FLOAT,
+    defaultValue: 0
   }
 }
 ,

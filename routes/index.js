@@ -16,34 +16,28 @@ const { query } = require('express');
 const Op = Sequelize.Op;
 
 const banned_Chars = ['<', '>', '-', '{', '}', '[', ']', '(', ')', 'script', '<script>', '</script>', 'prompt', 'alert', 'write', 'send', '?', '!', '$', '#', '\`', '\"', '\'', '\;', '\\', '\/'];
-
+const con = mysql.createConnection({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DBASE
+});
 
 // Welcome Page
 router.get('/', async (req, res) => {
-  
-  var con = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_DBASE
-  });
-  con.connect(function(err) {
-    if (err) throw err;
     var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description FROM accommodation\
     LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
     UNION\
     SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description FROM accommodation\
     RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID"
-    con.query(queryy, function (err, result, fields) {
+    con.query(queryy, function (err, result) {
       if (err) throw err;
       res.render('index', {
         user: req.user,
         points: JSON.parse(JSON.stringify(result))
       })
     });
-    con.end()
-  });
 })
 
 // Profile Page
@@ -103,9 +97,20 @@ router.post("/save_point", async (req, res) => { // save selected mark
 
 // ACCOMMODATIONS //
 router.get('/api/acc', (req,res)=> { 
-  Accommodation.findAll().then((results)=>{
-      res.json(results);
-  })
+
+  var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation\
+  LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
+  UNION\
+  SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation\
+  RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID ORDER BY price"
+  con.query(queryy, function (err, result) {
+    if (err) throw err;
+    res.json(result);
+  });
+
+  // Accommodation.findAll().then((results)=>{
+  //     res.json(results);
+  // })
 });
 router.get('/api/acc/:location', (req,res)=> { 
   Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{

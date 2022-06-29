@@ -75,3 +75,4 @@ function checkAndHideModal(e){
 }
 document.addEventListener("click", checkAndHideModal);
 document.addEventListener("keydown", checkAndHideModal);
+
