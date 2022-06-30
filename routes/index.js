@@ -26,13 +26,13 @@ const con = mysql.createConnection({
 
 // Welcome Page
 router.get('/', async (req, res) => {
-  var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description FROM accommodation\
+  var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation\
   LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
-  WHERE icon IS NOT NULL\
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1\
   UNION\
-  SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description FROM accommodation  \
+  SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation  \
   RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
-  WHERE icon IS NOT NULL"
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1 ORDER BY price"
     con.query(queryy, function (err, result) {
       if (err) throw err;
       res.render('index', {
@@ -86,7 +86,8 @@ router.post("/save_point", async (req, res) => { // save selected mark
       "ID":accID,
       "icon": req.body.icon,
       "photo": req.body.photo,
-      "description": req.body.description
+      "description": req.body.description,
+      "price": req.body.price
     }).then(async(result) => {
       console.log("save success");
       res.end();
@@ -100,13 +101,14 @@ router.post("/save_point", async (req, res) => { // save selected mark
 // ACCOMMODATIONS //
 router.get('/api/acc', (req,res)=> { 
 
-  var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description FROM accommodation\
+  var queryy = "\
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation\
   LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
-  WHERE icon IS NOT NULL\
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1\
   UNION\
-  SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description FROM accommodation  \
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation  \
   RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
-  WHERE icon IS NOT NULL"
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1 ORDER BY price"
   con.query(queryy, function (err, result) {
     if (err) throw err;
     res.json(result);
@@ -127,16 +129,48 @@ router.get('/api/id/:id', (req,res)=> {
       res.json(results);
   })
 });
-router.get('/api/acc/:location', (req,res)=> { 
+router.get('/api/acc/loc/:location', (req,res)=> { 
   Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
       res.json(results);
   })
 });
-router.get('/api/acc/:location/:type', (req,res)=> { 
+////////// APIs For Filtering ////////////
+router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
+  Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` }  }}).then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > name, location
+  Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }}}).then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/name/:name/type/:type', (req,res)=> {  // filter > name, type
+  Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/name/:name/location/:location/type/:type', (req,res)=> {  // filter > name, location, type
+  Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/location/:location', (req,res)=> { // filter > location
+  Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` } }}).then((results)=>{
+      res.json(results);
+  })
+});
+router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > location, type
   Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
       res.json(results);
   })
 });
+router.get('/api/acc/type/:type', (req,res)=> {  // filter > type
+  Accommodation.findAll({where:{"type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+      res.json(results);
+  })
+});
+////////// END For Filtering ////////////
 // BOOKINGS //
 router.get('/api/bookings', (req,res)=> { 
   Acc_bookings.findAll().then((results)=>{

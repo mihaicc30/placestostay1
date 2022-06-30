@@ -102,17 +102,17 @@ async function inputRange() {
    
     const ajaxResponse = await fetch(`api/acc`);
     const places = await ajaxResponse.json();
-
 	var slider = document.querySelector('#slider')
     var lowGBPAmount = document.querySelector('.lowGBPAmount')
     var highGBPAmount = document.querySelector('.highGBPAmount')
-    var min = 0.00
-    var max = parseFloat(places[places.length-1].price).toFixed(2)
+    const min = parseFloat(1.11)
+    const max = parseFloat(places[places.length-1].price).toFixed(2)
 
-    slider.addEventListener('change', function () {
+    slider.addEventListener('change', async function () {
         lowGBPAmount.textContent = formatPrice(min + ((max - min) * (slider.valueLow / 100)));
         highGBPAmount.textContent = formatPrice(min + ((max - min) * (slider.valueHigh / 100)));
 
+    
     });
 
     function formatPrice(price) {
@@ -122,4 +122,4 @@ async function inputRange() {
         }
     }
 }
-inputRange();
+inputRange()
