@@ -5,14 +5,14 @@
 <%- include('./partials/header') %>
 <div style="display: flex;flex-direction: column;">
     <div class="searchDiv">
-        <button id="showMap" class="btn btn-block btnActive" style="display: none;" 
+        <button id="showMap" class="btn btn-block " style="display: none;" 
                 onclick="this.classList.remove('btnActive');initializeMap();
                 document.getElementById('showList').classList.add('btnActive');
                 document.getElementById('map').classList.add('windowActive');
                 document.getElementById('filterDiv').classList.remove('windowActive');
                 document.getElementById('search').classList.remove('windowActive')">Show Map🌐</button>
 
-        <button id="showList" class="btn btn-block  m-0" style="display: none;"
+        <button id="showList" class="btn btn-block btnActive m-0" style="display: none;"
                 onclick="this.classList.remove('btnActive');
                 getPlaces();
                 document.getElementById('filterDiv').classList.add('windowActive');
@@ -150,8 +150,8 @@
         </div>
 
     </div>
-    <div id="map" class="rounded " style="position:absolute;height:80vh; width: 95vw;bottom:3%;left:2%;display: none;"></div>
-    <div id="search" class="rounded windowActive" style="position:absolute;height:80vh; width: 95vw;bottom:3%;left:2%;display: none;"><%- include('./partials/search') %></div>
+    <div id="map" class="rounded windowActive" style="position:absolute;height:80vh; width: 95vw;bottom:3%;left:2%;display: none;"></div>
+    <div id="search" class="rounded " style="position:absolute;height:80vh; width: 95vw;bottom:3%;left:2%;display: none;"><%- include('./partials/search') %></div>
 </div>
 <input hidden type="text" name="start" class="input" id="start" placeholder="Choose starting point" style="display: none;"/>
 <input hidden type="text" name="end" class="input" id="destination" placeholder="Choose starting point" style="display: none;"/>
