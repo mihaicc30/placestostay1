@@ -2,6 +2,7 @@ function completeBooking(){
     $.ajax({
         type: "POST",
         url: "/book",
+        crossDomain: true,
         data: {
             "accID": document.getElementById('hotelID').innerHTML ,
             "thedate": document.getElementById('dateOfBooking').value ,
@@ -16,6 +17,7 @@ function completeBooking(){
 function deleteThisPoint(pointRef, mark) { // mark deletion
     $.ajax({
         type: "POST",
+        crossDomain: true,
         url: "/delete_point",
         data: { "point": pointRef },
         success: [console.log("success delete this"),hideMark()]
@@ -32,6 +34,7 @@ function insertMarker(userID) { // mark insertion
         $.ajax({
             type: "POST",
             url: "/save_point",
+            crossDomain: true,
             data: {
 
                 "name": document.getElementById('modalName').value,
