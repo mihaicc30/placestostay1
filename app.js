@@ -51,10 +51,10 @@ app.use(function(req, res, next) {
     next();
 });
 // Routes
-app.use('/', require('./routes/index.js'));
-app.use('/users', require('./routes/users.js'));
-app.use('/config', express.static('/config'));
-app.use('/img', express.static('/img'));
+app.use('/', require(__dirname+'/routes/index.js'));
+app.use('/users', require(__dirname+'/routes/users.js'));
+app.use('/config', express.static(__dirname+'/config'));
+app.use('/img', express.static(__dirname+'/img'));
 
 
 
