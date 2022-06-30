@@ -337,9 +337,15 @@
 
     .searchDiv {
         position: absolute;
-        left: 5%;
-        top:13%;
+        left:22%!important;
+        top:13%!important;
     }
+    #filterDiv{
+        display: flex!important;
+        flex-direction: column!important;
+        margin: 5rem 0 5rem 0;
+    }
+    
 }
 
 /* start dual slider input-range */

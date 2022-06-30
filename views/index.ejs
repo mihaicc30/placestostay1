@@ -7,7 +7,7 @@
 var checkUser=0;
 if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 %>
-<div style="display: flex;flex-direction: column;">
+<div id="godDivChild" style="display: flex;flex-direction: column;">
     <div class="searchDiv">
         <button id="showMap" class="btn btn-block btnActive" style="display: none;" 
                 onclick="this.classList.remove('btnActive');initializeMap();
