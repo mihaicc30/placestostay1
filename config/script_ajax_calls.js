@@ -20,50 +20,73 @@ async function applyFilter(){
         let results = "";
         if(filteredResults.length > 0) {
             filteredResults.forEach( place => {
-                // filtering paradise
-                if(f1L==0 && f2L==0 && f3L==0 && f4L==0) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                // this is for the results when the user wants very specific accommodation :)
+                // filtering paradise // gods list of filters // somewhat proud its made by me and flawless :D
+                if(f1L==0 && f2L==0 && f3L==0 && f4L==0) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 
-                if(f1L>=1 && f2L==0 && f3L==0 && f4L==0 && String(place.name).toLowerCase().includes(String(f1).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                if(f1L>=1 && f2L==0 && f3L==0 && f4L==0 
+                    && String(place.name).toLowerCase().includes(String(f1).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 if(f1L>=1 && f2L>=1 && f3L==0 && f4L==0 
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
-                    && String(place.location).toLowerCase().includes(String(f2).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    && String(place.location).toLowerCase().includes(String(f2).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 if(f1L>=1 && f2L>=1 && f3L>=1 && f4L==0 
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
-                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 if(f1L>=1 && f2L>=1 && f3L>=1 && f4L>=1
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                if(f1L>=1 && f2L==0 && f3L==0 && f4L>=1
+                    && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
+                    && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                if(f1L>=1 && f2L==0 && f3L>=1 && f4L==0
+                    && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
+                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                if(f1L>=1 && f2L==0 && f3L>=1 && f4L>=1
+                    && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
+                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
+                    && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                if(f1L>=1 && f2L>=1 && f3L==0 && f4L>=1
+                    && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
+                    && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
+                    && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 
+
                 if(f1L==0 && f2L>=1 && f3L==0 && f4L==0
-                    && String(place.location).toLowerCase().includes(String(f2).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    && String(place.location).toLowerCase().includes(String(f2).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 if(f1L==0 && f2L>=1 && f3L>=1 && f4L==0
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
-                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 if(f1L==0 && f2L>=1 && f3L>=1 && f4L>=1
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
-                
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                if(f1L==0 && f2L>=1 && f3L==0 && f4L>=1
+                    && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
+                    && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                        
                 if(f1L==0 && f2L==0 && f3L>=1 && f4L==0
-                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    && String(place.type).toLowerCase().includes(String(f3).toLowerCase())) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 if(f1L==0 && f2L==0 && f3L>=1 && f4L>=1
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
                 
                 if(f1L==0 && f2L==0 && f3L==0 && f4L>=1
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
-               
-                // <div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>`
+                    ) { results += `<div onclick="openAddMarkModal2(${place.ID},<%=checkUser%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>` }
             });
         } else {
-            results += "<p>Unable to find anything.</p>";
+            results += "<div<p>Unable to find anything.</p></div>";
         }
         document.getElementById("results").innerHTML = results;
     } catch (e) {
