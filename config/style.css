@@ -142,6 +142,8 @@
 }
 
 .userFadeDownMenu {
+    display: flex;
+    flex-direction: column;
     transition: 1s ease-in;
 
 }

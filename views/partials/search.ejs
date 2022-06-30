@@ -1,24 +1,20 @@
 <div id="results" class="pt-3" style="position:fixed;height:80vh; width: 95vw;bottom: 2%;left: 2%;border:2px solid rgb(239 188 244) ;overflow: scroll;overflow-x: hidden;">
 
 </div>
-
+<% console.log(typeof user); %>
 <script type="text/javascript">
 async function getPlaces() {
 	// var searchType = document.getElementById('searchType').value
     try {
 		const ajaxResponse = await fetch(`api/acc`);
-
 		const places = await ajaxResponse.json();
 		let context = "";
 		if(places.length > 0) {
-			// context += '<table border="1px solid black">'
 			places.forEach( place => {
-                context += `<div onclick="openAddMarkModal2(${place.ID})"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>`;
+                context += `<div onclick="openAddMarkModal2(${place.ID},<%if(typeof user=="object"){%>1<%}else{%>2<%}%>)"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>`;
 			});
-			// context += '</table>'
 		} else {
 			context += "<p>Unable to find anything.</p>";
-			
 		}
 		document.getElementById("results").innerHTML = context;
 	} catch (e) {

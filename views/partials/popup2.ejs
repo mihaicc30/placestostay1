@@ -6,12 +6,10 @@
             <div style="height:10vh"></div>
             <div style="height:40vh;z-index: 999999999;">
                 <div id="hotelID" style="padding:10px;background-color:white;overflow: hidden"></div>
-                
                 <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div id="carousel-indicators" class="carousel-indicators"></div>
                     <div id="carousel-inner" class="carousel-inner"></div>
                   </div>
-
                 <div style="padding:10px;background-color:white;overflow: hidden;display: flex;">
                     <input id="numberOfPeople" style="width: 50px;" type="number" value="1" min="1">/
                     <input style="width: 50px;" type="number"></div>
@@ -32,7 +30,6 @@
 <%} else { %>
 <div class="mainModal2 hideMe" id="mainModal2" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:rgba(0, 0, 0, 0.77);z-index:9999">
     <div class="subModal2 hideMe" id="subModal2" style="background-color:rgb(255 255 255 / 64%);position:fixed;height:100vh; width:30vw;left:50%;top:0%;z-index:10000;display: flex!important;flex-direction: row;transform: translateX(-50%);justify-content: center;align-items: center">
-        <div hidden id="modalCoords" style="padding:10px;background-color:white;overflow: hidden"></div>
             <%- include ('../login') %>
     </div>
 </div>

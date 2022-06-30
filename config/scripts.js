@@ -23,13 +23,15 @@ function hideModal2() {
     document.getElementById('subModal2').classList.remove("showMe")
     document.getElementById('subModal2').classList.add("hideMe")
 }
-async function openAddMarkModal2(hotelID) {
+async function openAddMarkModal2(hotelID,uzer) {
         document.getElementById('mainModal2').classList.remove("hideMe")
         document.getElementById('subModal2').classList.remove("hideMe")
         document.getElementById('mainModal2').classList.add("showMe")
         document.getElementById('subModal2').classList.add("showMe")
-        document.getElementById('hotelID').innerText = hotelID 
-        await getHotelPics(hotelID)
+        if(String(uzer) == "1"){
+            document.getElementById('hotelID').innerText = hotelID 
+            await getHotelPics(hotelID)
+        }
         
 
 }
@@ -63,14 +65,20 @@ function checkAndHideModal(e){
     //
 
     var modal = document.getElementById('mainModal').classList
-
+    var modal2 = document.getElementById('mainModal2').classList
     if(e.key == "Escape"){
-        if( modal == "mainModal Me"){
+        if( modal == "mainModal"){
             hideModal()
+        }
+        if( modal2 == "mainModal2"){
+            hideModal2()
         }
     }
     if(e.target.id == "mainModal"){
         hideModal()
+    };
+    if(e.target.id == "mainModal2"){
+        hideModal2()
     };
 
 }
