@@ -23,12 +23,13 @@ function hideModal2() {
     document.getElementById('subModal2').classList.remove("showMe")
     document.getElementById('subModal2').classList.add("hideMe")
 }
-function openAddMarkModal2(hotelID) {
+async function openAddMarkModal2(hotelID) {
         document.getElementById('mainModal2').classList.remove("hideMe")
         document.getElementById('subModal2').classList.remove("hideMe")
         document.getElementById('mainModal2').classList.add("showMe")
         document.getElementById('subModal2').classList.add("showMe")
         document.getElementById('hotelID').innerText = hotelID 
+        await getHotelPics(hotelID)
         
 
 }

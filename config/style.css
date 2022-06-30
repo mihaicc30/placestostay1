@@ -264,7 +264,36 @@
     aspect-ratio: 1 / 1 ;
     width: 100%;
 }
-
+.hotelImgCarousel{
+    width:480px;
+    position: relative;
+}
+.arrowLeft, .arrowRight{
+    position: absolute;
+    top:50%;
+    z-index: 9699999;
+    font-size: 2rem;
+    color: red;
+}
+.arrowLeft{
+    left:2%;
+    
+}
+.arrowLeft{
+    right:2%;
+    
+}
+#myCarousel{
+    width: 400px;
+}
+.carouselImg{
+    width:350px;
+    height: 300px;
+}
+.carousel-indicators > button{
+    width:50px;
+    height:50px;
+}
 /* https://codepen.io/designcouch/pen/obvKxm */
 @keyframes roadRunnerInLeft {
     0% {

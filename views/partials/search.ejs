@@ -13,15 +13,14 @@ async function getPlaces() {
 		if(places.length > 0) {
 			// context += '<table border="1px solid black">'
 			places.forEach( place => {
-                context += `<div><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>`;
+                context += `<div onclick="openAddMarkModal2(${place.ID})"><img src="${place.photo}" alt="photos"><h4>${place.name}</h4><p>${place.type} in ${place.location}</p><p style='white-space: nowrap;'>${place.description}</p><p style='font-weight:bolder;white-space: nowrap;'>£${place.price}/night</p></div>`;
 			});
 			// context += '</table>'
 		} else {
 			context += "<p>Unable to find anything.</p>";
 			
 		}
-        var x = document.getElementById("results").innerHTML;
-		document.getElementById("results").innerHTML = x+ context;
+		document.getElementById("results").innerHTML = context;
 	} catch (e) {
         alert(`There was an error: ${e}`);
     }

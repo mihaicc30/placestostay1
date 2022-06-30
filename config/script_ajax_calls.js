@@ -1,3 +1,36 @@
+async function getHotelPics(hotelID){
+    try {
+		const ajaxResponse = await fetch(`api/img/${hotelID}`);
+		const photos = await ajaxResponse.json();
+		let inner = "";
+		let indicators = "";
+
+        counter=0
+         photos.forEach( ph => {
+            
+            if(counter=="0"){
+                indicators += `<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="${counter}" class="active" aria-current="true" aria-label="Slide ${counter+1}"></button>`;
+                inner += `<div class="carousel-item carouselImg active" data-interval="2000">
+                                <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
+                          </div>`;
+                counter++
+            } else{
+                indicators+= `<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="${counter}" aria-label="Slide ${counter+1}"></button>`;
+                inner += `<div class="carousel-item carouselImg" data-interval="2000">
+                             <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
+                          </div>`;
+                counter++}
+        });
+		document.getElementById("carousel-inner").innerHTML = inner;
+		document.getElementById("carousel-indicators").innerHTML = indicators;
+	} catch (e) {
+        alert(`There was an error: ${e}`);
+    }
+}
+
+
+
+
 function completeBooking(){
     $.ajax({
         type: "POST",
