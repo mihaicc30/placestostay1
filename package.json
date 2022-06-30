@@ -22,7 +22,7 @@
   "version": "3.3.3",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "devStart": "nodemon --signal SIGHUP app.js"
   },
   "keywords": [
