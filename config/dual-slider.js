@@ -103,7 +103,6 @@ async function inputRange() {
     const ajaxResponse = await fetch(`api/acc`);
     const places = await ajaxResponse.json();
     console.log(places.length);
-	console.log(parseFloat(places[0].price).toFixed(2));
 	console.log(parseFloat(places[places.length-1].price).toFixed(2));
 
 	var slider = document.querySelector('#slider')
