@@ -16,20 +16,24 @@ const Accommodation_details = sequelize.define('accommodation_details', {
   },
   icon: {
     type: Sequelize.STRING,
-    defaultValue: 0
+    allowNull: true,
   },
   photo: {
     type: Sequelize.STRING,
-    defaultValue: 0
+    allowNull: true,
   },
   description: {
     type: Sequelize.STRING,
-    defaultValue: 0
+    allowNull: true,
   },
   price: {
-    type: Sequelize.FLOAT,
-    defaultValue: 0
-  }
+    type: Sequelize.DECIMAL,
+    allowNull: true,
+  },
+  main_photo: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true,
+  },
 }
 ,
   {

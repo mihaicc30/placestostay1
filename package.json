@@ -19,7 +19,7 @@
     "sequelize": "6.21.0"
   },
   "name": "placestostay",
-  "version": "3.3.3",
+  "version": "4.1.1",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",

@@ -179,6 +179,26 @@ router.get('/api/bookings', (req,res)=> {
 });
 
 
+router.post('/api/img/:img/acc/:acc', (req,res)=> {  // user adds more images to accommmodation through api
+  Accommodation_details.create({"ID":req.params.acc, "photo":req.params.img}).then((results)=>{
+      console.log("db record inserted > added photo to accommodation");
+  })
+});
+router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommmodation
+  console.log("to be continued!");
+  res.end()
+  // Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
+  //     console.log("db record inserted > added photo to accommodation");
+  // }) !!!!!! here
+});
+
+
+router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of accommodation
+  Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
+      console.log("db record inserted > added photo to accommodation");
+  })
+});
+
 // book this
 router.post('/book',  (req, res) => {
   // to reCheck values and validate
@@ -190,6 +210,22 @@ router.post('/book',  (req, res) => {
     "npeople": req.body.npeople         // number of people
   }).then((results)=>{ 
     Acc_dates.increment({"availability": -req.body.npeople},{where:{"accID":results["dataValues"]["accID"],"thedate":results["dataValues"]["thedate"] } } ).then((results2)=>{
+      console.log("booking success & reduced availability")
+      res.end();
+    })
+  })
+});
+// book this api
+router.post('/book/id/:id/people/:people/date/:date',  (req, res) => {
+  // to reCheck values and validate
+  var theDate =String(req.body.thedate).replace("-","").replace("-","")
+  Acc_bookings.create({
+    "accID": req.params.id,            // hotel id
+    "thedate": req.params.date,                 // date of booking
+    "username": "ReST API Booking",      // user that is booking
+    "npeople":  req.params.people       // number of people
+  }).then((results)=>{ 
+    Acc_dates.decrement({"availability": req.params.people},{where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
       console.log("booking success & reduced availability")
       res.end();
     })

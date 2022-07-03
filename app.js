@@ -53,8 +53,8 @@ app.use(function(req, res, next) {
 // Routes
 app.use('/', require(__dirname+'/routes/index.js'));
 app.use('/users', require(__dirname+'/routes/users.js'));
-app.use('/config', express.static(__dirname+'/config'));
-app.use('/img', express.static(__dirname+'/img'));
+app.use('/config', express.static('./config'));
+app.use('/img', express.static('./img'));
 
 
 

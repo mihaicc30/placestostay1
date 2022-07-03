@@ -1,8 +1,9 @@
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script src="config/dual-slider.js" defer></script>
-<%- include ('./partials/popup') %>
-<%- include ('./partials/popup2') %>
-<%- include('./partials/header') %>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- GPS -->
+<script src="config/dual-slider.js" defer></script> <!-- slide filter for price range -->
+<%- include ('./partials/popup') %><!-- add/save mark window -->
+<%- include ('./partials/popup2') %><!-- book accommodation window -->
+<%- include ('./partials/popupAddImage') %><!-- add accommodation pics window -->
+<%- include('./partials/header') %><!-- navbar -->
 <%
 var checkUser=0;
 if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
@@ -18,7 +19,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 
         <button id="showList" class="btn btn-block  m-0" style="display: none;"
                 onclick="this.classList.remove('btnActive');
-                getPlaces();
+                applyFilter(<%=checkUser%>);
                 document.getElementById('filterDiv').classList.add('windowActive');
                 document.getElementById('showMap').classList.add('btnActive');
                 document.getElementById('search').classList.add('windowActive');
@@ -27,9 +28,9 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 
 
 
-    <div id="filterDiv" class="filterDiv windowActive" style="display: none;">
-        <input id="filterName" name="filterName" type="text" placeholder="Name of accommodation" onkeydown="applyFilter()" onkeypress="applyFilter()">
-        <select name="filterCounty" id="filterCounty" onchange="applyFilter()">
+    <div id="filterDiv" class="filterDiv windowActive" style="display: none;padding: 10px;">
+        <input id="filterName" name="filterName" type="text" placeholder="Name of accommodation" onkeydown="applyFilter(<%=checkUser%>)" onkeypress="applyFilter(<%=checkUser%>)">
+        <select name="filterCounty" id="filterCounty" onchange="applyFilter(<%=checkUser%>)">
             <option selected></option>
             <optgroup label="England">
                 <option>Bedfordshire</option>
@@ -141,7 +142,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
                 <option>Tyrone</option>
             </optgroup>
         </select>
-        <select name="filterType" id="filterType" onchange="applyFilter()">
+        <select name="filterType" id="filterType" onchange="applyFilter(<%=checkUser%>)">
             <option selected></option>
             <option value="Hotel">Hotel</option>
             <option value="BnB">B&B</option>
@@ -151,9 +152,9 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
         </select>
         
         <div class="input-range ml-2">
-            <input id="slider" type="range" style="margin: 4px 0 0 0;" multiple value="5,95" onchange="applyFilter()"/>
+            <input id="slider" type="range" style="margin: 4px 0 0 0;" multiple value="5,95" onchange="applyFilter(<%=checkUser%>)"/>
             <div class="range">
-               <div class="lowGBPAmount" id="lowGBPAmount"></div>  <!-- document.getElementsByClassName('lowGBPAmount')[0].innerHTML -->
+               <div class="lowGBPAmount" id="lowGBPAmount"></div>  
                 <div class="highGBPAmount" id="highGBPAmount"></div>
             </div>
         </div>
@@ -262,7 +263,7 @@ async function initializeMap() {
      
     <% for (let c = 0; c < points.length; c++) { %>
         marker<%=c%> = L.marker([<%=points[c].latitude%>,<%=points[c].longitude%>],{ <%if(String(points[c].icon).length > 4){%>icon: <%=points[c].icon%>,<%}%> alt: 'marker<%=c%>', <%if(String(points[c].description).length > 4){%>description:'<%=points[c].description%>'<%}%> } )
-        .bindPopup('<%if(String(points[c].photo).length > 4){%><img class="popupImg" src="<%=points[c].photo%>"><%}%><h4><%=points[c].name%></h4><h6><%=points[c].type%></h6><span><%=points[c].location%></span><br><%if(String(points[c].description).length > 0){%><%=points[c].description%><%}%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=points[c].ID%>"><button onclick="deleteThisPoint(`<%=points[c].ID%>`,`marker<%=c%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=points[c].latitude%>,<%=points[c].longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
+        .bindPopup('<%if(String(points[c].photo).length > 4){%><img class="popupImg" src="<%=points[c].photo%>"><%}%><h4><%=points[c].name%></h4><h6><%=points[c].type%></h6><span><%=points[c].location%></span><br><%if(String(points[c].description).length > 0){%><%=points[c].description%><%}%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=points[c].ID%>"><button onclick="deleteThisPoint(`<%=points[c].ID%>`,`marker<%=c%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=points[c].latitude%>,<%=points[c].longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addImgModal(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
     <% } %>
                    
      /*===================================================
