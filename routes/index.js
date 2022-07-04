@@ -115,9 +115,26 @@ router.get('/api/acc', (req,res)=> {
     res.json(result);
   });
 
-  // Accommodation.findAll().then((results)=>{
+  // Accommodation.findAll().then((results)=>{   // at the moment is a bit complicated to run a sequelize query in the above format and keeping to the provided database format 😢
   //     res.json(results);
   // })
+});
+
+// ACCOMMODATIONS FILTER USED FOR PAGINATION
+router.get('/api/acc/offset/:offset', (req,res)=> { 
+
+  var queryy = `\
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
+  LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1 \
+  UNION\
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
+  RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1  ORDER BY price LIMIT 6 OFFSET ${req.params.offset}`
+  con.query(queryy, function (err, result) {
+    if (err) throw err;
+    res.json(result);
+  });
 });
 
 router.get('/api/img/:id', (req,res)=> {  // give me image links

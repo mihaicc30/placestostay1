@@ -7,14 +7,6 @@
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans', sans-serif !important;
-    /* -webkit-user-select: none; */
-    /* Chrome all / Safari all */
-    /* -moz-user-select: none; */
-    /*Firefox all */
-    /* -ms-user-select: none; */
-    /*IE 10+ */
-    /* -o-user-select: none; */
-    /* user-select: none; */
 }
 
 #map {
@@ -123,9 +115,11 @@
     animation: roadRunnerOut .5s;
     display: none !important;
 }
+
 .active {
-    background-color: rgb(239 188 244)!important;
+    background-color: rgb(239 188 244) !important;
 }
+
 .alert {
     position: absolute;
     top: 5%;
@@ -225,16 +219,18 @@
     white-space: nowrap;
     align-items: baseline;
     position: absolute;
-    top: 5%;
+    z-index: 999;
+    top: 16%;
     transform: translateX(-50%);
 }
-.filterDiv{
+
+.filterDiv {
     display: flex;
     flex-direction: row;
     white-space: nowrap;
     align-items: baseline;
     position: absolute;
-    top: 11%;  
+    top: 11%;
     transform: translateX(-50%);
 }
 
@@ -247,58 +243,71 @@
 }
 
 #results>div {
-    background-color: bisque;
-    width:250px;
-    height:400px;
+    width: 250px;
+    height: 400px;
     padding: 10px;
-    box-shadow: -2px 7px 9px 1px #000000bd;
+    box-shadow: 15px -20px 16px 0 rgb(235 141 223 / 30%) inset;
     transition: .5s ease;
+    border-radius: 0 0 0 50px;
 }
-#results>div:hover{
+
+#results>div:hover {
     transform: scale(1.05);
 }
-#results>div>img{
-    aspect-ratio: 1 / 1 ;
+
+#results>div>img {
+    aspect-ratio: 1 / 1;
     width: 100%;
 }
-.hotelImgCarousel{
-    width:480px;
+
+.hotelImgCarousel {
+    width: 480px;
     position: relative;
 }
-.arrowLeft, .arrowRight{
+
+.arrowLeft,
+.arrowRight {
     position: absolute;
-    top:50%;
+    top: 50%;
     z-index: 9699999;
     font-size: 2rem;
     color: red;
 }
-.arrowLeft{
-    left:2%;
-    
+
+.arrowLeft {
+    left: 2%;
+
 }
-.arrowLeft{
-    right:2%;
-    
+
+.arrowLeft {
+    right: 2%;
+
 }
-#myCarousel{
+
+#myCarousel {
     width: 380px;
 }
-.carouselImg{
-    width:100%;
+
+.carouselImg {
+    width: 100%;
     height: 300px;
 }
-.carousel-item{
+
+.carousel-item {
     max-width: 300px;
 }
-.carousel-inner{
+
+.carousel-inner {
     margin-top: 5rem;
     max-width: 370px;
 }
-.carousel-indicators > button{
-    width:50px;
-    height:50px;
-    border: 1px solid black!important;
+
+.carousel-indicators>button {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black !important;
 }
+
 /* https://codepen.io/designcouch/pen/obvKxm */
 @keyframes roadRunnerInLeft {
     0% {
@@ -314,6 +323,13 @@
         transform: translateX(0px) skewX(0deg) scaleX(1);
         opacity: 1;
     }
+}
+
+#popupMessages{
+    position:fixed;
+    top:3%;
+    left: 50%;
+    z-index: 999;
 }
 
 @keyframes roadRunnerOut {
@@ -335,15 +351,15 @@
 
 @media (max-width: 800px) {
     .subModal2 {
-        width: 80vw!important;
+        width: 80vw !important;
     }
+
     .subModal2>div {
-        width: 80vw!important;
+        width: 80vw !important;
     }
+
     .profileSpace {
-        top: 12%;
-        right: 5%;
-        z-index: -1;
+        display: none;
     }
 
     #map {
@@ -353,113 +369,143 @@
 
     .searchDiv {
         position: absolute;
-        left:22%!important;
-        top:13%!important;
+        left: 22% !important;
+        top: 13% !important;
     }
-    #filterDiv{
-        display: flex!important;
-        flex-direction: column!important;
+
+    #filterDiv {
+        display: flex !important;
+        flex-direction: column !important;
         margin: 5rem 0 5rem 0;
     }
-    
+
 }
-.overflow-elipsis{
+
+.overflow-elipsis {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
-.divResults{
+
+.divResults {
     position: relative;
 }
-.divResults>button{
+
+.divResults>button {
     position: absolute;
     right: 4%;
     bottom: 5%;
-    padding: 0px 1rem 0px 1rem;
+    padding: 0px 10px 0px 10px;
+    border-radius: 10%;
+    align-items: center;
+    background-color:rgb(235 141 223);
+    display: flex;
+    justify-content: center;
+    border: none;
+    box-shadow:
+        12px 12px 16px 0 rgba(255, 255, 255, 0.3) inset,
+        -8px -8px 12px 0 rgba(0, 0, 0, .25) inset;
 }
-.make-main-profile-picture{
+
+.make-main-profile-picture {
     position: absolute;
     font-size: 2rem;
     right: 12.5%;
 }
+
 /* start dual slider input-range */
 .input-range {
     border: 1px solid black;
-    height: 25px!important;
+    height: 25px !important;
     position: relative;
     max-width: 300px;
 }
+
 .input-range input[type="range"].multirange {
-	width: 100%;
+    width: 100%;
 }
+
 .input-range .range {
-	display: flex;
-	justify-content: space-between;
-	font-family: Helvetica;
-	font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    font-family: Helvetica;
+    font-size: 13px;
     color: #777;
     font-size: 12px;
 }
+
 .input-range input[type="range"].multirange {
-	padding: 0;
-	--range-color: #387ef5; /* 007cc2 */
-	--range-color: #387ef5; /* 98ce44 */
-	margin: 0;
-	display: inline-block;
-	vertical-align: top;
-	-webkit-appearance: none;
-	appearance: none;
-	outline: none;
+    padding: 0;
+    --range-color: #387ef5;
+    /* 007cc2 */
+    --range-color: #387ef5;
+    /* 98ce44 */
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
     cursor: pointer;
 }
+
 .input-range input[type="range"].multirange.original {
-	position: absolute;
+    position: absolute;
 }
+
 .input-range input[type="range"].multirange::-webkit-slider-runnable-track {
-	background: linear-gradient(to right, #ddd, #ddd) no-repeat 0 50% / 100% 20%;
+    background: linear-gradient(to right, #ddd, #ddd) no-repeat 0 50% / 100% 20%;
 }
+
 .input-range input[type="range"].multirange.original::-webkit-slider-thumb {
-	position: relative;
-	z-index: 2;
+    position: relative;
+    z-index: 2;
 }
+
 .input-range input[type="range"].multirange::-webkit-slider-thumb {
-	position: relative;
-	z-index: 2;
-	-webkit-appearance: none;
-	border-radius: 15px;
-	border: none;
-	display: block;
-	background: var(--range-color);
-	height: 15px;
-	width: 15px;
+    position: relative;
+    z-index: 2;
+    -webkit-appearance: none;
+    border-radius: 15px;
+    border: none;
+    display: block;
+    background: var(--range-color);
+    height: 15px;
+    width: 15px;
 }
+
 .input-range input[type="range"].multirange.original::-moz-range-thumb {
-	transform: scale(1);
-	z-index: 1;
+    transform: scale(1);
+    z-index: 1;
 }
+
 .input-range input[type="range"].multirange::-moz-range-track {
-	border-color: transparent;
+    border-color: transparent;
 }
+
 .input-range input[type="range"].multirange.ghost {
-	position: relative;
-	background: linear-gradient(to right,
-        transparent var(--low),
-        var(--range-color) 0,
-        var(--range-color) var(--high),
-        transparent 0 ) no-repeat 0 50% / 100% 20%;
+    position: relative;
+    background: linear-gradient(to right,
+            transparent var(--low),
+            var(--range-color) 0,
+            var(--range-color) var(--high),
+            transparent 0) no-repeat 0 50% / 100% 20%;
 }
+
 .input-range input[type="range"].multirange.ghost::-webkit-slider-runnable-track {
-	background: linear-gradient(to right,
-        transparent var(--low),
-        var(--range-color) 0,
-        var(--range-color) var(--high),
-        transparent 0 ) no-repeat 0 50% / 100% 20%;
+    background: linear-gradient(to right,
+            transparent var(--low),
+            var(--range-color) 0,
+            var(--range-color) var(--high),
+            transparent 0) no-repeat 0 50% / 100% 20%;
 }
+
 .input-range input[type="range"].multirange.ghost::-moz-range-track {
-	background: linear-gradient(to right,
-        transparent var(--low),
-        var(--range-color) 0,
-        var(--range-color) var(--high),
-        transparent 0 ) no-repeat 0 45% / 100% 40%;
+    background: linear-gradient(to right,
+            transparent var(--low),
+            var(--range-color) 0,
+            var(--range-color) var(--high),
+            transparent 0) no-repeat 0 45% / 100% 40%;
 }
+
 /* end input-range */
