@@ -1,3 +1,14 @@
+async function changePage(page){
+
+    console.log("LOOKING ON PAGE "+page);
+    for(i=0;i<document.querySelectorAll('[data-pageresults]').length;i++){
+        document.querySelectorAll('[data-pageresults]')[i].style.display="none"
+    }
+    document.querySelectorAll(`[data-pageresults="${page}"]`).forEach(div => {
+        div.style.display="block"
+    });
+}
+
 function addImgModal(id,user){
     if(user!="2"){
         document.getElementById('hotelIDForAddImg').innerHTML=id

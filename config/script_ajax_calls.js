@@ -59,101 +59,119 @@ async function applyFilter(user){
         const ajaxResponse = await fetch(`api/acc`);
         const filteredResults = await ajaxResponse.json();
         let results = "";
-        let page = `<nav aria-label="Page navigation example" style="width:80vw">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link active" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
-        </ul>
-      </nav>`;
-        let someCounter = 0;
+
+        let navStart = `<nav aria-label="pagination" style="width:80vw">
+                            <ul class="pagination justify-content-center">
+                                `
+        let page="";
+
+        let navEnd =              `
+                            </ul>
+                        </nav>`
+
+                            ;
+        let someCounter = 3;
+        let divNo = 0;
+
         if(filteredResults.length > 0) {
-            filteredResults.forEach( place => {
+            await filteredResults.forEach( place => {
                 // this is for the results when the user wants very specific accommodation :)
                 // filtering paradise // gods list of filters // somewhat proud its made by me and flawless :D
                 // checking all 4 filters (name of accommodation, location, type, price range) with a total of 16 combinations (luckly there are only 4 filters, if 5, would be 32 combinations😢,etc)
-                if( (parseInt(someCounter) % 5) == "0" ){ console.log(`logging ${someCounter} counter`)}
-                // page += `<div> </div>`
-                someCounter++
                 
+                // if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };
+                    // if(divNo=="0"){page +=  `<li class="page-item" data-page="${divNo+1}"><a onclick="changePage(${divNo+1})" data-page="${divNo+1}" class="page-link active">${divNo+1}</a></li>`} else {
+                    //     page +=             `<li class="page-item" data-page="${divNo+1}"><a onclick="changePage(${divNo+1})" data-page="${divNo+1}" class="page-link">${divNo+1}</a></li>`
+                    // }
+                    // console.log(`logging ${someCounter} counter`);
+                    
+                    // console.log(" DIVNOOOOOOOO ",divNo);
+              
+                
+                console.log(divNo);
                 if(f1L==0 && f2L==0 && f3L==0 && f4L==0
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-size:1.2rem;font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-size:1.2rem;font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 
                 if(f1L>=1 && f2L==0 && f3L==0 && f4L==0 
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L>=1 && f3L==0 && f4L==0 
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L>=1 && f3L>=1 && f4L==0 
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L>=1 && f3L>=1 && f4L>=1
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L==0 && f3L==0 && f4L>=1
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L==0 && f3L>=1 && f4L==0
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L==0 && f3L>=1 && f4L>=1
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L>=1 && f2L>=1 && f3L==0 && f4L>=1
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 
 
                 if(f1L==0 && f2L>=1 && f3L==0 && f4L==0
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L==0 && f2L>=1 && f3L>=1 && f4L==0
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L==0 && f2L>=1 && f3L>=1 && f4L>=1
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L==0 && f2L>=1 && f3L==0 && f4L>=1
                     && String(place.location).toLowerCase().includes(String(f2).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                         
                 if(f1L==0 && f2L==0 && f3L>=1 && f4L==0
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 if(f1L==0 && f2L==0 && f3L>=1 && f4L>=1
                     && String(place.type).toLowerCase().includes(String(f3).toLowerCase())
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
                 
                 if(f1L==0 && f2L==0 && f3L==0 && f4L>=1
                     && parseFloat(f4) <= parseFloat(place.price) && parseFloat(place.price) <= parseFloat(f5+1)
-                    ) { results += `<div class="divResults" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
+                    ) { if( (parseInt(someCounter) % 3) == "0" ) { divNo++;  };someCounter++;results += `<div class="divResults" data-pageResults="${divNo}" onclick="openAddMarkModal2(${place.ID},${user})"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button class="bookInButton">BOOK</button></div>` }
             });
+            for(i=0;i < divNo; i++){
+                if(i=="0"){page +=  `<li class="page-item" data-page="${i+1}"><a onclick="changePage(${i+1})" data-page="${i+1}" class="page-link active">${i+1}</a></li>`} else {
+                    page +=             `<li class="page-item" data-page="${i+1}"><a onclick="changePage(${i+1})" data-page="${i+1}" class="page-link">${i+1}</a></li>`
+                }
+            }
+            document.getElementById("results").innerHTML = results+navStart+page+navEnd
+            changePage(1)
+
         } else {
-            results += "<div><p>Unable to find anything.</p></div>";
+            results += `<div class="divResults"><p>Unable to find anything.</p></div>`;
         }
-        document.getElementById("results").innerHTML = results+page;
+
+        
     } catch (e) {
         alert(`There was an error: ${e}`);
     }
