@@ -102,13 +102,13 @@ router.post("/save_point", async (req, res) => { // save selected mark
 router.get('/api/acc', (req,res)=> { 
 
   var queryy = "\
-  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation\
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
   LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
-  WHERE CHAR_LENGTH(accommodation_details.icon) >1\
+  WHERE accommodation_details.main_photo = 1 \
   UNION\
-  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation  \
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
   RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
-  WHERE CHAR_LENGTH(accommodation_details.icon) >1 ORDER BY price"
+  WHERE accommodation_details.main_photo = 1  ORDER BY price"
   con.query(queryy, function (err, result) {
     if (err) throw err;
     res.json(result);
@@ -120,7 +120,7 @@ router.get('/api/acc', (req,res)=> {
 });
 
 router.get('/api/img/:id', (req,res)=> {  // give me image links
-  Accommodation_details.findAll({where:{"ID": req.params.id },attributes: ['photo', 'ID']  }).then((results)=>{
+  Accommodation_details.findAll({where:{"ID": req.params.id },attributes: ['photo', 'ID'], order:[['main_photo','DESC']]  }).then((results)=>{
       res.json(results);
   })
 });
@@ -194,9 +194,16 @@ router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommm
 
 
 router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of accommodation
-  Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
-      console.log("db record inserted > added photo to accommodation");
-  })
+  // console.log(req.body.photoo, req.body.IDD);
+  Accommodation_details.findOne({where:{ "main_photo":"1", "ID":req.body.IDD}}) .then((result)=>{
+    console.log(result.dataValues)
+    Accommodation_details.update({"main_photo":null, "icon":null, "description":null, "price":null },{where:{ "main_photo":"1", "ID":req.body.IDD}})
+    Accommodation_details.update({"main_photo":1, "icon":result.dataValues.icon, "description":result.dataValues.description, "price":result.dataValues.price },{where:{ "photo":req.body.photoo, "ID":req.body.IDD}})
+    }
+  )
+  res.end()
+  //     console.log("db record inserted > added photo to accommodation");
+  // })
 });
 
 // book this

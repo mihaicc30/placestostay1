@@ -131,6 +131,7 @@ async function getHotelPics(hotelID){
     try {
 		const ajaxResponse = await fetch(`api/img/${hotelID}`);
 		const photos = await ajaxResponse.json();
+        console.log(photos);
 		let inner = "";
 		let indicators = "";
 
