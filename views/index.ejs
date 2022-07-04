@@ -144,14 +144,14 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
         </select>
         <select name="filterType" id="filterType" onchange="applyFilter(<%=checkUser%>)">
             <option selected></option>
-            <option value="Hotel">Hotel</option>
-            <option value="BnB">B&B</option>
-            <option value="RBnB">RB&B</option>
-            <option value="Hostel">Hostel</option>
+            <option value="hotel">Hotel</option>
+            <option value="BandB">B&B</option>
+            <option value="AirBandB">AirB&B</option>
+            <option value="campsite">Campsite</option>
             <option value="Other">Other</option>
         </select>
         
-        <div class="input-range ml-2">
+        <div class="input-range ml-2" style="width:200px;">
             <input id="slider" type="range" style="margin: 4px 0 0 0;" multiple value="5,95" onchange="applyFilter(<%=checkUser%>)"/>
             <div class="range">
                <div class="lowGBPAmount" id="lowGBPAmount"></div>  
@@ -250,10 +250,10 @@ async function initializeMap() {
      var parkingIcon = new baseIcon({ iconUrl: "./img/parking.png" })
      var iconParking = new baseIcon({ iconUrl: "./img/parking.png" })
      
-     var iconHotel = new baseIcon({ iconUrl: "./img/hotel.png" })
-     var iconHostel = new baseIcon({ iconUrl: "./img/hostel.png" })
-     var iconBnB = new baseIcon({ iconUrl: "./img/bnb.png" })
-     var iconRBnB = new baseIcon({ iconUrl: "./img/rbnb.png" })
+     var iconhotel = new baseIcon({ iconUrl: "./img/hotel.png" })
+     var iconcampsite = new baseIcon({ iconUrl: "./img/hostel.png" })
+     var iconBandB = new baseIcon({ iconUrl: "./img/bnb.png" })
+     var iconAirBandB = new baseIcon({ iconUrl: "./img/rbnb.png" })
      
  /*===================================================
                  BUILDING MARKS              
@@ -263,7 +263,7 @@ async function initializeMap() {
      
     <% for (let c = 0; c < points.length; c++) { %>
         marker<%=c%> = L.marker([<%=points[c].latitude%>,<%=points[c].longitude%>],{ <%if(String(points[c].icon).length > 4){%>icon: <%=points[c].icon%>,<%}%> alt: 'marker<%=c%>', <%if(String(points[c].description).length > 4){%>description:'<%=points[c].description%>'<%}%> } )
-        .bindPopup('<%if(String(points[c].photo).length > 4){%><img class="popupImg" src="<%=points[c].photo%>"><%}%><h4><%=points[c].name%></h4><h6><%=points[c].type%></h6><span><%=points[c].location%></span><br><%if(String(points[c].description).length > 0){%><%=points[c].description%><%}%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=points[c].ID%>"><button onclick="deleteThisPoint(`<%=points[c].ID%>`,`marker<%=c%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=points[c].latitude%>,<%=points[c].longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addImgModal(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
+        .bindPopup('<%if(String(points[c].photo).length > 4){%><img class="popupImg" src="<%=points[c].photo%>"><%}%><h4><%=points[c].name%></h4><h6><%=points[c].type%></h6><span><%=points[c].location%></span><br><%if(String(points[c].description).length > 0){%><%=points[c].description%><%}%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=points[c].ID%>"><button onclick="deleteThisPoint(`<%=points[c].ID%>`,`marker<%=c%>`,`<%=checkUser%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=points[c].latitude%>,<%=points[c].longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addImgModal(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
     <% } %>
                    
      /*===================================================

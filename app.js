@@ -5,9 +5,11 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('cookie-session');
 const app = express();
-
-
 const sequelize = require("./models/Database")
+const cors = require('cors')
+const corsOptions = { origin:'http://localhost:8000/', optionsSuccessStatus: 200}
+
+app.use(cors(corsOptions))
 
 // MySQL Connection
 sequelize.sync().then(result =>{

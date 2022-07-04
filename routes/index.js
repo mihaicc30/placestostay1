@@ -26,11 +26,11 @@ const con = mysql.createConnection({
 
 // Welcome Page
 router.get('/', async (req, res) => {
-  var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation\
+  var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price FROM accommodation\
   LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
   WHERE CHAR_LENGTH(accommodation_details.icon) >1\
   UNION\
-  SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price FROM accommodation  \
+  SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price FROM accommodation  \
   RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
   WHERE CHAR_LENGTH(accommodation_details.icon) >1 ORDER BY price"
     con.query(queryy, function (err, result) {
@@ -79,15 +79,16 @@ router.post("/save_point", async (req, res) => { // save selected mark
     "type": req.body.type,
     "location": req.body.location,
     "latitude": req.body.latitude,
-    "longitude": req.body.longitude
+    "longitude": req.body.longitude,
+    "description": req.body.description
   }).then(async(result) => {
     var accID = JSON.parse(JSON.stringify(result)).ID
     await Accommodation_details.create({
       "ID":accID,
       "icon": req.body.icon,
       "photo": req.body.photo,
-      "description": req.body.description,
-      "price": req.body.price
+      "price": req.body.price,
+      "main_photo": "1"
     }).then(async(result) => {
       console.log("save success");
       res.end();
@@ -102,13 +103,13 @@ router.post("/save_point", async (req, res) => { // save selected mark
 router.get('/api/acc', (req,res)=> { 
 
   var queryy = "\
-  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
   LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
-  WHERE accommodation_details.main_photo = 1 \
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1 \
   UNION\
-  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation_details.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
+  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
   RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
-  WHERE accommodation_details.main_photo = 1  ORDER BY price"
+  WHERE CHAR_LENGTH(accommodation_details.icon) >1  ORDER BY price"
   con.query(queryy, function (err, result) {
     if (err) throw err;
     res.json(result);
@@ -185,20 +186,16 @@ router.post('/api/img/:img/acc/:acc', (req,res)=> {  // user adds more images to
   })
 });
 router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommmodation
-  console.log("to be continued!");
-  res.end()
-  // Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
-  //     console.log("db record inserted > added photo to accommodation");
-  // }) !!!!!! here
+  Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
+    res.end()
+  }) 
 });
 
 
 router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of accommodation
-  // console.log(req.body.photoo, req.body.IDD);
   Accommodation_details.findOne({where:{ "main_photo":"1", "ID":req.body.IDD}}) .then((result)=>{
-    console.log(result.dataValues)
-    Accommodation_details.update({"main_photo":null, "icon":null, "description":null, "price":null },{where:{ "main_photo":"1", "ID":req.body.IDD}})
-    Accommodation_details.update({"main_photo":1, "icon":result.dataValues.icon, "description":result.dataValues.description, "price":result.dataValues.price },{where:{ "photo":req.body.photoo, "ID":req.body.IDD}})
+    Accommodation_details.update({"main_photo":null, "icon":null, "price":null },{where:{ "main_photo":"1", "ID":req.body.IDD}})
+    Accommodation_details.update({"main_photo":1, "icon":result.dataValues.icon, "price":result.dataValues.price },{where:{ "photo":req.body.photoo, "ID":req.body.IDD}})
     }
   )
   res.end()

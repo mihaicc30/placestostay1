@@ -22,10 +22,6 @@ const Accommodation_details = sequelize.define('accommodation_details', {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
   price: {
     type: Sequelize.DECIMAL,
     allowNull: true,
