@@ -120,23 +120,6 @@ router.get('/api/acc', (req,res)=> {
   // })
 });
 
-// ACCOMMODATIONS FILTER USED FOR PAGINATION
-router.get('/api/acc/offset/:offset', (req,res)=> { 
-
-  var queryy = `\
-  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
-  LEFT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID \
-  WHERE CHAR_LENGTH(accommodation_details.icon) >1 \
-  UNION\
-  SELECT name,type,location,latitude,longitude,accommodation_details.icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price, accommodation_details.main_photo FROM accommodation\
-  RIGHT JOIN accommodation_details ON accommodation.ID = accommodation_details.ID\
-  WHERE CHAR_LENGTH(accommodation_details.icon) >1  ORDER BY price LIMIT 6 OFFSET ${req.params.offset}`
-  con.query(queryy, function (err, result) {
-    if (err) throw err;
-    res.json(result);
-  });
-});
-
 router.get('/api/img/:id', (req,res)=> {  // give me image links
   Accommodation_details.findAll({where:{"ID": req.params.id },attributes: ['photo', 'ID'], order:[['main_photo','DESC']]  }).then((results)=>{
       res.json(results);
