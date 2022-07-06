@@ -403,6 +403,7 @@
     font-size: 13px;
     color: #777;
     font-size: 12px;
+    transform: translateY(-42px);
 }
 
 .input-range input[type="range"].multirange {

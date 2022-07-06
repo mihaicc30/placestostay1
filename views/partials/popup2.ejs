@@ -11,18 +11,23 @@
                 <span id="numberOfPeopleAVAILABLE" ></span>
 
                 <div id="calendarDiv" style="display: flex;gap:10px">
-                    <button class="btn btn-block fs-5 fw-bolder">-</button><input readonly id="numberOfPeople" style="border-radius: 50%;border: 1px solid rebeccapurple;width: 40px;text-align: end;" type="number" ><button class="btn btn-block fs-5 fw-bolder">+</button>
+                    <button class="btn btn-block fs-5 fw-bolder" onclick="numberOfUsers('-1')">-</button>
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/person-1780867-1514182.png" srcset="https://cdn.iconscout.com/icon/free/png-512/person-1780867-1514182.png 2x" alt="Person Icon" style="width: 38px;
+                    transform: translate(40px,4px);
+                    position: absolute;">
+                    <input readonly id="numberOfPeople" style="border-radius: 10%;
+                    border: 1px solid rebeccapurple;
+                    width: 58px;
+                    text-align: end;
+                    display: initial;" type="number" >
+                    <button class="btn btn-block fs-5 fw-bolder" onclick="numberOfUsers('+1')">+</button>
                 </div>
 
                 <div class="vanilla-calendar" id="calendar" style="width: 260px;" ></div>
 
-                <input  type="text" id="dateOfBooking" class="my-2" >
+                <input hidden type="text" id="dateOfBooking" class="my-2" >
                 <div hidden id="bookingUser" style="padding:10px;background-color:white;overflow: hidden"><%=user[0]["dataValues"].username%></div>
                 <button class="py-2 px-5 rounded" type="button" onclick="completeBooking()" id="insertSpecialButton2">🥂Book!</button>
-                <!-- <script>
-                    document.getElementById("dateOfBooking").setAttribute('min', new Date().toISOString().slice(0, 10));
-                    document.getElementById("dateOfBooking").setAttribute('value', new Date().toISOString().slice(0, 10));
-                </script> -->
                 
             </div>
         </div>

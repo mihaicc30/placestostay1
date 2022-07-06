@@ -1,3 +1,12 @@
+function numberOfUsers(someNumber){
+    let maxNumber= String(document.getElementById('numberOfPeopleAVAILABLE').innerHTML).substring(0,1)
+    if(parseInt(document.getElementById('numberOfPeople').value) + parseInt(someNumber) != parseInt(0) &&
+    parseInt(document.getElementById('numberOfPeople').value) + parseInt(someNumber) <= parseInt(maxNumber)
+    ){
+        document.getElementById('numberOfPeople').value = parseInt(document.getElementById('numberOfPeople').value) + parseInt(someNumber)
+    }
+}
+
 async function initCalendar(){
     const calendar = new VanillaCalendar('#calendar',{ date: {min: String(new Date().toISOString().slice(0, 10))},actions: {clickDay(e) {
         getSpacesAvailable(document.getElementById("hotelID").innerHTML,String(e.target.dataset.calendarDay).replace("-","").replace("-","").substring(2));

@@ -1,5 +1,4 @@
 async function getSpacesAvailable(hotelID,bookingDate){
-    console.log(hotelID, bookingDate);
     try{
         const ajaxResponse = await fetch(`/api/availability/${bookingDate}/${hotelID}`)
         const filteredResults = await ajaxResponse.json();
