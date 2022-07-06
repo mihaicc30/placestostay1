@@ -9,24 +9,6 @@ var checkUser=0;
 if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 %>
 <div id="godDivChild" style="display: flex;flex-direction: column;" >
-    <!-- <div class="searchDiv">
-        <button id="showMap" class="btn btn-block btnActive" style="display: none;" 
-                onclick="this.classList.remove('btnActive');initializeMap();
-                document.getElementById('showList').classList.add('btnActive');
-                document.getElementById('map').classList.add('windowActive');
-                document.getElementById('filterDiv').classList.remove('windowActive');
-                document.getElementById('search').classList.remove('windowActive')">Show Map🌐</button>
-
-        <button id="showList" class="btn btn-block  m-0" style="display: none;"
-                onclick="this.classList.remove('btnActive');
-                applyFilter(<%=checkUser%>);
-                document.getElementById('filterDiv').classList.add('windowActive');
-                document.getElementById('showMap').classList.add('btnActive');
-                document.getElementById('search').classList.add('windowActive');
-                document.getElementById('map').classList.remove('windowActive')">Show List📃</button>
-    </div> -->
-
-
 
     <div id="filterDiv" class="filterDiv windowActive" style="display: none;padding: 10px;" >
         <input id="filterName" name="filterName" type="text" placeholder="Name of accommodation" onkeydown="applyFilter(<%=checkUser%>)" onkeypress="applyFilter(<%=checkUser%>)">
@@ -161,7 +143,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 
     </div>
     <div id="map" class="rounded windowActive" style="position:absolute;height:90vh; width: 100vw;bottom:0%;left:0%;display: none;" ></div>
-    <div id="search" class="rounded windowActive" style="position:absolute;height:90vh; width: 30vw;bottom:0%;left:0%;display: none;z-index: 999;"><%- include('./partials/filteredResults') %></div>
+    <div id="search" class="rounded windowActive" style="position:absolute;height:90vh;bottom:0%;left:0%;display: none;z-index: 999;"><%- include('./partials/filteredResults') %></div>
     
 </div>
 <input hidden type="text" name="start" class="input" id="start" placeholder="Choose starting point" style="display: none;"/>

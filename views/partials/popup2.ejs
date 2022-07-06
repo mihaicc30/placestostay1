@@ -10,19 +10,13 @@
 
                 <span id="numberOfPeopleAVAILABLE" ></span>
 
-                <div style="display: flex;gap:10px">
+                <div id="calendarDiv" style="display: flex;gap:10px">
                     <button class="btn btn-block fs-5 fw-bolder">-</button><input readonly id="numberOfPeople" style="border-radius: 50%;border: 1px solid rebeccapurple;width: 40px;text-align: end;" type="number" ><button class="btn btn-block fs-5 fw-bolder">+</button>
                 </div>
 
-                <div class="vanilla-calendar" id="calendar" style="width: 260px;" onselect="alert(e.target.dataset.calendarDay)"></div>
-                <script defer>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        const calendar = new VanillaCalendar('#calendar',{ date: {min: String(new Date().toISOString().slice(0, 10))},actions: {clickDay(e) {getSpacesAvailable(document.getElementById("hotelID").innerHTML,String(calendar.value).replace("-","").replace("-","").substring(2))}} });
-                        calendar.init();
-                    });
-                </script>
+                <div class="vanilla-calendar" id="calendar" style="width: 260px;" ></div>
 
-                <input type="date" id="dateOfBooking" class="my-2" onchange='getSpacesAvailable(document.getElementById("hotelID").innerHTML,String(this.value).replace("-","").replace("-","").substring(2))'>
+                <input  type="text" id="dateOfBooking" class="my-2" >
                 <div hidden id="bookingUser" style="padding:10px;background-color:white;overflow: hidden"><%=user[0]["dataValues"].username%></div>
                 <button class="py-2 px-5 rounded" type="button" onclick="completeBooking()" id="insertSpecialButton2">🥂Book!</button>
                 <!-- <script>

@@ -216,10 +216,9 @@ router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of acco
 // book this
 router.post('/book',  (req, res) => {
   // to reCheck values and validate
-  var theDate =String(req.body.thedate).replace("-","").replace("-","")
   Acc_bookings.create({
     "accID": req.body.accID,            // hotel id
-    "thedate": theDate.substring(2),                 // date of booking
+    "thedate": req.body.thedate,                 // date of booking
     "username": req.body.username,      // user that is booking
     "npeople": req.body.npeople         // number of people
   }).then((results)=>{ 
@@ -232,7 +231,6 @@ router.post('/book',  (req, res) => {
 // book this api
 router.post('/book/id/:id/people/:people/date/:date',  (req, res) => {
   // to reCheck values and validate
-  var theDate =String(req.body.thedate).replace("-","").replace("-","")
   Acc_bookings.create({
     "accID": req.params.id,            // hotel id
     "thedate": req.params.date,                 // date of booking

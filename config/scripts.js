@@ -1,3 +1,16 @@
+async function initCalendar(){
+    const calendar = new VanillaCalendar('#calendar',{ date: {min: String(new Date().toISOString().slice(0, 10))},actions: {clickDay(e) {
+        getSpacesAvailable(document.getElementById("hotelID").innerHTML,String(e.target.dataset.calendarDay).replace("-","").replace("-","").substring(2));
+        document.getElementById('dateOfBooking').value= String(e.target.dataset.calendarDay).replace("-","").replace("-","").substring(2)
+
+    }} });
+    await calendar.init();
+    calendar.settings.iso8601 = true;
+    let todaysDate = new Date().toISOString().substring(0,10);
+    // calendar.date.today = todaysDate.toISOString()
+    console.log(todaysDate);
+    document.getElementById('dateOfBooking').value= String(calendar.date.today.toISOString()).substring(0,10).replace("-","").replace("-","").substring(2)
+}
 async function changePage(page){
 
     console.log("LOOKING ON PAGE "+page);
@@ -62,6 +75,7 @@ async function openAddMarkModal2(hotelID,uzer) {
         document.getElementById('subModal2').classList.add("showMe")
         if(String(uzer) == "1"){
             document.getElementById('hotelID').innerText = hotelID 
+            initCalendar()
             await getSpacesAvailable(hotelID,String(new Date().toISOString().slice(0, 10)).replace("-","").replace("-","").substring(2))
             await getHotelPics(hotelID,"carrDiv")
         }

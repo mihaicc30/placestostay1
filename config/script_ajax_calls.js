@@ -8,6 +8,7 @@ async function getSpacesAvailable(hotelID,bookingDate){
             document.getElementById('numberOfPeople').min = filteredResults
             document.getElementById('numberOfPeople').value = filteredResults
             document.getElementById('numberOfPeople').style.display="none"
+            document.getElementById('calendarDiv').style.visibility="hidden"
             document.getElementById('insertSpecialButton2').disabled = true
         } else {
             document.getElementById('numberOfPeopleAVAILABLE').innerHTML = filteredResults+" Spaces available! "
@@ -16,6 +17,7 @@ async function getSpacesAvailable(hotelID,bookingDate){
             document.getElementById('numberOfPeople').value = "1"
             document.getElementById('numberOfPeople').max = filteredResults
             document.getElementById('insertSpecialButton2').disabled = false
+            document.getElementById('calendarDiv').style.visibility="initial"
         }
     } catch (e) {
         alert(`There was an error: ${e}`);
@@ -226,7 +228,7 @@ function completeBooking(){
             "npeople": document.getElementById('numberOfPeople').value 
         },
         success: document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                                                Booking completed.
+                                                                                ${document.getElementById('bookingUser').innerHTML}, your booking has been completed.
                                                                                 <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                                                     <span aria-hidden="true"></span>
                                                                                 </button>
