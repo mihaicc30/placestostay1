@@ -8,8 +8,8 @@
 var checkUser=0;
 if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 %>
-<div id="godDivChild" style="display: flex;flex-direction: column;">
-    <div class="searchDiv">
+<div id="godDivChild" style="display: flex;flex-direction: column;" >
+    <!-- <div class="searchDiv">
         <button id="showMap" class="btn btn-block btnActive" style="display: none;" 
                 onclick="this.classList.remove('btnActive');initializeMap();
                 document.getElementById('showList').classList.add('btnActive');
@@ -24,11 +24,11 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
                 document.getElementById('showMap').classList.add('btnActive');
                 document.getElementById('search').classList.add('windowActive');
                 document.getElementById('map').classList.remove('windowActive')">Show List📃</button>
-    </div>
+    </div> -->
 
 
 
-    <div id="filterDiv" class="filterDiv windowActive" style="display: none;padding: 10px;">
+    <div id="filterDiv" class="filterDiv windowActive" style="display: none;padding: 10px;" >
         <input id="filterName" name="filterName" type="text" placeholder="Name of accommodation" onkeydown="applyFilter(<%=checkUser%>)" onkeypress="applyFilter(<%=checkUser%>)">
         <select name="filterCounty" id="filterCounty" onchange="applyFilter(<%=checkUser%>)">
             <option selected></option>
@@ -160,8 +160,9 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
         </div>
 
     </div>
-    <div id="map" class="rounded " style="position:absolute;height:80vh; width: 95vw;bottom:2%;left:2%;display: none;"></div>
-    <div id="search" class="rounded windowActive" style="position:absolute;height:80vh; width: 95vw;bottom:2%;left:2%;display: none;"><%- include('./partials/search') %></div>
+    <div id="map" class="rounded windowActive" style="position:absolute;height:90vh; width: 100vw;bottom:0%;left:0%;display: none;" ></div>
+    <div id="search" class="rounded windowActive" style="position:absolute;height:90vh; width: 30vw;bottom:0%;left:0%;display: none;z-index: 999;"><%- include('./partials/filteredResults') %></div>
+    
 </div>
 <input hidden type="text" name="start" class="input" id="start" placeholder="Choose starting point" style="display: none;"/>
 <input hidden type="text" name="end" class="input" id="destination" placeholder="Choose starting point" style="display: none;"/>
@@ -185,8 +186,8 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
  /*===================================================
                  MAP INIT               
  ===================================================*/
- var map = L.map('map')
-
+ var map = new L.map('map', null, { zoomControl:false });
+ map.removeControl(map.zoomControl);
  function addWP1(param1, param2) { // waypoint1
 
      document.getElementById('start').value = [param1, param2]
@@ -222,7 +223,8 @@ async function initializeMap() {
     map.remove()
     await resolveAfterMSeconds(100)
     console.log("loading...");
-    map = L.map('map')
+    map = L.map('map', null, { zoomControl:false })
+    map.removeControl(map.zoomControl);
     map.on('locationerror', onLocationError);
     map.on('locationfound', onLocationFound);
 
@@ -330,7 +332,7 @@ async function initializeMap() {
      /*===================================================
                              GPS / GEOLOCATION              
      ===================================================*/
-     map.locate({ setView: true, maxZoom: 19 });
+     map.locate({ setView: true, maxZoom: 20 });
      function onLocationFound(e) {
          var radius = e.accuracy;
          var gps1 = L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + "<br>at " + e.latlng);
@@ -345,9 +347,7 @@ async function initializeMap() {
      /*===================================================
                  TILE LAYER               
      ===================================================*/
-     L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map) // scale
-
-     
+     L.control.scale({ metric: true, imperial: false, position: 'bottomright' }).addTo(map) // scale
 
      /*===================================================
                  LAYER CONTROL               
@@ -365,10 +365,12 @@ async function initializeMap() {
          "Others": other,
      };
      /*===================================================
-                 LAYER BUTTON            
+                 BUTTONS            
      ===================================================*/
 
-     var layerz = L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
+     L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
+     L.control.zoom({ position: 'bottomright' }).addTo(map);
+     L.control.zoom({ position: 'topleft' }).remove(map);
 
       /*===================================================
                  ROUTING CONTROL              
@@ -383,7 +385,7 @@ async function initializeMap() {
                  wayPoint1 = L.latLng(wp1),
                  wayPoint2 = L.latLng(wp2)
              ],
-             show: true,
+             show: false,
              units: 'imperial',
              autoRoute: true,
              collapsible: true,
@@ -400,7 +402,7 @@ async function initializeMap() {
              waypoints: [
                  wayPoint1 = L.latLng(wp1)
              ],
-             show: true,
+             show: false,
              units: 'imperial',
              autoRoute: true,
              collapsible: true,
@@ -429,3 +431,4 @@ async function initializeMap() {
     }
 
 </script>
+<script defer>initializeMap()</script>

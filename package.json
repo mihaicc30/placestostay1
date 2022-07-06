@@ -17,7 +17,8 @@
     "nodemon": "2.0.18",
     "passport": "0.5.2",
     "passport-local": "1.0.0",
-    "sequelize": "6.21.0"
+    "sequelize": "6.21.0",
+    "vanilla-calendar": "^1.0.30"
   },
   "name": "placestostay",
   "version": "4.1.1",

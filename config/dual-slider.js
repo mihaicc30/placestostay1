@@ -1,4 +1,4 @@
-// input range    // source: https://codepen.io/Em-An/pen/mvJveV
+// dual input range for price filter   // source: https://codepen.io/Em-An/pen/mvJveV
 async function inputRange() {
     "use strict";
     

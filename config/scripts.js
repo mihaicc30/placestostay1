@@ -62,7 +62,7 @@ async function openAddMarkModal2(hotelID,uzer) {
         document.getElementById('subModal2').classList.add("showMe")
         if(String(uzer) == "1"){
             document.getElementById('hotelID').innerText = hotelID 
-            document.getElementById('numberOfPeopleAVAILABLE').innerHTML = "5"
+            await getSpacesAvailable(hotelID,String(new Date().toISOString().slice(0, 10)).replace("-","").replace("-","").substring(2))
             await getHotelPics(hotelID,"carrDiv")
         }
         

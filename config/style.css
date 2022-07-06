@@ -125,8 +125,7 @@
 }
 
 .popupImg {
-    max-height: 215px;
-    width: 190px;
+    width: 200px;
     border-radius: 5%;
     transition: .3s ease;
 }
@@ -228,7 +227,7 @@
     white-space: nowrap;
     align-items: baseline;
     position: absolute;
-    top: 11%;
+    top: 5.8%;
     transform: translateX(-50%);
 }
 
@@ -282,7 +281,8 @@
 
 }
 
-#myCarousel {
+.carousel {
+    margin-top: 50px;
     width: 200px;
 }
 
@@ -308,10 +308,11 @@
 /* https://codepen.io/designcouch/pen/obvKxm */
 
 #popupMessages{
-    position:fixed;
-    top:3%;
+    white-space: initial;
+    position: fixed;
+    top: 33%;
     left: 50%;
-    z-index: 999;
+    z-index: 9999;
 }
 
 
@@ -376,10 +377,13 @@
 
 .make-main-profile-picture {
     position: absolute;
-    font-size: 2rem;
-    right: 12.5%;
+    right: 0%;
+    top: -17%;
 }
-
+.leaflet-routing-collapse-btn{
+    left: 1px!important;
+    top: 0px!important;
+}
 /* start dual slider input-range */
 .input-range {
     border: 1px solid black;

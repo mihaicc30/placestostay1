@@ -11,17 +11,17 @@ const corsOptions = { origin:'http://localhost:8000/', optionsSuccessStatus: 200
 var valid = require("card-validator");
  
 
-var numberValidation = valid.number("441", {maxLength: 16});
-var numberValidation2 = valid.cardholderName("dsad asd 221asd asd 21s12@:<! as")
-var numberValidation3 = valid.expirationDate("7/22")
-var numberValidation4 = valid.cvv("722")
+// var numberValidation = valid.number("441", {maxLength: 16});
+// var numberValidation2 = valid.cardholderName("dsad asd 221asd asd 21s12@:<! as")
+// var numberValidation3 = valid.expirationDate("7/22")
+// var numberValidation4 = valid.cvv("722")
  
-console.log("CARD DETAILS",numberValidation.card);
-console.log("CARD VALIDITY",numberValidation.isValid);
-console.log("CARD POT. VALIDITY",numberValidation.isPotentiallyValid);
-console.log("NAME",numberValidation2.isValid);
-console.log("DATE",numberValidation3.isValid);
-console.log("CVV",numberValidation4.isValid);
+// console.log("CARD DETAILS",numberValidation.card);
+// console.log("CARD VALIDITY",numberValidation.isValid);
+// console.log("CARD POT. VALIDITY",numberValidation.isPotentiallyValid);
+// console.log("NAME",numberValidation2.isValid);
+// console.log("DATE",numberValidation3.isValid);
+// console.log("CVV",numberValidation4.isValid);
 
 
 app.use(cors(corsOptions))

@@ -179,6 +179,16 @@ router.get('/api/bookings', (req,res)=> {
   })
 });
 
+// API FOR CHECKING AVAILABLE PEOPLE IN ONE ACCOMMODATION //
+router.get('/api/availability/:thisDate/:thisID', (req,res)=> { 
+  Acc_dates.findAll({where:{"thedate":req.params.thisDate, "accID": req.params.thisID}} ).then((results)=>{
+    if(results.length>0){
+      res.json(JSON.parse(JSON.stringify(results))[0].availability);
+    } else {
+      res.json(0)
+    }
+  })
+});
 
 router.post('/api/img/:img/acc/:acc', (req,res)=> {  // user adds more images to accommmodation through api
   Accommodation_details.create({"ID":req.params.acc, "photo":req.params.img}).then((results)=>{
@@ -209,7 +219,7 @@ router.post('/book',  (req, res) => {
   var theDate =String(req.body.thedate).replace("-","").replace("-","")
   Acc_bookings.create({
     "accID": req.body.accID,            // hotel id
-    "thedate": theDate,                 // date of booking
+    "thedate": theDate.substring(2),                 // date of booking
     "username": req.body.username,      // user that is booking
     "npeople": req.body.npeople         // number of people
   }).then((results)=>{ 
