@@ -167,31 +167,31 @@ async function applyFilter(user){
 }
 
 
-async function getHotelPics(hotelID){
+async function getHotelPics(hotelID, putInThisDiv){
     try {
 		const ajaxResponse = await fetch(`api/img/${hotelID}`);
 		const photos = await ajaxResponse.json();
 		let inner = "";
-		let indicators = "";
-
+        let my_carousel_code_start = `<div id="myCarousel" class="carousel carousel-fade" data-bs-ride="carousel">
+                                        <div id="carousel-inner" class="carousel-inner"></div> `
+        let my_carousel_code_end = ` <a class="carousel-control-prev" href="#myCarousel" role="button" data-bs-slide="prev" style="text-decoration: none;color: black;font-size: 50px;left: -10%;transform: translateY(100px);">◀</a>
+                                    <a class="carousel-control-next" href="#myCarousel" role="button" data-bs-slide="next" style="text-decoration: none;color: black;font-size: 50px;right: -10%;transform: translateY(100px);">▶</a>
+                                    </div>`
         counter=0
          photos.forEach( ph => {
             
             if(counter=="0"){
-                indicators += `<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="${counter}" class="carrouselButtons active" aria-current="true" aria-label="Slide ${counter+1}"></button>`;
                 inner += `<div class="carousel-item carouselImg active" data-interval="2000" style="position: relative;">
                                 <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
                           </div>`;
                 counter++
             } else{
-                indicators+= `<button class="carrouselButtons " type="button" data-bs-target="#myCarousel" data-bs-slide-to="${counter}" aria-label="Slide ${counter+1}"></button>`;
                 inner += `<div class="carousel-item carouselImg" data-interval="2000">
                              <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}"><button onclick="ajaxChangeMainImg();this.remove()" class="make-main-profile-picture" style="position: absolute">⭐</button>
                           </div>`;
                 counter++}
         });
-		document.getElementById("carousel-inner").innerHTML = inner;
-		document.getElementById("carousel-indicators").innerHTML = indicators;
+		document.getElementById(`${putInThisDiv}`).innerHTML = my_carousel_code_start+inner+my_carousel_code_end;
 	} catch (e) {
         alert(`There was an error: ${e}`);
     }
