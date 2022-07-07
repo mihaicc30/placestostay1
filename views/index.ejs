@@ -13,7 +13,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 
     
     <div id="map" class="rounded windowActive" style="position:absolute;height:90vh; width: 100vw;bottom:0%;left:0%;display: none;" ></div>
-    <div id="search" class="rounded windowActive" style="position:absolute;height:90vh;bottom:0%;left:0%;display: none;z-index: 999;"><%- include('./partials/filteredResults') %></div>
+    <div id="search" class="rounded windowActive" style="position:absolute;height:90vh;bottom:0%;left:0%;display: none;z-index: 999;transition: all 1s cubic-bezier(0.05, -0.42, 0, 1.06) 0s;"><%- include('./partials/filteredResults') %></div>
     
 </div>
 <input hidden type="text" name="start" class="input" id="start" placeholder="Choose starting point" style="display: none;"/>
