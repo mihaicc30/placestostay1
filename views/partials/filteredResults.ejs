@@ -5,7 +5,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 <div id="filterDiv" class="filterDiv">
     <input id="filterName" style="width:250px;border:none" name="filterName" type="text" placeholder="Name of accommodation.." onkeydown="applyFilter(<%=checkUser%>)" onkeypress="applyFilter(<%=checkUser%>)">
     <select name="filterCounty" style="width:250px;border:none" id="filterCounty" onchange="applyFilter(<%=checkUser%>)" placeholder="aaa">
-        <option selected value="">Select County</option>
+        <option selected value="">Select Location..</option>
         <optgroup label="England">
             <option>Bedfordshire</option>
             <option>Berkshire</option>
@@ -117,7 +117,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
         </optgroup>
     </select>
     <select name="filterType" id="filterType" style="width:250px;border:none" onchange="applyFilter(<%=checkUser%>)">
-        <option selected value="">Select Type</option>
+        <option selected value="">Select Type..</option>
         <option value="hotel">Hotel</option>
         <option value="BandB">B&B</option>
         <option value="AirBandB">AirB&B</option>
@@ -135,4 +135,4 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
 
 </div>
 
-<div id="results" style="position:fixed;height:78vh; width: 300px;bottom: 0%;left: 0%;background-color: #f5efef;overflow: scroll;overflow-x: hidden;padding-top: 30px;"></div>
+<div id="results" style="position:fixed;height:75vh; width: 300px;bottom: 0%;left: 0%;background-color: #f5efef;overflow: scroll;overflow-x: hidden;"></div>
