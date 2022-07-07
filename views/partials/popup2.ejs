@@ -13,11 +13,11 @@
                 <div id="calendarDiv" style="display: flex;gap:10px">
                     <button class="btn btn-block fs-5 fw-bolder" onclick="numberOfUsers('-1')">-</button>
                     <img src="https://cdn.iconscout.com/icon/free/png-256/person-1780867-1514182.png" srcset="https://cdn.iconscout.com/icon/free/png-512/person-1780867-1514182.png 2x" alt="Person Icon" style="width: 38px;
-                    transform: translate(40px,4px);
+                    transform: translate(53px,10px);
                     position: absolute;">
                     <input readonly id="numberOfPeople" style="border-radius: 10%;
                     border: 1px solid rebeccapurple;
-                    width: 58px;
+                    width: 92px;
                     text-align: end;
                     display: initial;" type="number" >
                     <button class="btn btn-block fs-5 fw-bolder" onclick="numberOfUsers('+1')">+</button>
@@ -27,12 +27,12 @@
 
                 <input hidden type="text" id="dateOfBooking" class="my-2" >
                 <div hidden id="bookingUser" style="padding:10px;background-color:white;overflow: hidden"><%=user[0]["dataValues"].username%></div>
-                <button class="py-2 px-5 rounded" type="button" onclick="completeBooking()" id="insertSpecialButton2">🥂Book!</button>
+                <button class="py-2 px-5 rounded" type="button" onclick="completeBookingStep1()" id="insertSpecialButton2">🥂Book!</button>
                 
             </div>
         </div>
     </div>
-    <div style="width:100vw;height:100vh;position:fixed;left:0%;" onclick="hideModal2()"></div>
+    <div style="width:100vw;height:100vh;position:fixed;left:0%;" onclick="hideModal(2)"></div>
 </div>
 
 <%} else { %>

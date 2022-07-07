@@ -24,6 +24,23 @@ const con = mysql.createConnection({
   database: process.env.DB_DBASE
 });
 
+// CARD VALIDATOR // personally i would make my own but it was a requirement in the assessment brief so...here it is
+var valid = require("card-validator"); // card validator api
+router.get('/api/validatecard/:cardnumber/:cardname/:cardexpiration/:cardcvv', (req,res)=> { 
+  var numberValidation = valid.number(req.params.cardnumber);
+  var cardholderNameValidation = valid.cardholderName(req.params.cardname)
+  var expirationDateValidation = valid.expirationDate(req.params.cardexpiration)
+  var cvvValidation = valid.cvv(req.params.cardcvv)
+  // The maxElapsedYear parameter determines how many years in the future a card's expiration date should be considered valid.
+  // It has a default value of 19, so cards with an expiration date 20 or more years in the future would not be considered valid. 
+  if(numberValidation.isValid && cardholderNameValidation.isValid && expirationDateValidation.isValid && cvvValidation.isValid){
+    res.json("card valid");
+  } else {
+    res.json("card not valid");
+  }
+
+});
+
 // Welcome Page
 router.get('/', async (req, res) => {
   var queryy = "SELECT name,type,location,latitude,longitude,icon,accommodation.ID,accommodation_details.accID, accommodation_details.photo, accommodation.description, accommodation_details.price FROM accommodation\
@@ -225,16 +242,16 @@ router.post('/book',  (req, res) => {
     Acc_dates.increment({"availability": -req.body.npeople},{where:{"accID":results["dataValues"]["accID"],"thedate":results["dataValues"]["thedate"] } } ).then((results2)=>{
       console.log("booking success & reduced availability")
       res.end();
-    })
-  })
+    }).catch(err => console.log(err));
+  }).catch(err => console.log(err));
 });
-// book this api
+// book ReST api
 router.post('/book/id/:id/people/:people/date/:date',  (req, res) => {
   // to reCheck values and validate
   Acc_bookings.create({
     "accID": req.params.id,            // hotel id
     "thedate": req.params.date,                 // date of booking
-    "username": "ReST API Booking",      // user that is booking
+    "username": "ReST API Hardcoded Booking",      // user that is booking
     "npeople":  req.params.people       // number of people
   }).then((results)=>{ 
     Acc_dates.decrement({"availability": req.params.people},{where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{

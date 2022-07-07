@@ -8,7 +8,18 @@
     padding: 0;
     font-family: 'Noto Sans', sans-serif !important;
 }
-
+*::-webkit-scrollbar {
+    width: 30px;
+  }
+*::-webkit-scrollbar-track {
+    background: #66339959;
+    border-radius:  30px 0 30px 0 ;
+    margin: 19px 0 19px 0;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: rebeccapurple;
+    border-radius:  30px 0 30px 0 ;
+}
 #map {
     border: 2px solid rgb(239 188 244);
 }
@@ -27,6 +38,7 @@
     align-items: baseline;
     justify-content: center;
     gap: 10px;
+    margin-top: -8px;
 }
 
 .leaflet-control-geocoder {
@@ -223,12 +235,14 @@
 
 .filterDiv {
     display: flex;
-    flex-direction: row;
+    flex-direction: column!important;
     white-space: nowrap;
     align-items: baseline;
-    position: absolute;
-    top: 5.8%;
-    transform: translateX(-50%);
+    padding: 10px;
+    z-index: 999;
+    height: fit-content;
+    width: 300px;
+    background-color: #f5efef;
 }
 
 #results {
@@ -247,7 +261,6 @@
     transition: .5s ease;
     border-radius: 0 0 0 50px;
 }
-
 #results>div:hover {
     transform: scale(1.05);
 }
@@ -305,8 +318,6 @@
     border: 1px solid black !important;
 }
 
-/* https://codepen.io/designcouch/pen/obvKxm */
-
 #popupMessages{
     white-space: initial;
     position: fixed;
@@ -334,17 +345,7 @@
         width: 100vw !important;
     }
 
-    .searchDiv {
-        position: absolute;
-        left: 22% !important;
-        top: 13% !important;
-    }
 
-    #filterDiv {
-        display: flex !important;
-        flex-direction: column !important;
-        margin: 5rem 0 5rem 0;
-    }
 
 }
 
@@ -386,7 +387,7 @@
 }
 /* start dual slider input-range */
 .input-range {
-    border: 1px solid black;
+    padding-top: 10px;
     height: 25px !important;
     position: relative;
     max-width: 300px;
@@ -403,7 +404,6 @@
     font-size: 13px;
     color: #777;
     font-size: 12px;
-    transform: translateY(-42px);
 }
 
 .input-range input[type="range"].multirange {
