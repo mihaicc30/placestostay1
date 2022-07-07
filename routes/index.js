@@ -60,13 +60,9 @@ router.get('/', async (req, res) => {
 })
 
 // Profile Page
-router.get('/myprofile', async (req, res) => {
-  var queryz = await User.findAll({raw:true})
-  results = queryz.map(v => Object.assign({}, v))
-  
-  res.render('myprofile', {
-    user: req.user,
-    profile: results,
+router.get('/myprofile', ensureAuthenticated, async (req, res) => {
+    res.render('myprofile', {
+      user: req.user,
   })
 })
 // myprofile_delete page post
@@ -189,9 +185,16 @@ router.get('/api/acc/type/:type', (req,res)=> {  // filter > type
   })
 });
 ////////// END For Filtering ////////////
-// BOOKINGS //
+// BOOKINGS // await Acc_bookings.findAll({raw:true},{where:{"username": req.user.username} ,order:[['thedate','ASC']]} ).then((results)=>{
 router.get('/api/bookings', (req,res)=> { 
   Acc_bookings.findAll().then((results)=>{
+      res.json(results);
+  })
+});
+
+// showing user his bookings API
+router.get('/api/user/bookings', ensureAuthenticated, async (req,res)=> { 
+  await Acc_bookings.findAll({raw:true},{where:{"username": req.user.username} ,order:[['thedate','DESC']]} ).then((results)=>{
       res.json(results);
   })
 });

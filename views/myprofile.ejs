@@ -1,8 +1,12 @@
 <%- include('./partials/header') %>
-
 <%- include ('./partials/messages') %>
 <%if(typeof user !="undefined" ) {%>
 <% user = JSON.parse(JSON.stringify(user)) %>
+
+<script>
+    document.querySelectorAll('.navCenter')[1].style.display="none"
+</script>
+
 <div class="mainProfileDiv">
     <div style="width:500px;display: flex;flex-direction:column;align-items: center;">
         <h1>User Profile Page</h1>
@@ -12,7 +16,47 @@
         <button type="button" class="btn btn-danger ">Delete</button>
 
         <h1>Bookings</h1>
+        <div id="tableContainer"></div>
+        <br><p>*Just a side note, there is plenty of room for implementation for CRUD operations with this table but that will be beyond the point of this assessment 😸 and time is a bit tight..</p>
+        <script async>
+            let fetchThis
+            let jsonedResults 
+            let bookingsTable
 
+            const pageSize = 6;
+            let curPage = 1;
+            function previousPage() {
+                if(curPage > 1) curPage--;
+                fetchData();
+            }
+
+            function nextPage() {
+                if((curPage * pageSize) < jsonedResults.length) curPage++;
+                fetchData();
+            }
+
+            async function fetchData(){
+                fetchThis = await fetch('/api/user/bookings')
+                jsonedResults = await fetchThis.json();
+                bookingsTable =""
+
+                jsonedResults.filter((row, index) => {
+                    let start = (curPage-1)*pageSize;
+                    let end =curPage*pageSize;
+                    if(index >= start && index < end) return true;
+                }).forEach(entry => {
+                    bookingsTable+= `<tr>
+                        <td>20${String(entry.thedate).substring(0,2)}/${String(entry.thedate).substring(2,4)}/${String(entry.thedate).substring(4,6)}</td>
+                        <td>${entry.npeople}* people</td>
+                        <td>${entry.accID}</td>
+                        </tr>`
+                })
+                document.getElementById('tableContainer').innerHTML = `<div style="display:flex;align-items: baseline"><button class="btn btn-block" onclick="previousPage()" id="prevButton">Previous</button><button class="btn btn-block" onclick="nextPage()" id="nextButton">Next</button></div><table id="table"><tr><td>Date</td><td>PAX</td><td>Hotel</td></tr>`+bookingsTable+`</table>`
+
+                
+            }
+            fetchData()
+        </script>
 
     </div>
 </div>

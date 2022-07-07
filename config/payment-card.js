@@ -1,6 +1,7 @@
 // https://codepen.io/quinlo/pen/YONMEa
 
 window.onload = function () {
+if(window.location.pathname == '/myprofile'){return} // to break out
 
 const name = document.getElementById('name');
 const cardnumber = document.getElementById('cardnumber');

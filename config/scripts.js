@@ -16,16 +16,13 @@ async function initCalendar(){
     await calendar.init();
     calendar.settings.iso8601 = true;
     let todaysDate = new Date().toISOString().substring(0,10);
-    // calendar.date.today = todaysDate.toISOString()
-    console.log(todaysDate);
     document.getElementById('dateOfBooking').value= String(calendar.date.today.toISOString()).substring(0,10).replace("-","").replace("-","").substring(2)
 }
 async function changePage(page){
-    //  for(i=1;i<document.querySelectorAll('[data-page]').length;i++){
-    //     if(document.querySelector(`[data-page="${i}"]`).classList.contains('active')){
-    //         document.querySelector(`[data-page="${i}"]`).classList.remove('active')
-    //     }
-    // }
+    document.querySelectorAll('[data-page]').forEach(element => {
+        element.classList.remove('active')
+    });
+
     document.querySelector(`[data-page="${page}"]`).classList.add('active')
 
     for(i=0;i<document.querySelectorAll('[data-pageresults]').length;i++){
@@ -34,6 +31,7 @@ async function changePage(page){
     document.querySelectorAll(`[data-pageresults="${page}"]`).forEach(div => {
         div.style.display="block"
     });
+    
 }
 
 function showPaymentDiv(n) {
