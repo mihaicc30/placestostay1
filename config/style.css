@@ -14,7 +14,7 @@
 *::-webkit-scrollbar-track {
     background: #66339959;
     border-radius:  30px 0 30px 0 ;
-    margin: 44px 0 19px 0;
+    margin: 44px 0 44px 0;
 }
 *::-webkit-scrollbar-thumb {
     background-color: rebeccapurple;
@@ -331,11 +331,7 @@ table > tbody > tr > td {
 
 @media (max-width: 800px) {
     .subModal2 {
-        width: 80vw !important;
-    }
-
-    .subModal2>div {
-        width: 80vw !important;
+        width: 90vw !important;
     }
     .header>div:nth-child(2){
         display: none;
@@ -344,9 +340,6 @@ table > tbody > tr > td {
         bottom: 0% !important;
         width: 100vw !important;
     }
-
-
-
 }
 
 .overflow-elipsis {

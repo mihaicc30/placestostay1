@@ -193,8 +193,8 @@ router.get('/api/bookings', (req,res)=> {
 });
 
 // showing user his bookings API
-router.get('/api/user/bookings', ensureAuthenticated, async (req,res)=> { 
-  await Acc_bookings.findAll({raw:true},{where:{"username": req.user.username} ,order:[['thedate','DESC']]} ).then((results)=>{
+router.get('/api/user/bookings/:username', ensureAuthenticated, async (req,res)=> { 
+  await Acc_bookings.findAll({where:{"username": req.params.username} ,order:[['thedate','DESC']]} ).then((results)=>{
       res.json(results);
   })
 });
