@@ -77,8 +77,6 @@ async function initializeMap() {
     console.log("loading...");
     map = L.map('map', null, { zoomControl:false })
     map.removeControl(map.zoomControl);
-    map.on('locationerror', onLocationError);
-    map.on('locationfound', onLocationFound);
 
     /*===================================================
                 OSM TILE LAYER             
@@ -247,6 +245,8 @@ async function initializeMap() {
              showAlternatives: true,
              altLineOptions: { styles: [{ color: 'grey', opacity: 0.8, weight: 5 }, { color: 'grey', opacity: 0.8, weight: 5 }] }
          }).addTo(map)
+         var boundz = L.latLngBounds(wp1, wp2);
+         map.fitBounds(boundz)
      } else {
          var rout = L.Routing.control({
              "mode": "driving",
@@ -264,9 +264,9 @@ async function initializeMap() {
              showAlternatives: true,
              altLineOptions: { styles: [{ color: 'grey', opacity: 0.8, weight: 5 }, { color: 'grey', opacity: 0.8, weight: 5 }] }
          }).addTo(map)
+         var boundz = L.latLngBounds(wp1, wp2);
+         map.fitBounds(boundz)
      }
-     var boundz = L.latLngBounds(wp1, wp2);
-     map.fitBounds(boundz)
 
       /*===================================================
                  MAP ON CLICK POPUP          
@@ -284,3 +284,17 @@ async function initializeMap() {
 
 </script>
 <script defer>initializeMap()</script>
+<script>
+$(document).on('click','.divResults', function() {
+    var tempCoords = $(this).attr('data-coords').split(","),
+        coord_lat = tempCoords[0],
+        coord_lon = tempCoords[1]
+
+    var corner1 = L.latLng(tempCoords[0], tempCoords[1]),
+        corner2 = L.latLng(tempCoords[0], tempCoords[1]),
+
+        bounds = L.latLngBounds(corner1, corner2);
+    // map.fitBounds(bounds, {Zoom: 20})
+    // map.fitBounds({lon: tempCoords[0], lat: tempCoords[1]});
+    map.fitBounds(bounds,{setView: true, maxZoom: 14 });
+});</script>

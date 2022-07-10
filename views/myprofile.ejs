@@ -1,5 +1,4 @@
 <%- include('./partials/header') %>
-<%- include ('./partials/messages') %>
 <%if(typeof user !="undefined" ) {%>
 <% user = JSON.parse(JSON.stringify(user)) %>
 
@@ -11,10 +10,11 @@
 <div class="mainProfileDiv">
     <div style="width:500px;display: flex;flex-direction:column;align-items: center;">
         <h1>User Profile Page</h1>
+        <input hidden id="userid" type="text" placeholder="Username" value="<%=user[0].ID%>" readonly>
         <input type="text" placeholder="Username" value="<%=user[0].username%>">
         <input type="text" placeholder="Password">
-        <button type="button" class="btn btn-success ">Update</button>
-        <button type="button" class="btn btn-danger ">Delete</button>
+        <button type="button" class="btn btn-success" >Update</button>
+        <button type="button" class="btn btn-danger" >Delete</button>
 
         <h1>Past Bookings</h1>
         <div id="tableContainer"></div>

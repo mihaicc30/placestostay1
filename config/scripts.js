@@ -1,4 +1,4 @@
-    
+
 function hideFilters(){
     if(divOpen == 1){
         document.getElementById('search').style.transform="translate(0px,0px)";

@@ -66,22 +66,18 @@ router.get('/myprofile', ensureAuthenticated, async (req, res) => {
   })
 })
 // myprofile_delete page post
-router.post('/myprofile_delete', ensureAuthenticated, (req, res) => {
-  var { userid } = req.body;
-  User.deleteOne({ _id: userid }).exec().then(
-    req.flash('success_msg', `Account successfully deleted.`),
-    req.logout(),
-    res.redirect('index'))
+router.get('/myprofile_delete', ensureAuthenticated, (req, res) => {
+  User.destroy({where:{"ID":req.body.userid}})
+  req.flash('success_msg', `Account successfully deleted.😢`)
+  req.logout()
+  res.redirect('/')
 })
 
-router.post("/delete_point", async (req, res) => { // delete saved mark
+router.post("/delete_point",ensureAuthenticated, async (req, res) => { // delete saved mark
   Accommodation.destroy({where:{"ID":req.body.point}})
   Accommodation_details.destroy({where:{"ID":req.body.point}})
-
-  
   console.log("total deletion success")
   res.end();
-  
 });
 
 
@@ -143,10 +139,16 @@ router.get('/api/id/:id', (req,res)=> {
       res.json(results);
   })
 });
-router.get('/api/acc/loc/:location', (req,res)=> { 
-  Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
-      res.json(results);
-  })
+router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1.
+  if(req.params.location!=""){
+    Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
+      if(results.length>0){
+        res.json(results);
+      } else {
+        res.json("No accommodation found by given location.😢")
+      }
+    })
+  }
 });
 ////////// APIs For Filtering ////////////
 router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
@@ -154,7 +156,7 @@ router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
       res.json(results);
   })
 });
-router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > name, location
+router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > name, location      
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }}}).then((results)=>{
       res.json(results);
   })
@@ -174,10 +176,16 @@ router.get('/api/acc/location/:location', (req,res)=> { // filter > location
       res.json(results);
   })
 });
-router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > location, type
-  Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
-      res.json(results);
-  })
+router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > location, type   // task PartA.2.
+  if(req.params.location!="" && req.params.type!=""){
+    Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+      if(results.length>0){
+        res.json(results);
+      } else {
+        res.json("No accommodation found by given location and type.😢")
+      }
+    })
+  }
 });
 router.get('/api/acc/type/:type', (req,res)=> {  // filter > type
   Accommodation.findAll({where:{"type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
@@ -249,19 +257,48 @@ router.post('/book',  (req, res) => {
   }).catch(err => console.log(err));
 });
 // book ReST api
-router.post('/book/id/:id/people/:people/date/:date',  (req, res) => {
-  // to reCheck values and validate
-  Acc_bookings.create({
-    "accID": req.params.id,            // hotel id
-    "thedate": req.params.date,                 // date of booking
-    "username": "ReST API Hardcoded Booking",      // user that is booking
-    "npeople":  req.params.people       // number of people
-  }).then((results)=>{ 
-    Acc_dates.decrement({"availability": req.params.people},{where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
-      console.log("booking success & reduced availability")
-      res.end();
-    })
-  })
+router.get('/book/id/:id/people/:people/date/:date', ensureAuthenticated, (req, res) => {      // task PartA.3.
+  let submitQuery = 1
+  let thisUser = JSON.parse(JSON.stringify(req.user))[0]["username"]
+  if(typeof thisUser == "undefined"){
+    submitQuery = 2
+    res.json("Need to be authenticated.")
+    res.end();
+  }
+  else if(!(parseInt(req.params.people) > 0) || !(parseInt(req.params.people) <= 99)){
+    submitQuery = 2
+    res.json(`${req.params.people} is an invalid number of people.`)
+    res.end();
+  }
+  else if(String(req.params.date).length > 6 || String(req.params.date).length <= 0){
+    submitQuery = 2
+    res.json(`${req.params.date} is an invalid date length.`)
+    res.end();
+  }
+  let yy = String(req.params.date).substring(0,2)
+  let mm = String(req.params.date).substring(2,4)
+  let dd = String(req.params.date).substring(4,6)
+  if (!(yy >= 22) || !(yy <= 99) || !(mm >= 1) || !(mm <= 12) || !(dd >= 1) || !(dd <= 31  )){
+    submitQuery = 2
+    res.json(`${req.params.date} is an invalid date.`)
+    res.end();
+  }
+  else if(submitQuery == "2"){
+    res.json(`Invalid booking details.`)
+    res.end();
+  } else {
+    Acc_bookings.create({
+            "accID": req.params.id,            // hotel id
+            "thedate": req.params.date,                 // date of booking
+            "username": thisUser,      // user that is booking
+            "npeople":  req.params.people       // number of people
+          }).then((results)=>{ 
+            Acc_dates.decrement({"availability": req.params.people},{where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
+              console.log("booking success & reduced availability")
+              res.end();
+            })
+          })
+  }
 });
 
 // USERS //
