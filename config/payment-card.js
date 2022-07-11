@@ -1,8 +1,9 @@
 // https://codepen.io/quinlo/pen/YONMEa
+if(document.querySelectorAll('.navCenter').length == 3){
+
 
 window.onload = function () {
 if(window.location.pathname == '/myprofile'){return} // to break out
-
 const name = document.getElementById('name');
 const cardnumber = document.getElementById('cardnumber');
 const expirationdate = document.getElementById('expirationdate');
@@ -304,3 +305,4 @@ securitycode.addEventListener('focus', function () {
     document.querySelector('.creditcard').classList.add('flipped');
 });
 };
+}

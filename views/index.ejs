@@ -106,6 +106,7 @@ async function initializeMap() {
      var iconpub = new baseIcon({ iconUrl: "./img/hotel.png" })
      var iconcampsite = new baseIcon({ iconUrl: "./img/pub.png" })
      var iconBandB = new baseIcon({ iconUrl: "./img/bnb.png" })
+
      
  /*===================================================
                  BUILDING MARKS              
@@ -124,7 +125,6 @@ async function initializeMap() {
         .on("click", function() {getHotelPics(ajaxResponse[i].ID, "popupimg"+ajaxResponse[i].ID)} )
         .addTo(map)
     }
-
      
      /*===================================================
                              GPS / GEOLOCATION              
@@ -155,11 +155,11 @@ async function initializeMap() {
      };
 
      var overlays = {
-    //      "Hotels": hotels,
-    //      "B&Bs": bnbs,
-    //      "Campsites": campsites,
-    //      "Pubs": pubs,
-    //      "Others": other,
+        //  "Hotels": hotels,
+        //  "B&Bs": bnbs,
+        //  "Campsites": campsites,
+        //  "Pubs": pubs,
+        //  "Others": other,
      };
      /*===================================================
                  BUTTONS            
@@ -167,7 +167,6 @@ async function initializeMap() {
 
      L.control.layers(baseLayers, overlays, { position: 'bottomright' }).addTo(map);
      L.control.zoom({ position: 'bottomright' }).addTo(map);
-     L.control.zoom({ position: 'topleft' }).remove(map);
 
       /*===================================================
                  ROUTING CONTROL              

@@ -1,3 +1,41 @@
+function ajaxProfileDelete(oldUsername){
+    $.ajax({
+        type: "DELETE",
+        url: "/myprofile_delete",
+        crossDomain: true,
+        data: {
+            "oldUsername": oldUsername
+        },
+        success: document.getElementById('popupMessages').innerHTML = `<div class="alert alert-danger alert-dismissible fade show p-5 text-center" role="alert">
+                                                                                            Profile Deleted! 😢
+                                                                                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                        <span aria-hidden="true"></span>
+                                                                                    </button>
+                                                                                </div>`
+    })
+}
+function ajaxProfileUpdate(oldUsername){
+    var newUsername = document.getElementById("uzer").value
+    var pass = document.getElementById("pass").value
+    console.log(oldUsername, newUsername);
+
+    $.ajax({
+        type: "POST",
+        url: "/myprofile_save",
+        crossDomain: true,
+        data: {
+            "oldUsername": oldUsername,
+            "pass": pass,
+            "newUsername": newUsername
+        },
+        success: document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show p-5 text-center" role="alert">
+                                                                                            Profile Updated! 🌞
+                                                                                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                        <span aria-hidden="true"></span>
+                                                                                    </button>
+                                                                                </div>`
+    })
+}
 
 function completeBookingStep1() {
     let n_peps = document.getElementById('numberOfPeople').value
@@ -295,8 +333,8 @@ function deleteThisPoint(pointRef, mark, user) { // mark deletion
             url: "/delete_point",
             data: { "point": pointRef },
             success: [
-                document.querySelector('.leaflet-popup').classList.add('hideMe'),
                 document.getElementById('current_target').remove(),
+                document.querySelector('.leaflet-popup').classList.add('hideMe'),
                 document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
                                                                                             Point and accommodation deleted.
                                                                                             <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">

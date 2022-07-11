@@ -11,10 +11,10 @@
     <div style="width:500px;display: flex;flex-direction:column;align-items: center;">
         <h1>User Profile Page</h1>
         <input hidden id="userid" type="text" placeholder="Username" value="<%=user[0].ID%>" readonly>
-        <input type="text" placeholder="Username" value="<%=user[0].username%>">
-        <input type="text" placeholder="Password">
-        <button type="button" class="btn btn-success" >Update</button>
-        <button type="button" class="btn btn-danger" >Delete</button>
+        <input id="uzer" type="text" placeholder="Username" value="<%=user[0].username%>">
+        <input id="pass" type="password" placeholder="Password">
+        <button type="button" class="btn btn-success" onclick="ajaxProfileUpdate(username)">Update</button>
+        <button type="button" class="btn btn-danger" onclick="ajaxProfileDelete(username)">Delete</button>
 
         <h1>Past Bookings</h1>
         <div id="tableContainer"></div>

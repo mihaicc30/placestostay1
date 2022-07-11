@@ -12,7 +12,6 @@ const Acc_dates = require('../models/Acc_dates');
 
 var mysql = require('mysql2');
 const Sequelize = require("sequelize");
-const { query } = require('express');
 const Op = Sequelize.Op;
 
 const banned_Chars = ['<', '>', '-', '{', '}', '[', ']', '(', ')', 'script', '<script>', '</script>', 'prompt', 'alert', 'write', 'send', '?', '!', '$', '#', '\`', '\"', '\'', '\;', '\\', '\/'];
@@ -65,10 +64,25 @@ router.get('/myprofile', ensureAuthenticated, async (req, res) => {
       user: req.user,
   })
 })
+// myprofile_save page post
+router.post('/myprofile_save', ensureAuthenticated, (req, res) => {
+  // obviously in a live system i would check the old password and then update the account but this is not in the scope here
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(req.body.pass, salt, (err, hash) => {
+      if (err) throw err;
+      Acc_bookings.update({"username":req.body.newUsername},{where:{ "username":req.body.oldUsername}})
+      User.update({"username":req.body.newUsername, "password":hash},{where:{ "username":req.body.oldUsername}})
+      .then(updatedUser => {
+        res.end()
+      })
+        .catch(err => console.log(err));
+    })
+  })
+
+})
 // myprofile_delete page post
-router.get('/myprofile_delete', ensureAuthenticated, (req, res) => {
-  User.destroy({where:{"ID":req.body.userid}})
-  req.flash('success_msg', `Account successfully deleted.😢`)
+router.delete('/myprofile_delete', ensureAuthenticated, (req, res) => {
+  User.destroy({where:{"username":req.body.oldUsername}})
   req.logout()
   res.redirect('/')
 })

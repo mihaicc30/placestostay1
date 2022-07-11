@@ -14,14 +14,14 @@
     "leaflet-routing-machine": "3.2.12",
     "mysql2": "2.3.3",
     "nodemailer": "6.7.2",
-    "nodemon": "2.0.18",
-    "passport": "0.5.2",
+    "nodemon": "^2.0.18",
+    "passport": "^0.5.3",
     "passport-local": "1.0.0",
     "sequelize": "6.21.0",
     "vanilla-calendar": "^1.0.30"
   },
   "name": "placestostay",
-  "version": "4.1.1",
+  "version": "4.2.1",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
