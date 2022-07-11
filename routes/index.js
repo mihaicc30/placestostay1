@@ -83,6 +83,9 @@ router.post("/delete_point",ensureAuthenticated, async (req, res) => { // delete
 
 router.post("/save_point", async (req, res) => { // save selected mark
   console.log("ajax call    time " + new Date())
+  var bodyPhoto = req.body.photo
+  if(bodyPhoto.length < 1) { bodyPhoto = "https://cdn-j5lfyoei.resize-files-simplefileupload.com/5zg9WtHH3SHYQ0wioSD5VqJb0CZUv4oVvEq7HBk_2FE/plain/s3://static.files-simplefileupload.com/0blkz8lio489yzeapuf2qv0de7oc"}
+  
   const createMark = await Accommodation.create({
     "name": req.body.name,
     "type": req.body.type,
@@ -95,7 +98,7 @@ router.post("/save_point", async (req, res) => { // save selected mark
     await Accommodation_details.create({
       "ID":accID,
       "icon": req.body.icon,
-      "photo": req.body.photo,
+      "photo": bodyPhoto,
       "price": req.body.price,
       "main_photo": "1"
     }).then(async(result) => {

@@ -1,3 +1,4 @@
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- GPS -->
 <script src="config/dual-slider.js" defer></script> <!-- slide filter for price range -->
 <%- include ('./partials/popup') %><!-- add/save mark window -->
 <%- include ('./partials/popup2') %><!-- book accommodation window -->
@@ -70,14 +71,12 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
     
 
 async function initializeMap() {
-    
 
     map.remove()
     await resolveAfterMSeconds(100)
     console.log("loading...");
     map = L.map('map', null, { zoomControl:false })
     map.removeControl(map.zoomControl);
-    
 
     /*===================================================
                 OSM TILE LAYER             
@@ -87,6 +86,7 @@ async function initializeMap() {
     });
     osm.addTo(map);
      
+
  /*===================================================
                  ICONS               
  ===================================================*/
@@ -113,19 +113,80 @@ async function initializeMap() {
      // looping through the points from the database to dynamically add the points 
      // each time the map is called
 
-    let markers=[];
 
-    const ajaxRequest = await fetch(`api/acc`);
-    const ajaxResponse = await ajaxRequest.json();
-    await markers.push(ajaxResponse)
-    for (let i = 0; i < ajaxResponse.length; i++){
-        new L.marker([ajaxResponse[i].latitude,ajaxResponse[i].longitude],{ icon: new baseIcon({ iconUrl: `./img/${String(ajaxResponse[i].icon).replace('icon','')}.png` }), alt: `marker${i}`, description: ajaxResponse[i].description } )
-        .bindPopup(`<div id="popupimg${ajaxResponse[i].ID}" class="popupImg"></div><h4>${ajaxResponse[i].name}</h4><h6>${ajaxResponse[i].type}</h6><span>${ajaxResponse[i].location}</span><br>${ajaxResponse[i].description}<form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="${ajaxResponse[i].ID}"><button onclick="deleteThisPoint('${ajaxResponse[i].ID}','marker${i}','<%=checkUser%>')" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(${ajaxResponse[i].latitude},${ajaxResponse[i].longitude})"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addImgModal(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>`)
-        .on("click", function() {getHotelPics(ajaxResponse[i].ID, "popupimg"+ajaxResponse[i].ID)} )
-        .addTo(map)
+    try {
+        const ajaxResponse = await fetch(`api/acc`);
+        const photos = await ajaxResponse.json();
+    } catch (e) {
+        alert(`There was an error: ${e}`);
     }
 
      
+    <% for (let c = 0; c < points.length; c++) { %>
+        marker<%=c%> = L.marker([<%=points[c].latitude%>,<%=points[c].longitude%>],{ <%if(String(points[c].icon).length > 4){%>icon: <%=points[c].icon%>,<%}%> alt: 'marker<%=c%>', <%if(String(points[c].description).length > 4){%>description:'<%=points[c].description%>'<%}%> } )
+        .bindPopup('<div  id="popupimg<%=points[c].ID%>" class="popupImg"></div><h4><%=points[c].name%></h4><h6><%=points[c].type%></h6><span><%=points[c].location%></span><br><%if(String(points[c].description).length > 0){%><%=points[c].description%><%}%><form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="<%=points[c].ID%>"><button onclick="deleteThisPoint(`<%=points[c].ID%>`,`marker<%=c%>`,`<%=checkUser%>`)" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(<%=points[c].latitude%>,<%=points[c].longitude%>)"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addImgModal(<%=points[c].ID%>,<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>').openPopup()
+        .on("click", function(){getHotelPics(<%=points[c].ID%>,"popupimg<%=points[c].ID%>")})
+        <% } %>
+                   
+     /*===================================================
+                             GROUP LAYER           
+     ===================================================*/
+    <%countz=1%>
+    var hotels = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "hotel"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+        <% } %> 
+    <%}%>
+    ]).addTo(map)
+    
+    var bnbs = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "BandB"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+        <% } %> 
+    <%}%>
+    ]).addTo(map)
+    
+    var campsites = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "campsite"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+        <% } %> 
+    <%}%>
+    ]).addTo(map)
+
+    var pubs = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type == "pub"){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+        <% } %> 
+    <%}%>
+    ]).addTo(map)
+
+    var other = L.layerGroup([
+    <% if(typeof points != "undefined") { %>
+        <% for (let c = 0; c < points.length; c++) { %>
+            <% if(points[c].type != "hotel" && points[c].type != "campsite" && points[c].type != "BandB" && points[c].type != "pub" ){ %>
+            marker<%=c%>,
+            <%countz++%>
+            <%}%>
+        <% } %> 
+    <%}%>
+    ]).addTo(map)
+    
      /*===================================================
                              GPS / GEOLOCATION              
      ===================================================*/
@@ -155,11 +216,11 @@ async function initializeMap() {
      };
 
      var overlays = {
-    //      "Hotels": hotels,
-    //      "B&Bs": bnbs,
-    //      "Campsites": campsites,
-    //      "Pubs": pubs,
-    //      "Others": other,
+         "Hotels": hotels,
+         "B&Bs": bnbs,
+         "Campsites": campsites,
+         "Pubs": pubs,
+         "Others": other,
      };
      /*===================================================
                  BUTTONS            

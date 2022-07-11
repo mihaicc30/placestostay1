@@ -35,7 +35,9 @@ async function changePage(page){
         element.classList.remove('active')
     });
 
-    document.querySelector(`[data-page="${page}"]`).classList.add('active')
+    if(document.querySelector(`[data-page="${page}"]`) != null){
+        document.querySelector(`[data-page="${page}"]`).classList.add('active')
+    }
 
     for(i=0;i<document.querySelectorAll('[data-pageresults]').length;i++){
         document.querySelectorAll('[data-pageresults]')[i].style.display="none"
