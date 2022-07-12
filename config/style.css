@@ -328,7 +328,9 @@ table > tbody > tr > td {
     padding: 10px;
     border: 1px solid black;
 }
-
+#tableContainer{
+    background-color: white;
+}
 @media (max-width: 800px) {
     .subModal2 {
         width: 90vw !important;

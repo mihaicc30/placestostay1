@@ -18,10 +18,10 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 
 // Register
 router.post('/register', async (req, res) => {
-  const { name, email, password, password2 } = req.body;
+  const { name, password, password2 } = req.body;
   let errors = [];
 
-  if (!name || !email || !password || !password2) {
+  if (!name || !password || !password2) {
     errors.push({ msg: 'Please enter all fields' });
   }
 
@@ -37,20 +37,18 @@ router.post('/register', async (req, res) => {
     res.render('register', {
       errors,
       name,
-      email,
       password,
       password2
     });
   } else {
 
-    const user = await User.findOne({ where: {username:email} });
+    const user = await User.findOne({ where: {username:name} });
     
     if (user !== null) {
       errors.push({ msg: 'Email already exists' });
       res.render('register', {
         errors,
         name,
-        email,
         password,
         password2
       });
@@ -60,7 +58,7 @@ router.post('/register', async (req, res) => {
         bcrypt.hash(password, salt, (err, hash) => {
           if (err) throw err;
           const newUser = User.create({
-            username: email,
+            username: name,
             password: hash
           }).then(newUser => {
             req.flash(
