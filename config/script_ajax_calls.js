@@ -134,13 +134,13 @@ async function getSpacesAvailable(hotelID, bookingDate) {
         alert(`There was an error: ${e}`);
     }
 }
-async function ajaxChangeMainImg() {
+async function ajaxChangeMainImg(hotelID) {
     $.ajax({
         type: "POST",
         url: `/makeMainAccImage`,
         crossDomain: true,
         data: {
-            "IDD": document.getElementById('hotelID').innerText,
+            "IDD": hotelID,
             "photoo": document.getElementsByClassName("carousel-item carouselImg active")[0].childNodes[1].src
         },
         success: document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -294,6 +294,7 @@ async function applyFilter(user) {
 }
 
 
+
 async function getHotelPics(hotelID, putInThisDiv) {
     try {
         const ajaxResponse = await fetch(`api/img/${hotelID}`);
@@ -313,7 +314,7 @@ async function getHotelPics(hotelID, putInThisDiv) {
                 counter++
             } else {
                 inner += `<div class="carousel-item carouselImg rounded" data-interval="2000">
-                             <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}"><button onclick="ajaxChangeMainImg();this.remove()" class="make-main-profile-picture btn btn-block btn-primary">Make Profile Picture</button>
+                             <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}"><button onclick="ajaxChangeMainImg(${hotelID});this.style.display='none'" class="make-main-profile-picture btn btn-block btn-primary">Make Profile Picture</button>
                           </div>`;
                 counter++
             }

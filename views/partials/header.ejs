@@ -25,8 +25,10 @@
                 </div>
                 <%} else {%>
                 <div class="userFadeDownMenu">
-                    <a href="/users/register" class="btn btn-primary btn-block">Register</a>
-                    <a href="/users/login" class="btn btn-info btn-block">Login</a>
+                    <!-- <a href="/users/register" class="btn btn-primary btn-block">Register</a> -->
+                    <!-- <a href="/users/login" class="btn btn-info btn-block">Login</a> -->
+                    <button class="btn btn-info btn-block" onclick="openUserModal(2)">Login</button>
+                    <button class="btn btn-primary btn-block" onclick="openUserModal(5)">Register</button>
                 </div>
                 <%}%>
             </div>

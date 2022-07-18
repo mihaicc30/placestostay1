@@ -101,9 +101,14 @@ async function openAddMarkModal2(hotelID,uzer) {
             await getSpacesAvailable(hotelID,String(new Date().toISOString().slice(0, 10)).replace("-","").replace("-","").substring(2))
             await getHotelPics(hotelID,"carrDiv")
         }
-        
-
 }
+function openUserModal(no) {
+    document.getElementById(`mainModal${no}`).classList.remove("hideMe")
+    document.getElementById(`subModal${no}`).classList.remove("hideMe")
+    document.getElementById(`mainModal${no}`).classList.add("showMe")
+    document.getElementById(`subModal${no}`).classList.add("showMe")
+}
+
 var baseIcon = L.icon({
     iconUrl: './img/temp.png',
     iconSize: [35, 35],
@@ -123,21 +128,13 @@ function checkAndHideModal(e){
         }
         currentTarget.setAttribute("id", "current_target")
     };
-    // if(currentTarget.id == "insertSpecialButton"){
-    //     // var type = document.getElementById('modalTypeMenu').value
-    //     var coordslat = document.getElementById('modalCoordsLat').innerHTML
-    //     var coordslon = document.getElementById('modalCoordsLon').innerHTML
-    //     var alt = document.getElementById('modalMessageInput').value
-
-    //     L.marker([coordslat,coordslon], { "icon": baseIcon, "alt": `marker999, ${alt}` }).addTo(map)
-    // }
-    //
 
     if(e.key == "Escape"){
             hideModal(1)
             hideModal(2)
             hideModal(3)
             hideModal(4)
+            hideModal(5)
     }
     if(e.target.id == "mainModal1"){
         hideModal(1)
@@ -150,6 +147,9 @@ function checkAndHideModal(e){
     };
     if(e.target.id == "mainModal4"){
         hideModal(4)
+    };
+    if(e.target.id == "mainModal5"){
+        hideModal(5)
     };
 
 }

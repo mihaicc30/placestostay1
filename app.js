@@ -7,7 +7,7 @@ const session = require('cookie-session');
 const app = express();
 const sequelize = require("./models/Database")
 const cors = require('cors')
-const corsOptions = { origin:'http://localhost:8000/', optionsSuccessStatus: 200}
+const corsOptions = { origin:['http://localhost:8001','https://placestostay.herokuapp.com'], optionsSuccessStatus: 200, Secure:true,httpOnly: true, sameSite: 'none'}
  
 app.use(cors(corsOptions))
 
@@ -53,8 +53,8 @@ app.use(function(req, res, next) {
     next();
 });
 // Routes
-app.use('/', require(__dirname+'/routes/index.js'));
-app.use('/users', require(__dirname+'/routes/users.js'));
+app.use('/', require('./routes/index.js'));
+app.use('/users', require('./routes/users.js'));
 app.use('/config', express.static('./config'));
 app.use('/img', express.static('./img'));
 
@@ -72,5 +72,5 @@ process.on("SIGHUP", function () {
  }, 2000);
 })
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 app.listen(PORT, console.log(`NodeJS Server running on ${PORT}`));

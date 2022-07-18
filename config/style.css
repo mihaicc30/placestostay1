@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Dela+Gothic+One&family=Festive&family=Grand+Hotel&family=Great+Vibes&family=Josefin+Sans:wght@300&family=Lora:ital@1&family=Noto+Sans&display=swap');
-
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes fadeOut {
+0% { opacity: 1; }
+100% { opacity: 0; }
+}
 *,
 *::before,
 *::after {
@@ -8,6 +15,7 @@
     padding: 0;
     font-family: 'Noto Sans', sans-serif !important;
 }
+
 *::-webkit-scrollbar {
     width: 30px;
   }
@@ -132,7 +140,6 @@
 .alert {
     position: absolute;
     top: 5%;
-    transform: translateX(-50%);
 }
 
 .popupImg {
@@ -331,12 +338,13 @@ table > tbody > tr > td {
 #tableContainer{
     background-color: white;
 }
+#modalAddImg{
+    display: flex;
+    justify-content: center;
+}
 @media (max-width: 800px) {
     .subModal2 {
         width: 90vw !important;
-    }
-    .header>div:nth-child(2){
-        display: none;
     }
     #map {
         bottom: 0% !important;
