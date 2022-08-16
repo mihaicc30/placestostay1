@@ -9,7 +9,8 @@
 <!-- add accommodation pics window -->
 <%- include('./partials/header') %>
 <!-- navbar -->
-<% var checkUser=0; if(typeof user=="object" ) {checkUser=1 }else{ checkUser=2 } %>
+<% let checkUser=0; if(typeof user=="object" ) {checkUser=1 }else{ checkUser=2 } %>
+<% let checkAdmin=0; if(typeof user=="object") { checkAdmin=JSON.parse(JSON.stringify(user))[0].admin } %>
 
 <div id="godDivChild" style="display: flex;flex-direction: column;">
     <div id="map" class="rounded windowActive"
@@ -116,8 +117,12 @@
         await markers.push(ajaxResponse)
         for (let i = 0; i < ajaxResponse.length; i++) {
             new L.marker([ajaxResponse[i].latitude, ajaxResponse[i].longitude], { icon: new baseIcon({ iconUrl: `./img/${String(ajaxResponse[i].icon).replace('icon', '')}.png` }), alt: `marker${i}`, description: ajaxResponse[i].description })
-                .bindPopup(`<div id="popupimg${ajaxResponse[i].ID}" class="popupImg"></div><h4>${ajaxResponse[i].name}</h4><h6>${ajaxResponse[i].type}</h6><span>${ajaxResponse[i].location}</span><br>${ajaxResponse[i].description}<form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="${ajaxResponse[i].ID}"><button onclick="deleteThisPoint('${ajaxResponse[i].ID}','marker${i}','<%=checkUser%>')" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(${ajaxResponse[i].latitude},${ajaxResponse[i].longitude})"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addImgModal(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>`)
-                .on("click", function () { getHotelPics(ajaxResponse[i].ID, "popupimg" + ajaxResponse[i].ID) })
+                .bindPopup(`<div id="popupimg${ajaxResponse[i].ID}" class="popupImg"></div><h4>${ajaxResponse[i].name}</h4><h6>${ajaxResponse[i].type}</h6><span>${ajaxResponse[i].location}</span><br>${ajaxResponse[i].description}<form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="${ajaxResponse[i].ID}"><button onclick="deleteThisPoint('${ajaxResponse[i].ID}','marker${i}','<%=checkUser%>','<%=checkAdmin%>')" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button>
+                    <button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${ajaxResponse[i].ID},<%=checkUser%>)">
+                        <img src="./img/<% if(checkAdmin == "1"){%>manageAcc<%}else{%>booknow<%}%>.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;">
+                    </button>
+                        <button style="border:none;background-color:transparent" type="button" onclick="addImgModal(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(${ajaxResponse[i].latitude},${ajaxResponse[i].longitude})"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>`)
+                .on("click", function () { getHotelPics(ajaxResponse[i].ID, "popupimg" + ajaxResponse[i].ID, <%=checkAdmin%>) })
                 .addTo(map)
         }
 
@@ -188,6 +193,7 @@
             }).addTo(map)
             var boundz = L.latLngBounds(wp1, wp2);
             map.fitBounds(boundz)
+            console.log(boundz);
         } else {
             var rout = L.Routing.control({
                 "mode": "driving",
@@ -216,7 +222,7 @@
             L.popup()
                 .setLatLng(e.latlng)
                 .setContent("<div class='popupClick'>Location:<br><p contentEditable='true' id='wpz'>" + e.latlng.lat + ", " + e.latlng.lng + "</p>" +
-                    `</div><div style="display: flex;justify-content: center;"><button onclick="openAddMarkModal(${e.latlng.lat}, ${e.latlng.lng})" style="border:none;background-color:transparent;" type="button"><img src="/img/addmark.png" class="popupImgs" alt="Add Mark"></button><button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>`)
+                    `</div><div style="display: flex;justify-content: center;"><button onclick="openAddMarkModal(${e.latlng.lat}, ${e.latlng.lng},'<%=checkAdmin%>')" style="border:none;background-color:transparent;" type="button"><img src="/img/addmark.png" class="popupImgs" alt="Add Mark"></button><button style='border:none;background-color:transparent' type='button' onclick='addWP2(${e.latlng.lat}, ${e.latlng.lng})'><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>`)
                 .openOn(map);
         }
         map.on('click', onMapClick);

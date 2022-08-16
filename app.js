@@ -7,7 +7,15 @@ const session = require('cookie-session');
 const app = express();
 const sequelize = require("./models/Database")
 const cors = require('cors')
-const corsOptions = { origin:['http://localhost:8001','https://placestostay.herokuapp.com'], optionsSuccessStatus: 200, Secure:true,httpOnly: true, sameSite: 'none'}
+const corsOptions = { 
+  origin:"*",
+  optionsSuccessStatus: 200,
+  crossDomain: true,
+  Secure:true,
+  httpOnly: true,
+  sameSite: 'none',
+  credentials: true
+}
  
 app.use(cors(corsOptions))
 
@@ -36,6 +44,8 @@ app.use(
     secret: 't34tg4gh667125ik6f232d32f45yg56oNIN2uniuon2u3in2iuo6uh4j6',
     resave: true,
     saveUninitialized: true,
+    credentials: true,
+    SameSite: "None",
     maxAge: 6 * 60 * 60 * 1000 // 6 hours, a number representing the milliseconds from Date.now() for expiry
   })
 );
@@ -61,6 +71,7 @@ app.use('/img', express.static('./img'));
 
 
 app.all('*', (req, res) => {
+  res.status(404);
   res.render("./page_not_found.ejs")
 })
 

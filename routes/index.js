@@ -58,6 +58,20 @@ router.get('/', async (req, res) => {
     });
 })
 
+// Admin management - add spaces
+router.post('/addspaces', ensureAuthenticated, (req, res) => {
+  Acc_dates.update({"availability":req.body.number},{where:{ "accID":req.body.hotelID,"thedate":req.body.dater}})
+  .then(results=>{
+    if(String(results)=="0"){
+      Acc_dates.create({
+        "accID": req.body.hotelID,
+        "thedate": req.body.dater,
+        "availability": req.body.number
+      })
+    }
+  })
+})
+
 // Profile Page
 router.get('/myprofile', ensureAuthenticated, async (req, res) => {
     res.render('myprofile', {
@@ -148,20 +162,34 @@ router.get('/api/acc', (req,res)=> {
 
 router.get('/api/img/:id', (req,res)=> {  // give me image links
   Accommodation_details.findAll({where:{"ID": req.params.id },attributes: ['photo', 'ID'], order:[['main_photo','DESC']]  }).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given id.😢")
+    }
   })
 });
 router.get('/api/id/:id', (req,res)=> { 
   Accommodation.findAll({where:{"ID":{[Op.like]: `%${req.params.id}%` }  }}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given id.😢")
+    }
   })
 });
 router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1.
   if(req.params.location!=""){
     Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
       if(results.length>0){
+        res.status(200)
         res.json(results);
       } else {
+        res.status(404)
         res.json("No accommodation found by given location.😢")
       }
     })
@@ -170,67 +198,119 @@ router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1
 ////////// APIs For Filtering ////////////
 router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` }  }}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given name.😢")
+    }
   })
 });
 router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > name, location      
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }}}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given name or location.😢")
+    }
   })
 });
 router.get('/api/acc/name/:name/type/:type', (req,res)=> {  // filter > name, type
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given parameters.😢")
+    }
   })
 });
 router.get('/api/acc/name/:name/location/:location/type/:type', (req,res)=> {  // filter > name, location, type
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given parameters.😢")
+    }
   })
 });
 router.get('/api/acc/location/:location', (req,res)=> { // filter > location
   Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` } }}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No accommodation found by given parameters.😢")
+    }
   })
 });
 router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > location, type   // task PartA.2.
   if(req.params.location!="" && req.params.type!=""){
     Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
       if(results.length>0){
+        res.status(200)
         res.json(results);
       } else {
-        res.json("No accommodation found by given location and type.😢")
+        res.status(404)
+        res.json("No accommodation found by given parameters.😢")
       }
     })
   }
 });
 router.get('/api/acc/type/:type', (req,res)=> {  // filter > type
   Accommodation.findAll({where:{"type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No results found by given parameters.😢")
+    }
   })
 });
 ////////// END For Filtering ////////////
 // BOOKINGS // await Acc_bookings.findAll({raw:true},{where:{"username": req.user.username} ,order:[['thedate','ASC']]} ).then((results)=>{
 router.get('/api/bookings', (req,res)=> { 
   Acc_bookings.findAll().then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No results found by given parameters.😢")
+    }
   })
 });
 
 // showing user his bookings API
 router.get('/api/user/bookings/:username', ensureAuthenticated, async (req,res)=> { 
   await Acc_bookings.findAll({where:{"username": req.params.username} ,order:[['thedate','DESC']]} ).then((results)=>{
+    if(results.length>0){
+      res.status(200)
       res.json(results);
+    } else {
+      res.status(404)
+      res.json("No results found by given parameters.😢")
+    }
   })
 });
 
 // API FOR CHECKING AVAILABLE PEOPLE IN ONE ACCOMMODATION //
 router.get('/api/availability/:thisDate/:thisID', (req,res)=> { 
   Acc_dates.findAll({where:{"thedate":req.params.thisDate, "accID": req.params.thisID}} ).then((results)=>{
-    if(results.length>0){
+    if(results.length>0 && JSON.parse(JSON.stringify(results))[0]["availability"] != "0"){
+      res.status(200)
       res.json(JSON.parse(JSON.stringify(results))[0].availability);
     } else {
-      res.json(0)
+      res.status(404)
+      res.json("Fully booked on this date!")
     }
   })
 });
@@ -248,14 +328,19 @@ router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommm
 
 
 router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of accommodation
-  Accommodation_details.findOne({where:{ "main_photo":"1", "ID":req.body.IDD}}) .then((result)=>{
-    Accommodation_details.update({"main_photo":null, "icon":null, "price":null },{where:{ "main_photo":"1", "ID":req.body.IDD}})
-    Accommodation_details.update({"main_photo":1, "icon":result.dataValues.icon, "price":result.dataValues.price },{where:{ "photo":req.body.photoo, "ID":req.body.IDD}})
-    }
-  )
-  res.end()
-  //     console.log("db record inserted > added photo to accommodation");
-  // })
+  if(req.body.userAdmin == 1){
+    Accommodation_details.findOne({where:{ "main_photo":"1", "ID":req.body.IDD}}).then((result)=>{
+      if(JSON.stringify(result).length>0){
+        Accommodation_details.update({"main_photo":null, "icon":null, "price":null },{where:{ "main_photo":"1", "ID":req.body.IDD}})
+        Accommodation_details.update({"main_photo":1, "icon":result.dataValues.icon, "price":result.dataValues.price },{where:{ "photo":req.body.photoo, "ID":req.body.IDD}})
+      }
+    })
+    res.end()
+  } else {
+    console.log("user is not admin server side");
+    res.status(401)
+  }
+  
 });
 
 // book this

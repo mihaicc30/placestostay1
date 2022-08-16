@@ -1,3 +1,41 @@
+function addSpaces(hotelID, number, dater){
+    if(hotelID!="" && number!="" && dater!="" ){
+        $.ajax({
+            type: "POST",
+            url: "/addspaces",
+            crossDomain: true,
+            data: {
+                "hotelID": hotelID,
+                "number": number,
+                "dater": dater
+            },
+            success: document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show p-5 text-center" role="alert">
+                                                                                                Spaces set! 😇
+                                                                                        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                            <span aria-hidden="true"></span>
+                                                                                        </button>
+                                                                                    </div>`
+        })
+        
+        if(number == "0") {
+            document.getElementById('numberOfPeopleAVAILABLE').innerText = "No spaces available."
+        }
+        else {
+            document.getElementById('numberOfPeopleAVAILABLE').innerText=`${number} Spaces available!`
+        }
+    } else {
+        document.getElementById('popupMessages').innerHTML = `<div class="alert alert-danger alert-dismissible fade show p-5 text-center" role="alert">
+                                                                                                Date is not selected or input field is empty!
+                                                                                        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                            <span aria-hidden="true"></span>
+                                                                                        </button>
+                                                                                    </div>`
+    }
+}
+
+
+
+
 function ajaxProfileDelete(oldUsername){
     $.ajax({
         type: "DELETE",
@@ -17,7 +55,6 @@ function ajaxProfileDelete(oldUsername){
 function ajaxProfileUpdate(oldUsername){
     var newUsername = document.getElementById("uzer").value
     var pass = document.getElementById("pass").value
-    console.log(oldUsername, newUsername);
 
     $.ajax({
         type: "POST",
@@ -114,7 +151,8 @@ async function getSpacesAvailable(hotelID, bookingDate) {
     try {
         const ajaxResponse = await fetch(`/api/availability/${bookingDate}/${hotelID}`)
         const filteredResults = await ajaxResponse.json();
-        if (filteredResults < 1) {
+
+        if (filteredResults == "Fully booked on this date!") {
             document.getElementById('numberOfPeopleAVAILABLE').innerHTML = "Fully booked on this date!"
             document.getElementById('numberOfPeople').min = filteredResults
             document.getElementById('numberOfPeople').value = filteredResults
@@ -134,22 +172,35 @@ async function getSpacesAvailable(hotelID, bookingDate) {
         alert(`There was an error: ${e}`);
     }
 }
-async function ajaxChangeMainImg(hotelID) {
+async function ajaxChangeMainImg(hotelID, user) {
     $.ajax({
         type: "POST",
         url: `/makeMainAccImage`,
         crossDomain: true,
         data: {
             "IDD": hotelID,
-            "photoo": document.getElementsByClassName("carousel-item carouselImg active")[0].childNodes[1].src
+            "photoo": document.getElementsByClassName("carousel-item carouselImg active")[0].childNodes[1].src,
+            "userAdmin": user
         },
-        success: document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+               
+        })
+    if(user=="1"){
+        document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
                                                                                 Main accommodation image changed.
                                                                                 <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                                                     <span aria-hidden="true"></span>
                                                                                 </button>
                                                                             </div>`
-    })
+    }else{
+        document.getElementById('popupMessages').innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                                                Error 401 Unauthorized<br>
+                                                                                Admin priviledges required.
+                                                                                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                    <span aria-hidden="true"></span>
+                                                                                </button>
+                                                                            </div>`
+    }   
+                
 }
 
 
@@ -280,12 +331,14 @@ async function applyFilter(user) {
                     page += `<li class="page-item" data-page="${i + 1}"><a onclick="changePage(${i + 1})" data-page="${i + 1}" class="page-link">${i + 1}</a></li>`
                 }
             }
-            document.getElementById("results").innerHTML = results + navStart + page + navEnd
+            if(results.length < 1) {
+                document.getElementById("results").innerHTML = `<p>Unable to find anything.</p>`;
+            } else {
+                document.getElementById("results").innerHTML = results + navStart + page + navEnd
+            }
             changePage(1)
-
-        } else {
-            results += `<div class="divResults"><p>Unable to find anything.</p></div>`;
         }
+            
 
 
     } catch (e) {
@@ -295,7 +348,9 @@ async function applyFilter(user) {
 
 
 
-async function getHotelPics(hotelID, putInThisDiv) {
+async function getHotelPics(hotelID, putInThisDiv, user) {
+    let stock_photo = "https://cdn-j5lfyoei.resize-files-simplefileupload.com/5zg9WtHH3SHYQ0wioSD5VqJb0CZUv4oVvEq7HBk_2FE/plain/s3://static.files-simplefileupload.com/0blkz8lio489yzeapuf2qv0de7oc"
+    
     try {
         const ajaxResponse = await fetch(`api/img/${hotelID}`);
         const photos = await ajaxResponse.json();
@@ -303,46 +358,79 @@ async function getHotelPics(hotelID, putInThisDiv) {
         let my_carousel_code_start = `<div id="myCarousel${putInThisDiv}" class="carousel carousel-fade" data-bs-ride="carousel">`
         let my_carousel_code_end = ` <a class="carousel-control-prev" href="#myCarousel${putInThisDiv}" role="button" data-bs-slide="prev" style="text-decoration: none;color: black;font-size: 50px;left: -10%;transform: translateY(100px);">◀</a>
                                     <a class="carousel-control-next" href="#myCarousel${putInThisDiv}" role="button" data-bs-slide="next" style="text-decoration: none;color: black;font-size: 50px;right: -10%;transform: translateY(100px);">▶</a>
-                                    </div>`
+                                    </div>` 
         counter = 0
-        photos.forEach(ph => {
-
-            if (counter == "0") {
-                inner += `<div class="carousel-item carouselImg rounded active" data-interval="2000" style="position: relative;">
-                                <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
-                          </div>`;
-                counter++
-            } else {
-                inner += `<div class="carousel-item carouselImg rounded" data-interval="2000">
-                             <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}"><button onclick="ajaxChangeMainImg(${hotelID});this.style.display='none'" class="make-main-profile-picture btn btn-block btn-primary">Make Profile Picture</button>
-                          </div>`;
-                counter++
-            }
-        });
-        document.getElementById(`${putInThisDiv}`).innerHTML = my_carousel_code_start + inner + my_carousel_code_end;
+        if(photos.length >1){
+            photos.forEach(ph => {
+                if(ph.photo != stock_photo){
+                    if (counter == "0") {
+                        inner += `<div class="carousel-item carouselImg rounded active" data-interval="2000" style="position: relative;">
+                                        <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
+                                  </div>`;
+                        counter++
+                    } else {
+                        inner += `<div class="carousel-item carouselImg rounded" data-interval="2000">
+                                     <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}"><button onclick="ajaxChangeMainImg(${hotelID},${user});this.style.display='none'" class="make-main-profile-picture btn btn-block btn-primary">Make Profile Picture</button>
+                                  </div>`;
+                        counter++
+                    }
+                }
+            });
+        }else{
+            photos.forEach(ph => {
+                if (counter == "0") {
+                    inner += `<div class="carousel-item carouselImg rounded active" data-interval="2000" style="position: relative;">
+                                    <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
+                              </div>`;
+                    counter++
+                }
+            })
+        }
+        if(photos.length >1){
+            document.getElementById(`${putInThisDiv}`).innerHTML = my_carousel_code_start + inner + my_carousel_code_end;
+        } else {
+            document.getElementById(`${putInThisDiv}`).innerHTML = my_carousel_code_start + inner + "</div>";
+        }
     } catch (e) {
         alert(`There was an error: ${e}`);
     }
 }
 
 
-function deleteThisPoint(pointRef, mark, user) { // mark deletion
+function deleteThisPoint(pointRef, mark, user, adminCheck) { // mark deletion
     if (user == "1") {
-        $.ajax({
-            type: "POST",
-            crossDomain: true,
-            url: "/delete_point",
-            data: { "point": pointRef },
-            success: [
-                document.getElementById('current_target').remove(),
-                document.querySelector('.leaflet-popup').classList.add('hideMe'),
-                document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                                                            Point and accommodation deleted.
-                                                                                            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                                                                <span aria-hidden="true"></span>
-                                                                                            </button>
-                                                                                        </div>`]
-        })
+        if(adminCheck=="1"){
+            $.ajax({
+                type: "POST",
+                crossDomain: true,
+                url: "/delete_point",
+                data: { "point": pointRef },
+                success: [
+                    document.getElementById('current_target').remove(),
+                    document.querySelector('.leaflet-popup').classList.add('hideMe'),
+                    document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                                                                Point and accommodation deleted.
+                                                                                                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                                    <span aria-hidden="true"></span>
+                                                                                                </button>
+                                                                                            </div>`]
+            })
+            document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                                                Point and accommodation deleted.
+                                                                                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                        <span aria-hidden="true"></span>
+                                                                                    </button>
+                                                                                </div>`
+        }else{
+            document.getElementById('popupMessages').innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                                                    Error 401 Unauthorized<br>
+                                                                                    No admin priviledges.
+                                                                                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                                        <span aria-hidden="true"></span>
+                                                                                    </button>
+                                                                                </div>`
+        }   
+        
     } else {
         openAddMarkModal2(35, 2)
     }

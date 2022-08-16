@@ -29,6 +29,10 @@ async function initCalendar(){
     calendar.settings.iso8601 = true;
     let todaysDate = new Date().toISOString().substring(0,10);
     document.getElementById('dateOfBooking').value= String(calendar.date.today.toISOString()).substring(0,10).replace("-","").replace("-","").substring(2)
+    setTimeout(addToCalendarClass(), 1111)
+}
+function addToCalendarClass(){
+    document.querySelector('.vanilla-calendar-day_today').classList.add('vanilla-calendar-day_selected')
 }
 async function changePage(page){
     document.querySelectorAll('[data-page]').forEach(element => {
@@ -71,17 +75,27 @@ function addImgModal(id,user){
     }
 }
 
-function openAddMarkModal(lat, lon) {
+function openAddMarkModal(lat, lon, checkAdmin) {
+    if(checkAdmin == 1){
         document.getElementById('mainModal1').classList.remove("hideMe")
         document.getElementById('subModal1').classList.remove("hideMe")
         document.getElementById('mainModal1').classList.add("showMe")
         document.getElementById('subModal1').classList.add("showMe")
-
+    
         document.getElementById('modalCoordsLat').innerText = lat 
         document.getElementById('modalCoordsLon').innerText = lon
         document.getElementById('avatar_url').innerText = "" 
         document.getElementById('modalName').innerText = "" 
         document.getElementById('modalMessageInput').innerText = "" 
+    } else {
+        document.getElementById('popupMessages').innerHTML = `<div class="alert alert-danger alert-dismissible fade show p-5 text-center" role="alert">
+                                                                                <br><br> 401 Unauthorized <br><br>Admin privileges required.<br>
+                                                                        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true"></span>
+                                                                        </button>
+                                                                    </div>`
+    }
+    
 }
 function hideModal(n) {
     document.getElementById(`mainModal${n}`).classList.remove("showMe")
