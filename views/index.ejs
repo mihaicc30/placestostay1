@@ -26,17 +26,17 @@
 <input hidden type="text" name="end" class="input" id="destination" placeholder="Choose starting point" style="display: none;" />
 
 <script defer>
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            console.log("Geolocation is not supported by this browser.")
-        }
-    }
-    function showPosition(position) {
-        document.getElementById('start').value = [position.coords.latitude, position.coords.longitude]
-    }
-    getLocation()
+    // function getLocation() {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(showPosition);
+    //     } else {
+    //         console.log("Geolocation is not supported by this browser.")
+    //     }
+    // }
+    // function showPosition(position) {
+    //     document.getElementById('start').value = [position.coords.latitude, position.coords.longitude]
+    // }
+    // getLocation()
 
     /*===================================================
                     MAP INIT               
@@ -76,7 +76,7 @@
         map.remove()
         await resolveAfterMSeconds(100)
         console.log("loading...");
-        map = L.map('map', null, { zoomControl: false })
+        map = L.map('map', null, { zoomControl: false }).setView([53.78839048924211, -4.526367187500001], 6);
         map.removeControl(map.zoomControl);
 
 
@@ -103,7 +103,7 @@
         var iconcampsite = new baseIcon({ iconUrl: "./img/pub.png" })
         var iconBandB = new baseIcon({ iconUrl: "./img/bnb.png" })
 
-
+        
         /*===================================================
                         BUILDING MARKS              
         ===================================================*/
@@ -129,17 +129,17 @@
         /*===================================================
                                 GPS / GEOLOCATION              
         ===================================================*/
-        map.locate({ setView: true, maxZoom: 11 });
-        function onLocationFound(e) {
-            var radius = e.accuracy;
-            var gps1 = L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + "<br>at " + e.latlng);
-            var gps2 = L.circle(e.latlng, radius).addTo(map);
-        }
-        function onLocationError(e) {
-            alert(e.message);
-        }
-        map.on('locationerror', onLocationError);
-        map.on('locationfound', onLocationFound);
+
+        var lc = L.control.locate({
+            position: 'topright',
+            strings: {
+                title: "Show me where I am!"
+            },
+            locateOptions: {
+                    maxZoom: 10,
+                    enableHighAccuracy: true
+            }
+        }).addTo(map);
 
         /*===================================================
                     TILE LAYER               
@@ -211,8 +211,8 @@
                 showAlternatives: true,
                 altLineOptions: { styles: [{ color: 'grey', opacity: 0.8, weight: 5 }, { color: 'grey', opacity: 0.8, weight: 5 }] }
             }).addTo(map)
-            var boundz = L.latLngBounds(wp1, wp1);
-            map.fitBounds(boundz)
+            // var boundz = L.latLngBounds(wp1, wp1);
+            // map.fitBounds(boundz)
         }
 
         /*===================================================
@@ -240,3 +240,5 @@
 
         map.fitBounds(bounds, { setView: true, maxZoom: 14 });
     });</script>
+
+    
