@@ -26,17 +26,6 @@
 <input hidden type="text" name="end" class="input" id="destination" placeholder="Choose starting point" style="display: none;" />
 
 <script defer>
-    // function getLocation() {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(showPosition);
-    //     } else {
-    //         console.log("Geolocation is not supported by this browser.")
-    //     }
-    // }
-    // function showPosition(position) {
-    //     document.getElementById('start').value = [position.coords.latitude, position.coords.longitude]
-    // }
-    // getLocation()
 
     /*===================================================
                     MAP INIT               
@@ -201,7 +190,6 @@
             }).addTo(map)
             var boundz = L.latLngBounds(wp1, wp2);
             map.fitBounds(boundz)
-            console.log(boundz);
         }
 
         /*===================================================
