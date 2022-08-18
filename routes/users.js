@@ -42,8 +42,8 @@ router.post('/register', async (req, res) => {
     });
   } else {
 
-    const user = await User.findOne({ where: {username:name} });
-    
+    const user = await User.findOne({ where: { username: name } });
+
     if (user !== null) {
       errors.push({ msg: 'Email already exists' });
       res.render('register', {
@@ -52,23 +52,18 @@ router.post('/register', async (req, res) => {
         password,
         password2
       });
-
     } else {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-          if (err) throw err;
-          const newUser = User.create({
-            username: name,
-            password: hash
-          }).then(newUser => {
-            req.flash(
-              'success_msg',
-              'You are now registered and can log in');
-            res.redirect('/users/login');
-          })
-            .catch(err => console.log(err));
-        })
+      const newUser = User.create({
+        username: name,
+        password: password
+      }).then(newUser => {
+        req.flash(
+          'success_msg',
+          'You are now registered and can log in');
+        res.redirect('/users/login');
       })
+        .catch(err => console.log(err));
+
     }
   }
 })

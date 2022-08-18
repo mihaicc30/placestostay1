@@ -1,7 +1,7 @@
 <% if(typeof user =="object" ) {%>
     <% user = JSON.parse(JSON.stringify(user)) %>
 <div class="mainModal1 hideMe" id="mainModal1" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
-    <div class="subModal1 hideMe" id="subModal1" style="margin-top: 100px;border:5px solid rgb(239 188 244);background-color:white;position:fixed;height:80vh; width:400px;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row;justify-content: center;">
+    <div class="subModal1 hideMe" id="subModal1" style="margin-top: 100px;border:5px solid rgb(239 188 244);background-color:white;position:fixed;height:80vh; width:360px;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row;justify-content: center;">
         <div style="max-width:370px;display: flex;text-align: center;justify-content: center;">
             <div style="height:10vh"></div>
             <div style="height:40vh;z-index: 999999999;width: 290px;">
@@ -9,131 +9,22 @@
                 <div hidden id="modalCoordsLat" style="padding:10px;background-color:white;overflow: hidden"></div>
                 <div hidden id="modalCoordsLon" style="padding:10px;background-color:white;overflow: hidden"></div>
 
-                <div id="modalIcon" style="padding:10px;background-color:white;overflow: hidden">Type:
+                <div id="modalIcon" style="padding:10px;background-color:white;overflow: hidden;">Type:
                     <select name="modalIconMenu" id="modalIconMenu">
                         <option value="iconhotel">🏬Hotel</option>
                         <option value="iconBandB">🕌B&B</option>
                         <option value="iconcampsite">🏣Campsite</option>
                         <option value="iconpub">🌟Pub</option>
-                        <option value="iconparking">🅿Parking</option>
-                        <option value="iconOther">📍Other</option>
                     </select>
                 </div>
                 
                 <div style="padding:10px;background-color:white;overflow: hidden"><input required type="text" id="modalName" placeholder="Name.."><span id="error1"
                     style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span></div>
-                <div style="padding:10px;background-color:white;overflow: hidden;"><select name="county" id="modalLocation">
-                    <optgroup label="England">
-                        <option>Bedfordshire</option>
-                        <option>Berkshire</option>
-                        <option>Bristol</option>
-                        <option>Buckinghamshire</option>
-                        <option>Cambridgeshire</option>
-                        <option>Cheshire</option>
-                        <option>City of London</option>
-                        <option>Cornwall</option>
-                        <option>Cumbria</option>
-                        <option>Derbyshire</option>
-                        <option>Devon</option>
-                        <option>Dorset</option>
-                        <option>Durham</option>
-                        <option>East Riding of Yorkshire</option>
-                        <option>East Sussex</option>
-                        <option>Essex</option>
-                        <option>Gloucestershire</option>
-                        <option>Greater London</option>
-                        <option>Greater Manchester</option>
-                        <option>Hampshire</option>
-                        <option>Herefordshire</option>
-                        <option>Hertfordshire</option>
-                        <option>Isle of Wight</option>
-                        <option>Kent</option>
-                        <option>Lancashire</option>
-                        <option>Leicestershire</option>
-                        <option>Lincolnshire</option>
-                        <option>Merseyside</option>
-                        <option>Norfolk</option>
-                        <option>North Yorkshire</option>
-                        <option>Northamptonshire</option>
-                        <option>Northumberland</option>
-                        <option>Nottinghamshire</option>
-                        <option>Oxfordshire</option>
-                        <option>Rutland</option>
-                        <option>Shropshire</option>
-                        <option>Somerset</option>
-                        <option>South Yorkshire</option>
-                        <option>Staffordshire</option>
-                        <option>Suffolk</option>
-                        <option>Surrey</option>
-                        <option>Tyne and Wear</option>
-                        <option>Warwickshire</option>
-                        <option>West Midlands</option>
-                        <option>West Sussex</option>
-                        <option>West Yorkshire</option>
-                        <option>Wiltshire</option>
-                        <option>Worcestershire</option>
-                    </optgroup>
-                    <optgroup label="Wales">
-                        <option>Anglesey</option>
-                        <option>Brecknockshire</option>
-                        <option>Caernarfonshire</option>
-                        <option>Carmarthenshire</option>
-                        <option>Cardiganshire</option>
-                        <option>Denbighshire</option>
-                        <option>Flintshire</option>
-                        <option>Glamorgan</option>
-                        <option>Merioneth</option>
-                        <option>Monmouthshire</option>
-                        <option>Montgomeryshire</option>
-                        <option>Pembrokeshire</option>
-                        <option>Radnorshire</option>
-                    </optgroup>
-                    <optgroup label="Scotland">
-                        <option>Aberdeenshire</option>
-                        <option>Angus</option>
-                        <option>Argyllshire</option>
-                        <option>Ayrshire</option>
-                        <option>Banffshire</option>
-                        <option>Berwickshire</option>
-                        <option>Buteshire</option>
-                        <option>Cromartyshire</option>
-                        <option>Caithness</option>
-                        <option>Clackmannanshire</option>
-                        <option>Dumfriesshire</option>
-                        <option>Dunbartonshire</option>
-                        <option>East Lothian</option>
-                        <option>Fife</option>
-                        <option>Inverness-shire</option>
-                        <option>Kincardineshire</option>
-                        <option>Kinross</option>
-                        <option>Kirkcudbrightshire</option>
-                        <option>Lanarkshire</option>
-                        <option>Midlothian</option>
-                        <option>Morayshire</option>
-                        <option>Nairnshire</option>
-                        <option>Orkney</option>
-                        <option>Peeblesshire</option>
-                        <option>Perthshire</option>
-                        <option>Renfrewshire</option>
-                        <option>Ross-shire</option>
-                        <option>Roxburghshire</option>
-                        <option>Selkirkshire</option>
-                        <option>Shetland</option>
-                        <option>Stirlingshire</option>
-                        <option>Sutherland</option>
-                        <option>West Lothian</option>
-                        <option>Wigtownshire</option>
-                    </optgroup>
-                    <optgroup label="Northern Ireland">
-                        <option>Antrim</option>
-                        <option>Armagh</option>
-                        <option>Down</option>
-                        <option>Fermanagh</option>
-                        <option>Londonderry</option>
-                        <option>Tyrone</option>
-                    </optgroup>
-                </select><span id="error2"
+
+                <div style="padding:10px;background-color:white;overflow: hidden"><input required name="county" type="text" id="modalLocation" placeholder="Name..">
+                    <span id="error2"
                 style="visibility: hidden; color:red;font-size: 1.4em;font-weight: bold;">!</span></div>
+               
                 <div id="modalImg" style="padding:10px;background-color:white;overflow: hidden;display: flex;justify-content: center">
                     <form >
                         <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload" data-maxFileSize="0.5"> 

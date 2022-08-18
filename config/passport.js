@@ -10,14 +10,20 @@ module.exports = function (passport) {
       if (user.length < 1) {
         return done(null, false, { message: 'That email is not registered' });
       } else {
-        bcrypt.compare(password, user[0].dataValues.password, (err, isMatch) => {
-          if (err) throw err;
-          if (isMatch) {
-            return done(null, user);
-          } else {
-            return done(null, false, { message: 'Password incorrect' });
-          }
-        })
+        if(password == user[0].dataValues.password){
+          return done(null, user);
+        } else {
+          return done(null, false, { message: 'Password incorrect' });
+        }
+
+        // bcrypt.compare(password, user[0].dataValues.password, (err, isMatch) => {
+        //   if (err) throw err;
+        //   if (isMatch) {
+        //     return done(null, user);
+        //   } else {
+        //     return done(null, false, { message: 'Password incorrect' });
+        //   }
+        // })
       }
     })
   );

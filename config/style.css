@@ -150,6 +150,7 @@
 .alert {
     position: absolute;
     top: 5%;
+    animation: fadeIn 500ms forwards, slide-up 500ms forwards;
 }
 
 .popupImg {

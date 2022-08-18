@@ -111,7 +111,7 @@
                         <img src="./img/<% if(checkAdmin == "1"){%>manageAcc<%}else{%>booknow<%}%>.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;">
                     </button>
                         <button style="border:none;background-color:transparent" type="button" onclick="addImgModal(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(${ajaxResponse[i].latitude},${ajaxResponse[i].longitude})"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>`)
-                .on("click", function () { getHotelPics(ajaxResponse[i].ID, "popupimg" + ajaxResponse[i].ID, <%=checkAdmin%>) })
+                .on("click", function () { getHotelPics(ajaxResponse[i].ID, "popupimg" + ajaxResponse[i].ID, `<%=checkAdmin%>`) })
                 .addTo(map)
         }
 
@@ -155,7 +155,7 @@
                 title: "Show me where I am!"
             },
             locateOptions: {
-                    maxZoom: 12,
+                    maxZoom: 14,
                     enableHighAccuracy: true
             }
         }).addTo(map);
@@ -215,7 +215,7 @@
             corner2 = L.latLng(tempCoords[0], tempCoords[1]),
             bounds = L.latLngBounds(corner1, corner2);
 
-        map.flyToBounds(bounds, { setView: true, maxZoom: 10, duration: 0.5 });
+        map.flyToBounds(bounds, { setView: true, maxZoom: 14, duration: 0.5 });
     });</script>
 
     

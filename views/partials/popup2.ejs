@@ -1,8 +1,8 @@
 <% if(typeof user =="object" ) {%>
     <% let checkAdmin=0; if(typeof user=="object") { checkAdmin=JSON.parse(JSON.stringify(user))[0].admin } %>
 <div class="mainModal2 hideMe" id="mainModal2" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
-    <div class="subModal2 hideMe" id="subModal2" style="border:5px solid rgb(239 188 244);background-color:white;position:fixed;height:80vh; width:400px;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row;justify-content: center;">
-        <div style="max-width:400px;display: flex;text-align: center;justify-content: center;flex-direction: column;">
+    <div class="subModal2 hideMe" id="subModal2" style="border:5px solid rgb(239 188 244);background-color:white;position:fixed;height:80vh; width:360px;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row;justify-content: center;">
+        <div style="max-width:360px;display: flex;text-align: center;justify-content: center;flex-direction: column;">
             <div style="height:40vh;z-index: 999999999;width: 290px; display: flex; justify-content: center;align-items: center;flex-direction: column;">
                 <div hidden id="hotelID" style="padding:10px;background-color:white;overflow: hidden"></div>
                 <h1><%if(checkAdmin=="1"){%>Accommodation Management<%}else{%>Booking Information<%}%></h1>
@@ -43,12 +43,62 @@
 <%} else { %>
     <div class="mainModal2 hideMe" id="mainModal2" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
         <div class="subModal2 hideMe" id="subModal2" style="position:fixed;height:fit-content; width:fit-content;z-index:10000;display: flex!important;flex-direction: row;justify-content: center;align-items: center">
-                <%- include ('../login') %>
+            <div class="row mt-5">
+                <div class="col-md-6">
+                  <div class="card card-body" style="min-width: 400px;">
+                      <h1 class="text-center mb-3"><svg xmlns="http://www.w3.org/2000/svg" style="height: 50px;width:50px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>Login</h1>
+                      <form action="/users/login" method="POST">
+                        <div class="form-group">
+                          <label for="email">Username</label>
+                          <input type="text" id="email" name="email" class="form-control" placeholder="Enter Username"
+                            autocomplete="username" />
+                        </div>
+                        <div class="form-group">
+                          <label for="password">Password</label>
+                          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"
+                            autocomplete="current-password" />
+                        </div>
+                        <button type="submit" class="btn btn-info btn-block">Login</button>
+                      </form>
+                      <p class="lead mt-4">
+                        No Account? <a href="/users/register">Register</a>
+                      </p>
+                  </div>
+                </div>
+              </div>
         </div>
     </div>
     <div class="mainModal5 hideMe" id="mainModal5" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
         <div class="subModal5 hideMe" id="subModal5" style="position:fixed;height:fit-content; width:fit-content;z-index:10000;display: flex!important;flex-direction: row;justify-content: center;align-items: center">
-                <%- include ('../register') %>
+            <div class="row mt-5">
+                <div class="col-md-6">
+                  <div class="card card-body" style="min-width: 400px;">
+                    <h1 class="text-center mb-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" style="height:50px;width:50px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Register
+                    </h1>
+                      <form action="/users/register" method="POST">
+                        <div class="form-group">
+                          <label for="name">Username</label>
+                          <input type="name" id="name" name="name" class="form-control" placeholder="Enter Username"
+                            value="<%= typeof name != 'undefined' ? name : '' %>" />
+                        </div>
+                        <div class="form-group">
+                          <label for="password">Password</label>
+                          <input type="password" id="password" name="password" class="form-control" placeholder="Create Password"
+                            value="<%= typeof password != 'undefined' ? password : '' %>" autocomplete="new-password" />
+                        </div>
+                        <div class="form-group">
+                          <label for="password2">Confirm Password</label>
+                          <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password"
+                            value="<%= typeof password2 != 'undefined' ? password2 : '' %>" autocomplete="new-password" />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                          Register
+                        </button>
+                      </form>
+                  </div>
+                </div>
+              </div>
         </div>
     </div>
 <%}%>
