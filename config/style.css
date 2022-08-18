@@ -127,11 +127,21 @@
 
 .showMe {
     display: flex !important;
+    animation: fadeIn 500ms forwards, slide-up 500ms forwards;
 }
 
 .hideMe {
+    animation: fadeIn 500ms forwards, slide-up 500ms backwards;
     display: none !important;
 }
+@keyframes slide-up {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0%);
+    }
+  }
 
 .active {
     background-color: rgb(239 188 244) !important;

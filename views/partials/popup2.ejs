@@ -29,15 +29,15 @@
                 <div hidden id="bookingUser" style="padding:10px;background-color:white;overflow: hidden"><%=user[0]["dataValues"].username%></div>
                 <button <%if(checkAdmin=="1"){%>style="display:none"<%}%> class="py-2 px-5 rounded" type="button" onclick="completeBookingStep1()" id="insertSpecialButton2">🥂Book!</button>
                 <%if(checkAdmin=="1"){%>
-                    <div class="d-flex flex-row justify-content-center">
+                    <div class="d-flex flex-row justify-content-center" style="    gap: 5px;">
                         <input min="0" type="number" class="w-25 text-center" id="spacesToAdd">    
-                        <button class="py-2 px-3 rounded btn btn-primary" type="button" onclick="addSpaces(document.getElementById('hotelID').innerText, document.getElementById('spacesToAdd').value, document.getElementsByClassName('vanilla-calendar-day_selected')[0].attributes[1].nodeValue.substring(2).replace(/-/g,''))">👪SET!</button>
+                        <button class="py-2 px-3 rounded btn btn-primary" type="button" onclick="addSpaces(document.getElementById('hotelID').innerText, document.getElementById('spacesToAdd').value, document.getElementsByClassName('vanilla-calendar-day_selected')[0].attributes[1].nodeValue.substring(2).replace(/-/g,''))">👪SET AVAILABILITY!</button>
                     </div>
                 <%}%>
             </div>
         </div>
     </div>
-    <div style="width:100vw;height:100vh;position:fixed;left:0%;" onclick="hideModal(2)"></div>
+    <div id="closingArea" style="width:100vw;height:100vh;position:fixed;left:0%;" onclick="hideModal(2)"></div>
 </div>
 
 <%} else { %>
