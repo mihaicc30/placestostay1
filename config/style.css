@@ -496,3 +496,40 @@ table > tbody > tr > td {
     background-color: #d741d780;
     border: none;
 }
+.cloud1{
+    width: 200px;
+    height: 200px;
+    opacity: .6;
+    position: absolute;
+    animation: float infinite;
+    animation-duration: 3s;
+    margin-top: 100px;
+    left:-18%;
+}
+.cloud2{
+    width: 200px;
+    height: 200px;
+    opacity: .6;
+    position: absolute;
+    animation: float infinite;
+    animation-duration: 4s;
+    margin-top: 300px;
+    right: -19%;
+    top: -21%;
+}
+.cloud3{
+    width: 200px;
+    height: 200px;
+    opacity: .6;
+    position: absolute;
+    animation: float infinite;
+    animation-duration: 5s;
+    margin-top: 400px;
+    left: 6%;
+    top: -21%;
+}
+@keyframes float {
+    0%{transform: translate(5px, -10px);}
+    50%{transform: translate(-5px, 10px);}
+    100%{transform: translate(5px, -10px);}    
+}
