@@ -15,15 +15,6 @@ module.exports = function (passport) {
         } else {
           return done(null, false, { message: 'Password incorrect' });
         }
-
-        // bcrypt.compare(password, user[0].dataValues.password, (err, isMatch) => {
-        //   if (err) throw err;
-        //   if (isMatch) {
-        //     return done(null, user);
-        //   } else {
-        //     return done(null, false, { message: 'Password incorrect' });
-        //   }
-        // })
       }
     })
   );
