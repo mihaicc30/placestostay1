@@ -40,9 +40,7 @@ router.post('/register', async (req, res) => {
       password2
     });
   } else {
-
     const user = await User.findOne({ where: { username: name } });
-
     if (user !== null) {
       errors.push({ msg: 'Email already exists' });
       res.render('register', {

@@ -34,10 +34,10 @@ const con = mysql.createConnection({
   password: process.env.DB_PASS,
   database: process.env.DB_DBASE
 });
+const { INTEGER } = require('sequelize');
 
 // CARD VALIDATOR // personally i would make my own but it was a requirement in the assessment brief so...here it is
 var valid = require("card-validator"); // card validator api
-const { INTEGER } = require('sequelize');
 router.get('/api/validatecard/:cardnumber/:cardname/:cardexpiration/:cardcvv', (req,res)=> { 
       
   for(elem in req.params){
@@ -306,12 +306,12 @@ router.get('/api/acc/location/:location', (req,res)=> { // filter > location
   })
 });
 router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > location, type   // task PartA.2.
-      
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
   }
   if(req.params.location!="" && req.params.type!=""){
-    Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
+    Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, 
+          "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
       if(results.length>0){
         res.status(200)
         res.json(results);
@@ -385,7 +385,7 @@ router.get('/api/availability/:thisDate/:thisID', (req,res)=> {
   })
 });
 
-router.post('/api/img/:img/acc/:acc', (req,res)=> {  // user adds more images to accommmodation through api
+router.post('/api/img/:img/acc/:acc', ensureAuthenticated,(req,res)=> {  // user adds more images to accommmodation through api
       
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
@@ -394,12 +394,13 @@ router.post('/api/img/:img/acc/:acc', (req,res)=> {  // user adds more images to
       console.log("db record inserted > added photo to accommodation");
   })
 });
-router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommmodation
+router.post('/api/insertIMG', ensureAuthenticated,(req,res)=> {  // user adds more images to accommmodation
       
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
   }
   Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
+    res.status(200)
     res.end()
   }) 
 });
@@ -419,8 +420,8 @@ router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of acco
     })
     res.end()
   } else {
-    console.log("user is not admin server side");
     res.status(401)
+    console.log("user is not admin server side");
   }
   
 });
@@ -447,51 +448,75 @@ router.post('/book',  (req, res) => {
 });
 // book ReST api
 router.get('/book/id/:id/people/:people/date/:date', ensureAuthenticated, (req, res) => {      // task PartA.3.
-      
+  let errors = []
+  
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
   }
+  function isInThePast(date) {
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1)
 
-  let submitQuery = 1
+    return date <= yesterday
+  }
+  
   let thisUser = JSON.parse(JSON.stringify(req.user))[0]["username"]
   if(typeof thisUser == "undefined"){
-    submitQuery = 2
-    res.json("Need to be authenticated.")
-    res.end();
+    errors.push("Need to be authenticated.")
   }
-  else if(!(parseInt(req.params.people) > 0) || !(parseInt(req.params.people) <= 99)){
-    submitQuery = 2
-    res.json(`${req.params.people} is an invalid number of people.`)
-    res.end();
+  if(req.params.id < 1){
+    errors.push(`Accommodation ID cant be ${req.params.id}!`)
   }
-  else if(String(req.params.date).length > 6 || String(req.params.date).length <= 0){
-    submitQuery = 2
-    res.json(`${req.params.date} is an invalid date length.`)
-    res.end();
+  if(!(parseInt(req.params.people) > 0) || !(parseInt(req.params.people) <= 99)){
+    errors.push(`${req.params.people} is an invalid number of people.`)
+  }
+  if( isInThePast(new Date(`20${String(req.params.date).substring(0,2)}-${String(req.params.date).substring(2,4)}-${String(req.params.date).substring(4,6)}`)) ){
+    errors.push("Date is in the past.")
+  }
+  if(String(req.params.date).length > 6 || String(req.params.date).length <= 0){
+    errors.push(`${req.params.date} is an invalid date length.`)
   }
   let yy = String(req.params.date).substring(0,2)
   let mm = String(req.params.date).substring(2,4)
   let dd = String(req.params.date).substring(4,6)
   if (!(yy >= 22) || !(yy <= 99) || !(mm >= 1) || !(mm <= 12) || !(dd >= 1) || !(dd <= 31  )){
-    submitQuery = 2
-    res.json(`${req.params.date} is an invalid date.`)
-    res.end();
+    errors.push(`${req.params.date} is an invalid date.`)
   }
-  else if(submitQuery == "2"){
-    res.json(`Invalid booking details.`)
+  if(errors.length > 0){
+    res.status(404)
+    res.json(errors)
     res.end();
   } else {
-    Acc_bookings.create({
+    Acc_dates.findOne({where:{"accID":req.params.id,"thedate":req.params.date } })
+    .then(checkAvailability=>{
+      if(checkAvailability == null){
+        res.status(404)
+        res.json(`No availability on this date.`)
+        res.end();
+      }
+      else{
+        if(JSON.parse(JSON.stringify(checkAvailability)).availability < req.params.people){
+          res.status(404)
+          res.json(`Only ${JSON.parse(JSON.stringify(checkAvailability)).availability} people available on this date, not ${req.params.people}, sorry.`);
+          res.end();
+        } else{
+          Acc_bookings.create({
             "accID": req.params.id,            // hotel id
             "thedate": req.params.date,                 // date of booking
             "username": thisUser,      // user that is booking
             "npeople":  req.params.people       // number of people
           }).then((results)=>{ 
-            Acc_dates.decrement({"availability": req.params.people},{where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
+            Acc_dates.decrement({"availability": req.params.people},
+                {where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
               console.log("booking success & reduced availability")
-              res.end();
+              res.status(200)
+              res.json(`Booking complete.`)
+              res.end()
             })
           })
+        }
+      }
+    })
   }
 });
 
