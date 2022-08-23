@@ -15,7 +15,7 @@ const Op = Sequelize.Op;
 
 
 function sanitize(param) {
-  var banned_Chars = ['<', '>', '{', '}', '[', ']', '(', ')', '</script>', '<script>', 'prompt', 'alert', 'write', 'send', 'script', '?', '!', '$', '#','\`','"','\"','\'','\;','\\',`\\`];
+  var banned_Chars = ['<', '>', '{', '}', '[', ']', '(', ')', '</script>', '<script>', 'prompt', 'alert', 'write', 'send', 'script', '?', '!', '$', '#','\`','"','\"','\'','\;','\\'];
   var textvalue = param
   for (var i = 0; i < banned_Chars.length; i++) {
     if (~textvalue.indexOf(banned_Chars[i])) {
