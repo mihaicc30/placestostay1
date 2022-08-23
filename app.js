@@ -19,6 +19,8 @@ const corsOptions = {
  
 app.use(cors(corsOptions))
 
+
+
 // MySQL Connection
 sequelize.sync().then(result =>{
   console.log("MySQL Connected "+new Date())

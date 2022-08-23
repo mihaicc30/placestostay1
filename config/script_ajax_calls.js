@@ -256,6 +256,7 @@ async function applyFilter(user) {
                 // this is for the results when the user wants very specific accommodation :)
                 // filtering paradise // gods list of filters // somewhat proud its made by me and flawless :D
                 // checking all 4 filters (name of accommodation, location, type, price range) with a total of 16 combinations (luckly there are only 4 filters, if 5, would be 32 combinations😢,etc)
+                console.log(place);
                 if (f1L == 0 && f2L == 0 && f3L == 0 && f4L == 0
                 ) { if ((parseInt(someCounter) % 6) == "0") { divNo++; }; someCounter++; results += `<div data-coords="${place.latitude},${place.longitude}" class="divResults" data-pageResults="${divNo}"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-size:1.2rem;font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${place.ID},${user})"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>` }
 
@@ -365,7 +366,7 @@ async function getHotelPics(hotelID, putInThisDiv, user) {
                 if(ph.photo != stock_photo){
                     if (counter == "0") {
                         inner += `<div class="carousel-item carouselImg rounded active" data-interval="2000" style="position: relative;">
-                                        <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}">
+                                        <img src="${ph.photo}" class="carouselImg rounded" alt="img${counter}"><button onclick="ajaxChangeMainImg(${hotelID},${user});this.style.display='none'" class="make-main-profile-picture btn btn-block btn-primary">Make Profile Picture</button>
                                   </div>`;
                         counter++
                     } else {

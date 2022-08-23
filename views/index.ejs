@@ -1,14 +1,9 @@
 <script src="config/dual-slider.js" defer></script> <!-- slide filter for price range -->
-<%- include ('./partials/popup') %>
-<!-- add/save mark window -->
-<%- include ('./partials/popup2') %>
-<!-- book accommodation window -->
-<%- include ('./partials/popupAddImage') %>
-<!-- add accommodation pics window -->
-<%- include ('./partials/payment_modal') %>
-<!-- add accommodation pics window -->
-<%- include('./partials/header') %>
-<!-- navbar -->
+<%- include ('./partials/popup') %><!-- add/save mark window -->
+<%- include ('./partials/popup2') %><!-- book accommodation window -->
+<%- include ('./partials/popupAddImage') %><!-- add accommodation pics window -->
+<%- include ('./partials/payment_modal') %><!-- add accommodation pics window -->
+<%- include('./partials/header') %><!-- navbar -->
 <% let checkUser=0; if(typeof user=="object" ) {checkUser=1 }else{ checkUser=2 } %>
 <% let checkAdmin=0; if(typeof user=="object") { checkAdmin=JSON.parse(JSON.stringify(user))[0].admin } %>
 

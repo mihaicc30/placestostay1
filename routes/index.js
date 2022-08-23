@@ -9,12 +9,24 @@ const Accommodation = require('../models/Accommodation');
 const Accommodation_details = require('../models/Accommodation_details');
 const Acc_bookings = require('../models/Acc_bookings');
 const Acc_dates = require('../models/Acc_dates');
-
 var mysql = require('mysql2');
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-const banned_Chars = ['<', '>', '-', '{', '}', '[', ']', '(', ')', 'script', '<script>', '</script>', 'prompt', 'alert', 'write', 'send', '?', '!', '$', '#', '\`', '\"', '\'', '\;', '\\', '\/'];
+
+function sanitize(param) {
+  var banned_Chars = ['<', '>', '{', '}', '[', ']', '(', ')', '</script>', '<script>', 'prompt', 'alert', 'write', 'send', 'script', '?', '!', '$', '#','\`','"','\"','\'','\;','\\',`\\`];
+  var textvalue = param
+  for (var i = 0; i < banned_Chars.length; i++) {
+    if (~textvalue.indexOf(banned_Chars[i])) {
+        textvalue = String(textvalue).replace(banned_Chars[i], "");
+        textvalue = sanitize(textvalue)
+    }
+  }
+  return textvalue
+}
+
+
 const con = mysql.createConnection({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -25,7 +37,12 @@ const con = mysql.createConnection({
 
 // CARD VALIDATOR // personally i would make my own but it was a requirement in the assessment brief so...here it is
 var valid = require("card-validator"); // card validator api
+const { INTEGER } = require('sequelize');
 router.get('/api/validatecard/:cardnumber/:cardname/:cardexpiration/:cardcvv', (req,res)=> { 
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   var numberValidation = valid.number(req.params.cardnumber);
   var cardholderNameValidation = valid.cardholderName(req.params.cardname)
   var expirationDateValidation = valid.expirationDate(req.params.cardexpiration)
@@ -60,6 +77,10 @@ router.get('/', async (req, res) => {
 
 // Admin management - add spaces
 router.post('/addspaces', ensureAuthenticated, (req, res) => {
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Acc_dates.update({"availability":req.body.number},{where:{ "accID":req.body.hotelID,"thedate":req.body.dater}})
   .then(results=>{
     if(String(results)=="0"){
@@ -81,27 +102,29 @@ router.get('/myprofile', ensureAuthenticated, async (req, res) => {
 // myprofile_save page post
 router.post('/myprofile_save', ensureAuthenticated, (req, res) => {
   // obviously in a live system i would check the old password and then update the account but this is not in the scope here
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(req.body.pass, salt, (err, hash) => {
-      if (err) throw err;
-      Acc_bookings.update({"username":req.body.newUsername},{where:{ "username":req.body.oldUsername}})
-      User.update({"username":req.body.newUsername, "password":hash},{where:{ "username":req.body.oldUsername}})
-      .then(updatedUser => {
-        res.end()
-      })
-        .catch(err => console.log(err));
-    })
+  Acc_bookings.update({"username":req.body.newUsername},{where:{ "username":req.body.oldUsername}})
+  User.update({"username":req.body.newUsername, "password":hash},{where:{ "username":req.body.oldUsername}})
+  .then(updatedUser => {
+    res.end()
   })
-
+  .catch(err => console.log(err));
 })
 // myprofile_delete page post
 router.delete('/myprofile_delete', ensureAuthenticated, (req, res) => {
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   User.destroy({where:{"username":req.body.oldUsername}})
   req.logout()
   res.redirect('/')
 })
 
 router.post("/delete_point",ensureAuthenticated, async (req, res) => { // delete saved mark
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.destroy({where:{"ID":req.body.point}})
   Accommodation_details.destroy({where:{"ID":req.body.point}})
   console.log("total deletion success")
@@ -113,7 +136,10 @@ router.post("/save_point", async (req, res) => { // save selected mark
   console.log("ajax call    time " + new Date())
   var bodyPhoto = req.body.photo
   if(bodyPhoto.length < 1) { bodyPhoto = "https://cdn-j5lfyoei.resize-files-simplefileupload.com/5zg9WtHH3SHYQ0wioSD5VqJb0CZUv4oVvEq7HBk_2FE/plain/s3://static.files-simplefileupload.com/0blkz8lio489yzeapuf2qv0de7oc"}
-  
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   const createMark = await Accommodation.create({
     "name": req.body.name,
     "type": req.body.type,
@@ -160,7 +186,10 @@ router.get('/api/acc', (req,res)=> {
   // })
 });
 
-router.get('/api/img/:id', (req,res)=> {  // give me image links
+router.get('/api/img/:id', (req,res)=> {  // give me image links    
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation_details.findAll({where:{"ID": req.params.id },attributes: ['photo', 'ID'], order:[['main_photo','DESC']]  }).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -171,7 +200,10 @@ router.get('/api/img/:id', (req,res)=> {  // give me image links
     }
   })
 });
-router.get('/api/id/:id', (req,res)=> { 
+router.get('/api/id/:id', (req,res)=> {     
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.findAll({where:{"ID":{[Op.like]: `%${req.params.id}%` }  }}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -182,7 +214,10 @@ router.get('/api/id/:id', (req,res)=> {
     }
   })
 });
-router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1.
+router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1.        
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   if(req.params.location!=""){
     Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
       if(results.length>0){
@@ -190,13 +225,16 @@ router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1
         res.json(results);
       } else {
         res.status(404)
-        res.json("No accommodation found by given location.😢")
+        res.json(`No accommodation found by given location.😢 = ${req.params.location}`)
       }
     })
   }
 });
 ////////// APIs For Filtering ////////////
-router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
+router.get('/api/acc/name/:name', (req,res)=> {    // filter > name    
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` }  }}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -208,6 +246,10 @@ router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
   })
 });
 router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > name, location      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
+
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }}}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -219,6 +261,10 @@ router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > n
   })
 });
 router.get('/api/acc/name/:name/type/:type', (req,res)=> {  // filter > name, type
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -230,6 +276,10 @@ router.get('/api/acc/name/:name/type/:type', (req,res)=> {  // filter > name, ty
   })
 });
 router.get('/api/acc/name/:name/location/:location/type/:type', (req,res)=> {  // filter > name, location, type
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.findAll({where:{"name":{[Op.like]: `%${req.params.name}%` },"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -241,6 +291,10 @@ router.get('/api/acc/name/:name/location/:location/type/:type', (req,res)=> {  /
   })
 });
 router.get('/api/acc/location/:location', (req,res)=> { // filter > location
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` } }}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -252,6 +306,10 @@ router.get('/api/acc/location/:location', (req,res)=> { // filter > location
   })
 });
 router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > location, type   // task PartA.2.
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   if(req.params.location!="" && req.params.type!=""){
     Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
       if(results.length>0){
@@ -265,6 +323,10 @@ router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > 
   }
 });
 router.get('/api/acc/type/:type', (req,res)=> {  // filter > type
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation.findAll({where:{"type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -291,6 +353,10 @@ router.get('/api/bookings', (req,res)=> {
 
 // showing user his bookings API
 router.get('/api/user/bookings/:username', ensureAuthenticated, async (req,res)=> { 
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   await Acc_bookings.findAll({where:{"username": req.params.username} ,order:[['thedate','DESC']]} ).then((results)=>{
     if(results.length>0){
       res.status(200)
@@ -304,6 +370,10 @@ router.get('/api/user/bookings/:username', ensureAuthenticated, async (req,res)=
 
 // API FOR CHECKING AVAILABLE PEOPLE IN ONE ACCOMMODATION //
 router.get('/api/availability/:thisDate/:thisID', (req,res)=> { 
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Acc_dates.findAll({where:{"thedate":req.params.thisDate, "accID": req.params.thisID}} ).then((results)=>{
     if(results.length>0 && JSON.parse(JSON.stringify(results))[0]["availability"] != "0"){
       res.status(200)
@@ -316,11 +386,19 @@ router.get('/api/availability/:thisDate/:thisID', (req,res)=> {
 });
 
 router.post('/api/img/:img/acc/:acc', (req,res)=> {  // user adds more images to accommmodation through api
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation_details.create({"ID":req.params.acc, "photo":req.params.img}).then((results)=>{
       console.log("db record inserted > added photo to accommodation");
   })
 });
 router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommmodation
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   Accommodation_details.create({"ID":req.body.IDD, "photo":req.body.photoo}).then((results)=>{
     res.end()
   }) 
@@ -328,6 +406,10 @@ router.post('/api/insertIMG', (req,res)=> {  // user adds more images to accommm
 
 
 router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of accommodation
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   if(req.body.userAdmin == 1){
     Accommodation_details.findOne({where:{ "main_photo":"1", "ID":req.body.IDD}}).then((result)=>{
       if(JSON.stringify(result).length>0){
@@ -345,6 +427,11 @@ router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of acco
 
 // book this
 router.post('/book',  (req, res) => {
+
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
   // to reCheck values and validate
   Acc_bookings.create({
     "accID": req.body.accID,            // hotel id
@@ -360,6 +447,11 @@ router.post('/book',  (req, res) => {
 });
 // book ReST api
 router.get('/book/id/:id/people/:people/date/:date', ensureAuthenticated, (req, res) => {      // task PartA.3.
+      
+  for(elem in req.params){
+    req.params[elem] = sanitize(req.params[elem])
+  }
+
   let submitQuery = 1
   let thisUser = JSON.parse(JSON.stringify(req.user))[0]["username"]
   if(typeof thisUser == "undefined"){

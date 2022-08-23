@@ -21,7 +21,7 @@ if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
                 </div>
                 <script>
                     document.getElementById("avatar_url2").addEventListener("fileUploadSuccess", function (e) {
-                        addImg(document.getElementById("hotelIDForAddImg").innerHTML,this.value,<%=checkUser%>)
+                        addImg(document.getElementById("hotelIDForAddImg").innerHTML,this.value,'<%=checkUser%>')
                     });
                 </script>
                 

@@ -105,7 +105,7 @@ async function inputRange() {
 	var slider = document.querySelector('#slider')
     var lowGBPAmount = document.querySelector('.lowGBPAmount')
     var highGBPAmount = document.querySelector('.highGBPAmount')
-    const min = parseFloat(1.11)
+    const min = parseFloat(0.01)
     const max = parseFloat(places[places.length-1].price).toFixed(2)
 
     slider.addEventListener('change', async function () {
