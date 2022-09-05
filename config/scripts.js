@@ -49,6 +49,7 @@ async function changePage(page){
     document.querySelectorAll(`[data-pageresults="${page}"]`).forEach(div => {
         div.style.display="block"
     });
+    $("#results").animate({ scrollTop: 0 }, "slow");
     
 }
 

@@ -30,7 +30,7 @@
                 <button <%if(checkAdmin=="1"){%>style="display:none"<%}%> class="py-2 px-5 rounded" type="button" onclick="completeBookingStep1()" id="insertSpecialButton2">🥂Book!</button>
                 <%if(checkAdmin=="1"){%>
                     <div class="d-flex flex-row justify-content-center" style="    gap: 5px;">
-                        <input min="0" type="number" class="w-25 text-center" id="spacesToAdd">    
+                        <input min="0" type="number" class="w-25 text-center" id="spacesToAdd" value="">    
                         <button class="py-2 px-3 rounded btn btn-primary" type="button" onclick="addSpaces(document.getElementById('hotelID').innerText, document.getElementById('spacesToAdd').value, document.getElementsByClassName('vanilla-calendar-day_selected')[0].attributes[1].nodeValue.substring(2).replace(/-/g,''))">👪SET AVAILABILITY!</button>
                     </div>
                 <%}%>

@@ -343,6 +343,7 @@ async function applyFilter(user) {
                 document.getElementById("results").innerHTML = results + navStart + page + navEnd
             }
             changePage(1)
+            
         }
             
 

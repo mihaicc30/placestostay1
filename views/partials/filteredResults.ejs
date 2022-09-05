@@ -28,8 +28,8 @@ let divOpen = 2
             </g>
         </svg>
    </div>
-    <input id="filterName" style="width:250px;border:none" name="filterName" type="text" placeholder="Accommodation.." onkeydown="applyFilter(`<%=checkUser%>`)" onkeypress="applyFilter(`<%=checkUser%>`)">
-    <input id="filterCounty" style="width:250px;border:none" name="filterCounty" type="text" placeholder="Location.." onkeydown="applyFilter(`<%=checkUser%>`)" onkeypress="applyFilter(`<%=checkUser%>`)">
+    <input autocomplete="false" id="filterName" style="width:250px;border:none" name="filterName" type="text" placeholder="Accommodation.." onkeydown="applyFilter(`<%=checkUser%>`)" onkeypress="applyFilter(`<%=checkUser%>`)">
+    <input autocomplete="false" id="filterCounty" style="width:250px;border:none" name="filterCounty" type="text" placeholder="Location.." onkeydown="applyFilter(`<%=checkUser%>`)" onkeypress="applyFilter(`<%=checkUser%>`)">
     <select name="filterType" id="filterType" style="width:250px;border:none" onchange="applyFilter(`<%=checkUser%>`)">
         <option selected value="">Select Type..</option>
         <option value="hotel">Hotel</option>
