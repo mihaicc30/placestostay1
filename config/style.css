@@ -20,13 +20,13 @@
     width: 30px;
   }
 *::-webkit-scrollbar-track {
-    background: #66339959;
-    border-radius:  30px 0 30px 0 ;
-    margin: 54px 0 44px 0;
+    margin: 56px 0 59px 0;
 }
 *::-webkit-scrollbar-thumb {
-    background-color: rebeccapurple;
-    border-radius:  30px 0 30px 0 ;
+    background-color: rgb(126 126 126);
+    border: 6px solid transparent;
+    border-radius: 30px 0 30px 0;
+    background-clip: content-box;
 }
 #map {
     border: 2px solid rgb(239 188 244);
@@ -93,8 +93,9 @@
 
 .leaflet-popup>a:hover,
 #directionIcon:hover {
-    transform: scale(1.2);
+    transform: scale(1.2) translateY(-10px);
     font-weight: bolder;
+    box-shadow: 2px 6px 2px 0px #0000008c;
 }
 
 .notDisplay {
@@ -202,6 +203,7 @@
     margin: 1em;
     justify-content: center;
     display: flex;
+    align-items: center;
     border: 1px solid black;
     padding: 10px;
     cursor: default;
@@ -276,7 +278,7 @@
     padding: 10px 10px 33px 10px;
     z-index: 999;
     height: fit-content;
-    width: 300px;
+    width: 330px;
     background-color: #f5efef;
 }
 
@@ -286,20 +288,31 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
+    padding-top: 2.5rem;
 }
 
 #results>div {
     width: 250px;
     height: 400px;
     padding: 10px;
-    box-shadow: 15px -20px 16px 0 rgb(235 141 223 / 30%) inset;
-    transition: .5s ease;
+    background: linear-gradient(145deg, #cacaca, #f0f0f0);
     border-radius: 0 0 0 50px;
+    cursor: pointer;
+    
 }
 #results>div:hover {
-    transform: scale(1.05);
+    transform: scale(0.98);
 }
-
+.addNeumorph{
+    box-shadow:  7px 7px 14px rgb(160, 160, 160),
+    -7px -7px 14px #ffffff;
+    transition: .5s ease;
+}
+.addNeumorph:hover{
+    background: #e0e0e0;
+    box-shadow: inset 7px 7px 14px rgb(141, 141, 141),
+            inset -7px -7px 14px #ffffff;
+}
 #results>div>img {
     aspect-ratio: 1 / 1;
     width: 100%;
@@ -563,3 +576,61 @@ table > tbody > tr > td {
     50%{transform: translate(-5px, 10px);}
     100%{transform: translate(5px, -10px);}    
 }
+
+/* From uiverse.io by @namecho */
+.switch {
+    --button-width: 3.5em;
+    --button-height: 2em;
+    --toggle-diameter: 1.5em;
+    --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
+    --toggle-shadow-offset: 10px;
+    --toggle-wider: 3em;
+    --color-grey: #cccccc;
+    --color-green: #4296f4;
+   }
+   
+   .slider {
+    display: inline-block;
+    width: var(--button-width);
+    height: var(--button-height);
+    background-color: var(--color-grey);
+    border-radius: calc(var(--button-height) / 2);
+    position: relative;
+    transition: 0.3s all ease-in-out;
+   }
+   
+   .slider::after {
+    content: "";
+    display: inline-block;
+    width: var(--toggle-diameter);
+    height: var(--toggle-diameter);
+    background-color: #fff;
+    border-radius: calc(var(--toggle-diameter) / 2);
+    position: absolute;
+    top: var(--button-toggle-offset);
+    transform: translateX(var(--button-toggle-offset));
+    box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+    transition: 0.3s all ease-in-out;
+   }
+   
+   .switch input[type="checkbox"]:checked + .slider {
+    background-color: var(--color-green);
+   }
+   
+   .switch input[type="checkbox"]:checked + .slider::after {
+    transform: translateX(calc(var(--button-width) - var(--toggle-diameter) - var(--button-toggle-offset)));
+    box-shadow: calc(var(--toggle-shadow-offset) * -1) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+   }
+   
+   .switch input[type="checkbox"] {
+    display: none;
+   }
+   
+   .switch input[type="checkbox"]:active + .slider::after {
+    width: var(--toggle-wider);
+   }
+   
+   .switch input[type="checkbox"]:checked:active + .slider::after {
+    transform: translateX(calc(var(--button-width) - var(--toggle-wider) - var(--button-toggle-offset)));
+   }
+   

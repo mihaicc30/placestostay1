@@ -1,12 +1,12 @@
 
 function hideFilters(){
     if(divOpen == 1){
-        document.getElementById('search').style.transform="translate(0px,0px)";
-        document.getElementById('menuButton').style.transform="rotateX(180deg) rotate(180deg)"
+        document.getElementById('search').style.transform="translate(-24px,0px)";
+        // document.getElementById('menuButton').style.transform="rotateX(180deg) rotate(180deg)"
         divOpen = 2;
     } else {
-        document.getElementById('search').style.transform="translate(-283px,0px)";
-        document.getElementById('menuButton').style.transform="rotateX(0deg) rotate(0deg)"
+        document.getElementById('search').style.transform="translate(-286px,0px)";
+        // document.getElementById('menuButton').style.transform="rotateX(0deg) rotate(0deg)"
         divOpen = 1;
     }
 }
