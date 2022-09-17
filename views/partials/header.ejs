@@ -3,36 +3,27 @@
 <div class="header">
 
     <div class="navCenter">
-        <a href="/"><img src="https://cdn-j5lfyoei.files-simplefileupload.com/static/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbUxEIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--6ee9dfefefae7b50c57d940ed67b068c34900fcd/LOGO3.jpeg" style="height: auto;width: 262px;border: 1px solid black" class="rounded" alt="Logo"></a>
+        <a href="/"><img src="./img/logo3.jpeg" style="border: 1px solid black; height: 70px;padding: 0.5rem; box-shadow: inset 0 0 0 2000px #EDB7F1;" class="rounded" alt="Logo" ></a>
         
     </div>      
-    <%if(checkUser == 1 ){%>
-        <div class="navCenter" style="text-align: center;">
-            <p class="">Welcome back,<br><%=user.user.username%>!</p>
-        </div>
-        <%}%>
     <div class="navCenter">
-        <div class="userProfile">
             <div class="userProfileDiv rounded">
-                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill: none; height: 100%; width: 100%; stroke: currentcolor; stroke-width: 3; overflow: visible;"><g fill="none" fill-rule="nonzero"><path d="m2 16h28"></path><path d="m2 24h28"></path><path d="m2 8h28"></path></g></svg>
-                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style="display: block; height: 100%; width: 100%; fill: currentcolor;"><path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z"></path></svg>
-            </div>
+                <%if(checkUser == 1 ){%><div><span id="welcomeMsg">Welcome<br><%=user.user.username%>!</span></div><%}%>
+                <div class="dropdown">
+                    <span><ion-icon name="menu-outline" size="large"></ion-icon>
+                        <ion-icon name="person-circle-outline" size="large"></ion-icon></span>
 
-            <div class="UserProfileDropDownMenu">
-                <%if(checkUser == 1 ){%>
-                
-                <div class="userFadeDownMenu">
-                    <a href="/myprofile" class="btn btn-success btn-block">Profile</a>
-                    <a href="/logout" class="btn btn-dark btn-block">Logout</a>
+                    <div class="dropdown-content">
+                        <%if(checkUser == 1 ){%>
+                            <a href="/myprofile" class="btn btn-success btn-block">Profile</a>
+                            <a href="/logout" class="btn btn-dark btn-block">Logout</a>
+                            <%} else {%>
+                            <button class="btn btn-info btn-block" onclick="openUserModal(2)">Login</button>
+                            <button class="btn btn-primary btn-block" onclick="openUserModal(5)">Register</button>
+                            <%}%>
+                    </div>
                 </div>
-                <%} else {%>
-                <div class="userFadeDownMenu">
-                    <button class="btn btn-info btn-block" onclick="openUserModal(2)">Login</button>
-                    <button class="btn btn-primary btn-block" onclick="openUserModal(5)">Register</button>
-                </div>
-                <%}%>
             </div>
-        </div>
     </div>
     <div id="popupMessages">
         <%- include ('./messages') %>

@@ -104,7 +104,7 @@
         for (let i = 0; i < ajaxResponse.length; i++) {
             new L.marker([ajaxResponse[i].latitude, ajaxResponse[i].longitude], { icon: new baseIcon({ iconUrl: `./img/${String(ajaxResponse[i].icon).replace('icon', '')}.png` }), alt: `marker${i}`, description: ajaxResponse[i].description })
                 .bindPopup(`<div id="popupimg${ajaxResponse[i].ID}" class="popupImg"></div><h4>${ajaxResponse[i].name}</h4><h6>${ajaxResponse[i].type}</h6><span>${ajaxResponse[i].location}</span><br>${ajaxResponse[i].description}<form class="popupHiddenForm"><input hidden id="pointID" name="pointID" value="${ajaxResponse[i].ID}"><button onclick="deleteThisPoint('${ajaxResponse[i].ID}','marker${i}','<%=checkUser%>','<%=checkAdmin%>')" type="button" ><img src="/img/deletemark.png" class="popupImgs" alt="Remove Mark"></button></button>
-                    <button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${ajaxResponse[i].ID},<%=checkUser%>)">
+                    <button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${ajaxResponse[i].ID},<%=checkUser%>,<%=checkAdmin%>)">
                         <img src="./img/<% if(checkAdmin == "1"){%>manageAcc<%}else{%>booknow<%}%>.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;">
                     </button>
                         <button style="border:none;background-color:transparent" type="button" onclick="addImgModal(${ajaxResponse[i].ID},<%=checkUser%>)"><img src="./img/addimg.png" alt="Add img" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button><button style="border:none;background-color:transparent" type="button" onclick="addWP2(${ajaxResponse[i].latitude},${ajaxResponse[i].longitude})"><img src="./img/direction.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></form>`)
@@ -116,7 +116,7 @@
         /*===================================================
                     TILE LAYER               
         ===================================================*/
-        L.control.scale({ metric: true, imperial: false, position: 'bottomright' }).addTo(map) // scale
+        L.control.scale({ metric: true, imperial: true, position: 'bottomright' }).addTo(map) // scale
 
         /*===================================================
                     LAYER CONTROL               
@@ -147,7 +147,7 @@
         ===================================================*/
 
         var lc = L.control.locate({
-            position: 'topright',
+            position: 'bottomright',
             strings: {
                 title: "Show me where I am!"
             },
