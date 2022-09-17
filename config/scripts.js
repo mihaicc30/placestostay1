@@ -1,12 +1,14 @@
 
 function hideFilters(){
+    // 
+    // 
     if(divOpen == 1){
         document.getElementById('search').style.transform="translate(-24px,0px)";
-        // document.getElementById('menuButton').style.transform="rotateX(180deg) rotate(180deg)"
+        document.getElementById('menuButton').innerHTML=`<ion-icon class="collapsebtn act" name="caret-back-outline"></ion-icon>`
         divOpen = 2;
     } else {
         document.getElementById('search').style.transform="translate(-286px,0px)";
-        // document.getElementById('menuButton').style.transform="rotateX(0deg) rotate(0deg)"
+        document.getElementById('menuButton').innerHTML=`<ion-icon class="collapsebtn" name="caret-forward-outline"></ion-icon>`
         divOpen = 1;
     }
 }

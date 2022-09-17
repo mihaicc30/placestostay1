@@ -8,25 +8,8 @@ let divOpen = 2
 </script>
 
 <div id="filterDiv" class="filterDiv">
-    <div onclick="hideFilters();" id="menuButton" style="position:absolute;cursor:pointer; height:50px;width: 50px;right: -13%;top: 0%;color: rebeccapurple;transition: 1s ease;" >
-        
-        
-        <div style="
-        display: flex;
-        transform: translate(-31px, 6px);
-        height: 162px;
-        border-radius: 10px;
-        text-orientation: mixed;
-        cursor: pointer;
-        background-color: rgb(239 188 244);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border:2px solid;">
-            <div style="writing-mode: vertical-rl;">SEARCH BAR</div>
-        </div>
-
-    
+    <div onclick="hideFilters();" id="menuButton" style="position:absolute;cursor:pointer;color: black;transition: 1s ease;right: -2.5%;" >
+        <ion-icon name="caret-back-outline" class="collapsebtn act"></ion-icon>
    </div>
     <input autocomplete="false" id="filterName" style="width:250px;border:none; text-align: center;" name="filterName" type="text" placeholder="Accommodation.." onkeydown="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)" onkeypress="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)">
     <input autocomplete="false" id="filterCounty" style="width:250px;border:none; text-align: center;" name="filterCounty" type="text" placeholder="Location.." onkeydown="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)" onkeypress="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)">

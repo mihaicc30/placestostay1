@@ -83,15 +83,24 @@ function completeBookingStep1() {
 }
 
 function completeBookingStep2() {
+    const payButton = document.querySelector('#paymentButton') 
+    const loader = document.querySelector('#paymentButtonLoader') 
+    payButton.innerHTML=`<button class="btn btn-primary" id="paymentButton" onclick="completeBookingStep3()">💳Pay</button>`
+    loader.innerHTML=""
 
-    let name = document.getElementById('name').value = ""
-    let cardnumber = document.getElementById('cardnumber').value = ""
-    let expirationdate = document.getElementById('expirationdate').value = ""
-    let securitycode = document.getElementById('securitycode').value = ""
+    document.getElementById('name').value = ""
+    document.getElementById('cardnumber').value = ""
+    document.getElementById('expirationdate').value = ""
+    document.getElementById('securitycode').value = ""
     showPaymentDiv(4)
 }
 
 async function completeBookingStep3() {
+
+    const payButton = document.querySelector('#paymentButton') 
+    const loader = document.querySelector('#paymentButtonLoader') 
+    
+     
 
     let name = document.getElementById('name').value
     let cardnumber = document.getElementById('cardnumber').value
@@ -108,45 +117,52 @@ async function completeBookingStep3() {
         const checkSecurityCode     = securitycode == ""    ? document.getElementById('securitycode').style.border = "2px solid red"    
                                                             : document.getElementById('securitycode').style.border = "none"
     } else {
-        let validateThisCard = await fetch(`/api/validatecard/${cardnumber}/${name}/${expirationdate}/${securitycode}`)
-        let ajaxResponse = await validateThisCard.json();
-        if (ajaxResponse == "card valid") {
-            $.ajax({
-                type: "POST",
-                url: "/book",
-                crossDomain: true,
-                data: {
-                    "accID": document.getElementById('hotelID').innerHTML,
-                    "thedate": document.getElementById('dateOfBooking').value,
-                    "username": document.getElementById('bookingUser').innerHTML,
-                    "npeople": document.getElementById('numberOfPeople').value,
-                },
-                success: document.getElementById('popupMessages').innerHTML = `
-                        <div class="alert alert-success alert-dismissible fade show p-5 text-center" role="alert">
-                                    🙌🥳🥂🙌<br><br>
-                            Your booking has been completed.<br><br>
-                            Have a safe journey!🚙🌴<br>
-                            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true"></span>
-                            </button>
-                        </div>`
-            })
-            hideModal(2); hideModal(3); hideModal(4);
-        } else {
-            console.log("card is not valid"); 
-            document.getElementById('name').style.border = "2px solid red"
-            document.getElementById('cardnumber').style.border = "2px solid red"
-            document.getElementById('expirationdate').style.border = "2px solid red"
-            document.getElementById('securitycode').style.border = "2px solid red"
+        payButton.innerHTML=""
+        loader.innerHTML=`<div class="loader"></div>`
+        setTimeout(async() => {
+            let validateThisCard = await fetch(`/api/validatecard/${cardnumber}/${name}/${expirationdate}/${securitycode}`)
+            let ajaxResponse = await validateThisCard.json();
+            if (ajaxResponse == "card valid") {
+                $.ajax({
+                    type: "POST",
+                    url: "/book",
+                    crossDomain: true,
+                    data: {
+                        "accID": document.getElementById('hotelID').innerHTML,
+                        "thedate": document.getElementById('dateOfBooking').value,
+                        "username": document.getElementById('bookingUser').innerHTML,
+                        "npeople": document.getElementById('numberOfPeople').value,
+                    },
+                    success: document.getElementById('popupMessages').innerHTML = `
+                            <div class="alert alert-success alert-dismissible fade show p-5 text-center" role="alert">
+                                        🙌🥳🥂🙌<br><br>
+                                Your booking has been completed.<br><br>
+                                Have a safe journey!🚙🌴<br>
+                                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true"></span>
+                                </button>
+                            </div>`
+                })
+                hideModal(2); hideModal(3); hideModal(4);
+            } else {
+                payButton.innerHTML=`<button class="btn btn-primary" id="paymentButton" onclick="completeBookingStep3()">💳Pay</button>`
+                loader.innerHTML=""
+                console.log("card is not valid"); 
+                document.getElementById('name').style.border = "2px solid red"
+                document.getElementById('cardnumber').style.border = "2px solid red"
+                document.getElementById('expirationdate').style.border = "2px solid red"
+                document.getElementById('securitycode').style.border = "2px solid red"
 
-            document.getElementById('popupMessages').innerHTML = `
-                    <div class="alert alert-danger alert-dismissible fade show p-5 text-center" role="alert">
-                            👎 <br><br> CARD IS NOT VALID!<br><br>📃Check again your details.<br>
-                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>`
-        }
+                document.getElementById('popupMessages').innerHTML = `
+                        <div class="alert alert-danger alert-dismissible fade show p-5 text-center" role="alert">
+                                👎 <br><br> CARD IS NOT VALID!<br><br>📃Check again your details.<br>
+                        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>`
+            }
+        }, 3333);
+        
     }
 
 
