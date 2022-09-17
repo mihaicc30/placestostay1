@@ -1,12 +1,12 @@
 
 <% let checkUser=2; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") {checkUser=1 }else{ checkUser=2 } %>
 <% let checkAdmin=0; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") { checkAdmin=user.user.admin } %>
-<script src="config/dual-slider.js" defer></script> <!-- slide filter for price range -->
 <%- include ('./partials/popup') %><!-- add/save mark window -->
 <%- include ('./partials/popup2') %><!-- book accommodation window -->
 <%- include ('./partials/popupAddImage') %><!-- add accommodation pics window -->
 <%- include ('./partials/payment_modal') %><!-- add accommodation pics window -->
 <%- include('./partials/header') %><!-- navbar -->
+<script src="config/dual-slider.js" defer></script> <!-- slide filter for price range -->
 
 
 <div id="godDivChild" style="display: flex;flex-direction: column;">

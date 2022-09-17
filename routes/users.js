@@ -71,13 +71,11 @@ router.post('/login', (req, res, next) => {
     failureFlash: true
   })
   (req, res, next)
-  // console.log(req.session)
 
 });
 
 // Logout
 router.get('/logout', (req, res) => {
-  // console.log(req.session)
   req.logout();
   req.flash('success_msg', 'You are logged out');
   res.redirect('/');

@@ -8,7 +8,11 @@
     </div>      
     <div class="navCenter">
             <div class="userProfileDiv rounded">
-                <%if(checkUser == 1 ){%><div><span id="welcomeMsg">Welcome<br><%=user.user.username%>!</span></div><%}%>
+                <%if(checkUser == 1 ){%>
+                    <div>
+                        <span id="welcomeMsg">Welcome<br><%=user.user.username%>!</span>
+                    </div>
+                <%}%>
                 <div class="dropdown">
                     <span><ion-icon name="menu-outline" size="large"></ion-icon>
                         <ion-icon name="person-circle-outline" size="large"></ion-icon></span>

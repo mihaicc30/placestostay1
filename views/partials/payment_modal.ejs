@@ -1,7 +1,4 @@
-<% let checkUser=2; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") {checkUser=1 }else{ checkUser=2 } %>
-<% let checkAdmin=0; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") { checkAdmin=user.user.admin } %>
-<%if(checkUser==1){%>
-   
+
 <div class="mainModal4 hideMe" id="mainModal4" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
     <div class="subModal4 hideMe" id="subModal4" style="border:5px solid rgb(239 188 244);background-color:white;position:fixed;height:80vh; width:400px;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row;justify-content: center;">
         <div style="max-width:400px;display: flex;text-align: center;justify-content: center;flex-direction: column;">
@@ -133,24 +130,8 @@
                 </div>
 
                 <button class="btn btn-primary" onclick="completeBookingStep3()">💳Pay</button>
-
-
-
-
-
-
-
-
             </div>
         </div>
     </div>
     <div style="width:100vw;height:100vh;position:fixed;left:0%;" onclick="hideModal(4)"></div>
 </div>
-
-<%} else { %>
-<div class="mainModal4 hideMe" id="mainModal4" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
-    <div class="subModal4 hideMe" id="subModal4" style="position:fixed;height:fit-content; width:fit-content;z-index:10000;display: flex!important;flex-direction: row;justify-content: center;align-items: center">
-            <%- include ('../login') %>
-    </div>
-</div>
-<%}%>
