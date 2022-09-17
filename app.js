@@ -3,7 +3,7 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const passport = require('passport');
 const flash = require('connect-flash');
-const session = require('cookie-session');
+const session = require('express-session');
 const app = express();
 const sequelize = require("./models/Database")
 const cors = require('cors')
@@ -18,8 +18,6 @@ const corsOptions = {
 }
  
 app.use(cors(corsOptions))
-
-
 
 // MySQL Connection
 sequelize.sync().then(result =>{
@@ -43,11 +41,10 @@ app.use(express.urlencoded({ extended: true }));
 // Express session
 app.use(
   session({
-    secret: 't34tg4gh667125ik6f232d32f45yg56oNIN2uniuon2u3in2iuo6uh4j6',
-    resave: true,
+    secret: 'MihaiCulea12345',
+    resave: false,
     saveUninitialized: true,
     credentials: true,
-    SameSite: "None",
     maxAge: 6 * 60 * 60 * 1000 // 6 hours, a number representing the milliseconds from Date.now() for expiry
   })
 );
@@ -66,7 +63,7 @@ app.use(function(req, res, next) {
 });
 // Routes
 app.use('/', require('./routes/index.js'));
-app.use('/users', require('./routes/users.js'));
+app.use('/', require('./routes/users.js'));
 app.use('/config', express.static('./config'));
 app.use('/img', express.static('./img'));
 

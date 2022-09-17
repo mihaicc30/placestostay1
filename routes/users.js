@@ -19,7 +19,6 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 router.post('/register', async (req, res) => {
   const { name, password, password2 } = req.body;
   let errors = [];
-
   if (!name || !password || !password2) {
     errors.push({ msg: 'Please enter all fields' });
   }
@@ -33,7 +32,7 @@ router.post('/register', async (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render('register', {
+    res.render('index', {
       errors,
       name,
       password,
@@ -41,8 +40,9 @@ router.post('/register', async (req, res) => {
     });
   } else {
     const user = await User.findOne({ where: { username: name } });
+
     if (user !== null) {
-      errors.push({ msg: 'Email already exists' });
+      errors.push({ msg: 'Username already exists' });
       res.render('register', {
         errors,
         name,
@@ -57,10 +57,9 @@ router.post('/register', async (req, res) => {
         req.flash(
           'success_msg',
           'You are now registered and can log in');
-        res.redirect('/users/login');
+        res.redirect('/');
       })
         .catch(err => console.log(err));
-
     }
   }
 })
@@ -68,13 +67,17 @@ router.post('/register', async (req, res) => {
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/users/login',
+    failureRedirect: '/',
     failureFlash: true
-  })(req, res, next);
+  })
+  (req, res, next)
+  // console.log(req.session)
+
 });
 
 // Logout
 router.get('/logout', (req, res) => {
+  // console.log(req.session)
   req.logout();
   req.flash('success_msg', 'You are logged out');
   res.redirect('/');

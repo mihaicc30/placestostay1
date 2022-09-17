@@ -179,18 +179,23 @@ async function getSpacesAvailable(hotelID, bookingDate) {
     }
 }
 async function ajaxChangeMainImg(hotelID, user) {
-    $.ajax({
-        type: "POST",
-        url: `/makeMainAccImage`,
-        crossDomain: true,
-        data: {
-            "IDD": hotelID,
-            "photoo": document.getElementsByClassName("carousel-item carouselImg active")[0].childNodes[1].src,
-            "userAdmin": user
-        },
-               
-        })
+    
     if(user=="1"){
+        applyFilter(1,1)
+        $.ajax({
+            type: "POST",
+            url: `/makeMainAccImage`,
+            crossDomain: true,
+            data: {
+                "IDD": hotelID,
+                "photoo": document.getElementsByClassName("carousel-item carouselImg active")[0].childNodes[1].src,
+                "userAdmin": user
+            },
+                   
+            })
+        setTimeout(() => {
+            document.getElementById('popupMessages').innerHTML=""
+        }, 2222);
         document.getElementById('popupMessages').innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
                                                                                 Main accommodation image changed.
                                                                                 <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">
@@ -206,7 +211,8 @@ async function ajaxChangeMainImg(hotelID, user) {
                                                                                 </button>
                                                                             </div>`
     }   
-                
+    
+
 }
 
 
@@ -231,9 +237,11 @@ async function addImg(id, img, user) {
     }
 }
 
-async function applyFilter(user) {
-
-    await resolveAfterMSeconds(1000) // reduce the number of queries on the server
+async function applyFilter(user, isAdmin) {
+    let pic="booknow"
+    if(String(isAdmin) === "1"){ pic="manageAcc" }
+    
+    await resolveAfterMSeconds(500) // reduce the number of queries on the server
     var f1L = document.getElementById('filterName').value.length,
         f2L = document.getElementById('filterCounty').value.length,
         f3L = document.getElementById('filterType').value.length,
@@ -244,7 +252,6 @@ async function applyFilter(user) {
         f3 = document.getElementById('filterType').value,
         f4 = document.getElementById('lowGBPAmount').innerHTML.substring(1),
         f5 = document.getElementById('highGBPAmount').innerHTML.substring(1)
-
     // console.log(f1L,f2L,f3L,f4L,f5L);  // test double checking console output
 
     try {
@@ -263,7 +270,7 @@ async function applyFilter(user) {
                 // filtering paradise // gods list of filters // somewhat proud its made by me and flawless :D
                 // checking all 4 filters (name of accommodation, location, type, price range) with a total of 16 combinations (luckly there are only 4 filters, if 5, would be 32 combinations😢,etc)
                 if (f1L == 0 && f2L == 0 && f3L == 0 && f4L == 0
-                ) { if ((parseInt(someCounter) % 6) == "0") { divNo++; }; someCounter++; results += `<div data-coords="${place.latitude},${place.longitude}" class="divResults" data-pageResults="${divNo}"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-size:1.2rem;font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${place.ID},${user})"><img src="./img/booknow.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>` }
+                ) { if ((parseInt(someCounter) % 6) == "0") { divNo++; }; someCounter++; results += `<div data-coords="${place.latitude},${place.longitude}" class="divResults" data-pageResults="${divNo}"><img src="${place.photo}" alt="photos"><h4 class="overflow-elipsis">${place.name}</h4><p class="overflow-elipsis">${place.type} in ${place.location}</p><p class="overflow-elipsis">${place.description}</p><p style='font-size:1.2rem;font-weight:bolder;white-space: nowrap;margin-left:20px;'>£${place.price}/night</p><button style="border:none;background-color:transparent" type="button" onclick="openAddMarkModal2(${place.ID},${user})"><img src="./img/${pic}.png" alt="Get Directions" id="directionIcon" style="width:45px; height:45px;background-color:transparent;"></button></div>` }
 
                 if (f1L >= 1 && f2L == 0 && f3L == 0 && f4L == 0
                     && String(place.name).toLowerCase().includes(String(f1).toLowerCase())

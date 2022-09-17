@@ -1,14 +1,16 @@
+<% let checkUser=2; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") {checkUser=1 }else{ checkUser=2 } %>
+<% let checkAdmin=0; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") { checkAdmin=user.user.admin } %>
 <div class="header">
 
     <div class="navCenter">
         <a href="/"><img src="https://cdn-j5lfyoei.files-simplefileupload.com/static/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbUxEIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--6ee9dfefefae7b50c57d940ed67b068c34900fcd/LOGO3.jpeg" style="height: auto;width: 262px;border: 1px solid black" class="rounded" alt="Logo"></a>
         
-    </div>
-    <%if(typeof user!="undefined" ){%>
-    <div class="navCenter" style="text-align: center;">
-        <p class="">Welcome back,<br><%=user[0]["dataValues"]["username"]%>!</p>
-    </div>
-    <%}%>
+    </div>      
+    <%if(checkUser == 1 ){%>
+        <div class="navCenter" style="text-align: center;">
+            <p class="">Welcome back,<br><%=user.user.username%>!</p>
+        </div>
+        <%}%>
     <div class="navCenter">
         <div class="userProfile">
             <div class="userProfileDiv rounded">
@@ -17,16 +19,14 @@
             </div>
 
             <div class="UserProfileDropDownMenu">
-                <%if(typeof user=="object" ){%>
+                <%if(checkUser == 1 ){%>
                 
                 <div class="userFadeDownMenu">
                     <a href="/myprofile" class="btn btn-success btn-block">Profile</a>
-                    <a href="/users/logout" class="btn btn-dark btn-block">Logout</a>
+                    <a href="/logout" class="btn btn-dark btn-block">Logout</a>
                 </div>
                 <%} else {%>
                 <div class="userFadeDownMenu">
-                    <!-- <a href="/users/register" class="btn btn-primary btn-block">Register</a> -->
-                    <!-- <a href="/users/login" class="btn btn-info btn-block">Login</a> -->
                     <button class="btn btn-info btn-block" onclick="openUserModal(2)">Login</button>
                     <button class="btn btn-primary btn-block" onclick="openUserModal(5)">Register</button>
                 </div>

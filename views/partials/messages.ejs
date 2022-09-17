@@ -9,6 +9,9 @@
     <% }); %>
       <% } %>
 <% if(success_msg !='' ){ %>
+    <script>setTimeout(() => {
+      document.getElementById('popupMessages').innerHTML=""
+    }, 2222); </script>
   <div class="alert alert-success alert-dismissible fade show" role="alert">
     <%= success_msg %>
       <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">

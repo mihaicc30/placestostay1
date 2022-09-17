@@ -1,9 +1,6 @@
-<% if(typeof user =="object" ) {%>
-<%
-var checkUser=0;
-if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
-%>
-<% user = JSON.parse(JSON.stringify(user)) %>
+<% let checkUser=2; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") {checkUser=1 }else{ checkUser=2 } %>
+<% let checkAdmin=0; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") { checkAdmin=user.user.admin } %>
+<%if(checkUser==1 ){%>
 <div class="mainModal3 hideMe" id="mainModal3" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display: flex;justify-content: center;align-items: center">
     <div class="subModal3 hideMe" id="subModal3" style="margin-top: 100px;border:5px solid rgb(239 188 244);background-color:white;position:fixed;height:80vh; width:360px;z-index:10000;border-radius:5%;display: flex!important;flex-direction: row;justify-content: center;">
         <div style="height:50px"></div>

@@ -6,8 +6,15 @@ module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'email',passwordField: 'password', }, async (email, password, done) => {
       var user = await User.findAll({where: {username: email}})
+      var userTempo = await User.findAll({where: {username: email}})
+
+      userTempo = JSON.parse(JSON.stringify(user))[0]
       user = JSON.parse(JSON.stringify(user))[0]
-      if (user.length < 1) {
+      
+      // console.log(userTempo);
+      // console.log(user);
+
+      if (!user) {
         return done(null, false, { message: 'That email is not registered' });
       } else {
         if(password == user.password){
@@ -20,7 +27,9 @@ module.exports = function (passport) {
   );
 
   passport.serializeUser((user, done) => {
-    done(null, user.ID);
+    // console.log(user);
+    delete user.password
+    done(null, user);
   });
 
   passport.deserializeUser((ID, done) => {

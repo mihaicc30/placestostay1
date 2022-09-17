@@ -3,7 +3,7 @@
     <div class="card card-body" style="min-width: 400px;">
       <%- include('./partials/messages') %>
         <h1 class="text-center mb-3"><svg xmlns="http://www.w3.org/2000/svg" style="height: 50px;width:50px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>Login</h1>
-        <form action="/users/login" method="POST">
+        <form action="/login" method="POST">
           <div class="form-group">
             <label for="email">Username</label>
             <input type="text" id="email" name="email" class="form-control" placeholder="Enter Username"
@@ -17,7 +17,7 @@
           <button type="submit" class="btn btn-info btn-block">Login</button>
         </form>
         <p class="lead mt-4">
-          No Account? <a href="/users/register">Register</a>
+          No Account? <a href="/register">Register</a>
         </p>
     </div>
   </div>

@@ -114,7 +114,7 @@ async function openAddMarkModal2(hotelID,uzer) {
             document.getElementById('hotelID').innerText = hotelID 
             initCalendar()
             await getSpacesAvailable(hotelID,String(new Date().toISOString().slice(0, 10)).replace("-","").replace("-","").substring(2))
-            await getHotelPics(hotelID,"carrDiv")
+            await getHotelPics(hotelID,"carrDiv",uzer)
         }
 }
 function openUserModal(no) {

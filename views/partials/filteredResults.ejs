@@ -1,7 +1,7 @@
-<%
-var checkUser=0;
-if(typeof user=="object") {checkUser=1 }else{ checkUser=2 }
-%>
+
+
+<% let checkUser=2; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") {checkUser=1 }else{ checkUser=2 } %>
+<% let checkAdmin=0; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") { checkAdmin=user.user.admin } %>
 <script defer>
 let divOpen = 2
 
@@ -28,9 +28,9 @@ let divOpen = 2
             </g>
         </svg>
    </div>
-    <input autocomplete="false" id="filterName" style="width:250px;border:none" name="filterName" type="text" placeholder="Accommodation.." onkeydown="applyFilter(`<%=checkUser%>`)" onkeypress="applyFilter(`<%=checkUser%>`)">
-    <input autocomplete="false" id="filterCounty" style="width:250px;border:none" name="filterCounty" type="text" placeholder="Location.." onkeydown="applyFilter(`<%=checkUser%>`)" onkeypress="applyFilter(`<%=checkUser%>`)">
-    <select name="filterType" id="filterType" style="width:250px;border:none" onchange="applyFilter(`<%=checkUser%>`)">
+    <input autocomplete="false" id="filterName" style="width:250px;border:none" name="filterName" type="text" placeholder="Accommodation.." onkeydown="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)" onkeypress="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)">
+    <input autocomplete="false" id="filterCounty" style="width:250px;border:none" name="filterCounty" type="text" placeholder="Location.." onkeydown="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)" onkeypress="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)">
+    <select name="filterType" id="filterType" style="width:250px;border:none" onchange="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)">
         <option selected value="">Select Type..</option>
         <option value="hotel">Hotel</option>
         <option value="BandB">B&B</option>
@@ -39,7 +39,7 @@ let divOpen = 2
     </select>
     
     <div class="input-range" style="width:250px;">
-        <input id="slider" type="range"  multiple value="5,95" onchange="applyFilter(`<%=checkUser%>`)"/>
+        <input id="slider" type="range"  multiple value="5,95" onchange="applyFilter(`<%=checkUser%>`,`<%=checkAdmin%>`)"/>
         <div class="range">
            <div class="lowGBPAmount" id="lowGBPAmount"></div>  
             <div class="highGBPAmount" id="highGBPAmount"></div>

@@ -1,17 +1,18 @@
+<% let checkUser=2; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") {checkUser=1 }else{ checkUser=2 } %>
+<% let checkAdmin=0; if(String(typeof user) !== "undefined" && String(typeof user.user) !== "undefined") { checkAdmin=user.user.admin } %>
 <%- include('./partials/header') %>
-<%if(typeof user !="undefined" ) {%>
-<% user = JSON.parse(JSON.stringify(user)) %>
+<%if(checkUser==1){%>
 
 <script>
     document.querySelectorAll('.navCenter')[1].style.display="none"
-    let username = "<%=user[0].username%>"
+    let username = "<%=user.user.username%>"
 </script>
 
 <div class="mainProfileDiv">
     <div style="width:500px;display: flex;flex-direction:column;align-items: center;">
         <h1>User Profile Page</h1>
-        <input hidden id="userid" type="text" placeholder="Username" value="<%=user[0].ID%>" readonly>
-        <input id="uzer" type="text" placeholder="Username" value="<%=user[0].username%>">
+        <input hidden id="userid" type="text" placeholder="Username" value="<%=user.ID%>" readonly>
+        <input id="uzer" type="text" placeholder="Username" value="<%=user.username%>">
         <input id="pass" type="password" placeholder="Password">
         <button type="button" class="btn btn-success" onclick="ajaxProfileUpdate(username)">Update</button>
         <button type="button" class="btn btn-danger" onclick="ajaxProfileDelete(username)">Delete</button>

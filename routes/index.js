@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
     con.query(queryy, function (err, result) {
       if (err) throw err;
       res.render('index', {
-        user: req.user,
+        user: req.session.passport,
         points: JSON.parse(JSON.stringify(result))
       })
     });
@@ -96,7 +96,7 @@ router.post('/addspaces', ensureAuthenticated, (req, res) => {
 // Profile Page
 router.get('/myprofile', ensureAuthenticated, async (req, res) => {
     res.render('myprofile', {
-      user: req.user,
+      user: req.session.passport,
   })
 })
 // myprofile_save page post
@@ -180,10 +180,6 @@ router.get('/api/acc', (req,res)=> {
     if (err) throw err;
     res.json(result);
   });
-
-  // Accommodation.findAll().then((results)=>{   // at the moment is a bit complicated to run a sequelize query in the above format and keeping to the provided database format 😢
-  //     res.json(results);
-  // })
 });
 
 router.get('/api/img/:id', (req,res)=> {  // give me image links    
@@ -196,7 +192,7 @@ router.get('/api/img/:id', (req,res)=> {  // give me image links
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given id.😢")
+      res.json({"Not Found":"No accommodation found by given id.😢"})
     }
   })
 });
@@ -210,22 +206,20 @@ router.get('/api/id/:id', (req,res)=> {
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given id.😢")
+      res.json({"Not Found":"No accommodation found by given id.😢"})
     }
   })
 });
-router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1.        
+router.get('/api/acc/loc/:location', (req,res)=> {               // task PartA.1.     
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
   }
-  if(req.params.location!=""){
+  if(req.params.location != "" || req.params.location != null){
     Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }  }}).then((results)=>{
       if(results.length>0){
-        res.status(200)
         res.json(results);
       } else {
-        res.status(404)
-        res.json(`No accommodation found by given location.😢 = ${req.params.location}`)
+        res.status(404).json({"Error":`No accommodation found by given location.😢 = ${req.params.location}`})
       }
     })
   }
@@ -241,7 +235,7 @@ router.get('/api/acc/name/:name', (req,res)=> {    // filter > name
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given name.😢")
+      res.json({"Not Found":"No accommodation found by given name.😢"})
     }
   })
 });
@@ -256,7 +250,7 @@ router.get('/api/acc/name/:name/location/:location', (req,res)=> { // filter > n
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given name or location.😢")
+      res.json({"Not Found":"No accommodation found by given name or location.😢"})
     }
   })
 });
@@ -271,7 +265,7 @@ router.get('/api/acc/name/:name/type/:type', (req,res)=> {  // filter > name, ty
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given parameters.😢")
+      res.json({"Not Found":"No accommodation found by given parameters.😢"})
     }
   })
 });
@@ -286,7 +280,7 @@ router.get('/api/acc/name/:name/location/:location/type/:type', (req,res)=> {  /
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given parameters.😢")
+      res.json({"Not Found":"No accommodation found by given parameters.😢"})
     }
   })
 });
@@ -301,7 +295,7 @@ router.get('/api/acc/location/:location', (req,res)=> { // filter > location
       res.json(results);
     } else {
       res.status(404)
-      res.json("No accommodation found by given parameters.😢")
+      res.json({"Not Found":"No accommodation found by given parameters.😢"})
     }
   })
 });
@@ -309,15 +303,13 @@ router.get('/api/acc/location/:location/type/:type', (req,res)=> {  // filter > 
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
   }
-  if(req.params.location!="" && req.params.type!=""){
+  if(req.params.location!="" && req.params.type!="" && req.params.location!=null && req.params.type!=null){
     Accommodation.findAll({where:{"location":{[Op.like]: `%${req.params.location}%` }, 
           "type":{[Op.like]: `%${req.params.type}%`}  }}).then((results)=>{
       if(results.length>0){
-        res.status(200)
         res.json(results);
       } else {
-        res.status(404)
-        res.json("No accommodation found by given parameters.😢")
+        res.status(404).json({"Not Found":"No accommodation found by given parameters.😢"})
       }
     })
   }
@@ -333,12 +325,11 @@ router.get('/api/acc/type/:type', (req,res)=> {  // filter > type
       res.json(results);
     } else {
       res.status(404)
-      res.json("No results found by given parameters.😢")
+      res.json({"Not Found":"No results found by given parameters.😢"})
     }
   })
 });
 ////////// END For Filtering ////////////
-// BOOKINGS // await Acc_bookings.findAll({raw:true},{where:{"username": req.user.username} ,order:[['thedate','ASC']]} ).then((results)=>{
 router.get('/api/bookings', (req,res)=> { 
   Acc_bookings.findAll().then((results)=>{
     if(results.length>0){
@@ -346,7 +337,7 @@ router.get('/api/bookings', (req,res)=> {
       res.json(results);
     } else {
       res.status(404)
-      res.json("No results found by given parameters.😢")
+      res.json({"Not Found":"No bookings in the db.😢"})
     }
   })
 });
@@ -363,7 +354,7 @@ router.get('/api/user/bookings/:username', ensureAuthenticated, async (req,res)=
       res.json(results);
     } else {
       res.status(404)
-      res.json("No results found by given parameters.😢")
+      res.json({"Not Found":"No results found by given parameters.😢"})
     }
   })
 });
@@ -428,96 +419,107 @@ router.post('/makeMainAccImage', (req,res)=> {  // user changes main img of acco
 
 // book this
 router.post('/book',  (req, res) => {
-
-      
   for(elem in req.params){
     req.params[elem] = sanitize(req.params[elem])
   }
-  // to reCheck values and validate
-  Acc_bookings.create({
-    "accID": req.body.accID,            // hotel id
-    "thedate": req.body.thedate,                 // date of booking
-    "username": req.body.username,      // user that is booking
-    "npeople": req.body.npeople         // number of people
-  }).then((results)=>{ 
-    Acc_dates.increment({"availability": -req.body.npeople},{where:{"accID":results["dataValues"]["accID"],"thedate":results["dataValues"]["thedate"] } } ).then((results2)=>{
-      console.log("booking success & reduced availability")
-      res.end();
-    }).catch(err => console.log(err));
-  }).catch(err => console.log(err));
-});
-// book ReST api
-router.get('/book/id/:id/people/:people/date/:date', ensureAuthenticated, (req, res) => {      // task PartA.3.
   let errors = []
-  
-  for(elem in req.params){
-    req.params[elem] = sanitize(req.params[elem])
-  }
-  function isInThePast(date) {
-    let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1)
 
-    return date <= yesterday
+  if( req.body.accID == "" || req.body.accID == null){ errors.push({"Error":"Account ID is not valid."}) }
+  if( req.body.thedate == "" || req.body.thedate == null){ errors.push({"Error":"Date is not valid."}) }
+  if( req.body.username == "" || req.body.username == null){ errors.push({"Error":"Date is not valid."}) }
+  if( req.body.npeople == "" || req.body.npeople == null){ errors.push({"Error":"People is not valid."}) }
+
+  if(errors.length >0){
+    res.status(400).json(errors)
+  } else {
+    Acc_bookings.create({
+      "accID": req.body.accID,            // hotel id
+      "thedate": req.body.thedate,                 // date of booking
+      "username": req.body.username,      // user that is booking
+      "npeople": req.body.npeople         // number of people
+    }).then((results)=>{ 
+      Acc_dates.increment({"availability": -req.body.npeople},{where:{"accID":results["dataValues"]["accID"],"thedate":results["dataValues"]["thedate"] } } ).then((results2)=>{
+        console.log("booking success & reduced availability")
+        res.end();
+      }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
+  }
+
+ 
+});
+
+
+// book ReST api
+router.get('/book/id/:id/people/:people/date/:date', (req, res) => {      // task PartA.3.
+  if(!req.session.passport.user){
+    res.status(401).json({"Unauthorized":"You need to log in first."})
+  } else {
+    let errors = []
+    for(elem in req.params){
+      req.params[elem] = sanitize(req.params[elem])
+    }
+    function isInThePast(date) {
+      let yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1)
+  
+      return date <= yesterday
+    }
+    
+    let thisUser = JSON.parse(JSON.stringify(req.user))[0]["username"]
+    if(typeof thisUser == "undefined"){
+      errors.push({"Error":"Need to be authenticated."})
+    }
+    if(req.params.id < 1){
+      errors.push({"Error":`Accommodation ID cant be ${req.params.id}!`})
+    }
+    if(!(parseInt(req.params.people) > 0) || !(parseInt(req.params.people) <= 99)){
+      errors.push({"Error":`${req.params.people} is an invalid number of people.`})
+    }
+    if( isInThePast(new Date(`20${String(req.params.date).substring(0,2)}
+    -${String(req.params.date).substring(2,4)}
+    -${String(req.params.date).substring(4,6)}`)) ){
+      errors.push({"Error":"Date is in the past."})
+    }
+    if(String(req.params.date).length > 6 || String(req.params.date).length <= 0){
+      errors.push({"Error":`${req.params.date} is an invalid date length.`})
+    }
+    let yy = String(req.params.date).substring(0,2)
+    let mm = String(req.params.date).substring(2,4)
+    let dd = String(req.params.date).substring(4,6)
+    if (!(yy >= 22) || !(yy <= 99) || !(mm >= 1) || !(mm <= 12) || !(dd >= 1) || !(dd <= 31  )){
+      errors.push({"Error":`${req.params.date} is an invalid date.`})
+    }
+    if(errors.length > 0){
+      res.status(404).json(errors)
+    } else {
+      Acc_dates.findOne({where:{"accID":req.params.id,"thedate":req.params.date } })
+      .then(checkAvailability=>{
+        if(checkAvailability == null){
+          res.status(404).json({"Error":`No availability on this date.`})
+        }
+        else{
+          if(JSON.parse(JSON.stringify(checkAvailability)).availability < req.params.people){
+            res.status(404).json({"Error":`Only ${JSON.parse(JSON.stringify(checkAvailability)).availability} 
+                                  people available on this date, not ${req.params.people}, sorry.`});
+          } else{
+            Acc_bookings.create({
+              "accID": req.params.id,            // hotel id
+              "thedate": req.params.date,                 // date of booking
+              "username": thisUser,      // user that is booking
+              "npeople":  req.params.people       // number of people
+            }).then((results)=>{ 
+              Acc_dates.decrement({"availability": req.params.people},
+                  {where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
+                console.log("booking success & reduced availability")
+                res.status(200).json({"Success":`Booking complete.`})
+              })
+            })
+          }
+        }
+      })
+    }
   }
   
-  let thisUser = JSON.parse(JSON.stringify(req.user))[0]["username"]
-  if(typeof thisUser == "undefined"){
-    errors.push("Need to be authenticated.")
-  }
-  if(req.params.id < 1){
-    errors.push(`Accommodation ID cant be ${req.params.id}!`)
-  }
-  if(!(parseInt(req.params.people) > 0) || !(parseInt(req.params.people) <= 99)){
-    errors.push(`${req.params.people} is an invalid number of people.`)
-  }
-  if( isInThePast(new Date(`20${String(req.params.date).substring(0,2)}-${String(req.params.date).substring(2,4)}-${String(req.params.date).substring(4,6)}`)) ){
-    errors.push("Date is in the past.")
-  }
-  if(String(req.params.date).length > 6 || String(req.params.date).length <= 0){
-    errors.push(`${req.params.date} is an invalid date length.`)
-  }
-  let yy = String(req.params.date).substring(0,2)
-  let mm = String(req.params.date).substring(2,4)
-  let dd = String(req.params.date).substring(4,6)
-  if (!(yy >= 22) || !(yy <= 99) || !(mm >= 1) || !(mm <= 12) || !(dd >= 1) || !(dd <= 31  )){
-    errors.push(`${req.params.date} is an invalid date.`)
-  }
-  if(errors.length > 0){
-    res.status(404)
-    res.json(errors)
-    res.end();
-  } else {
-    Acc_dates.findOne({where:{"accID":req.params.id,"thedate":req.params.date } })
-    .then(checkAvailability=>{
-      if(checkAvailability == null){
-        res.status(404)
-        res.json(`No availability on this date.`)
-        res.end();
-      }
-      else{
-        if(JSON.parse(JSON.stringify(checkAvailability)).availability < req.params.people){
-          res.status(404)
-          res.json(`Only ${JSON.parse(JSON.stringify(checkAvailability)).availability} people available on this date, not ${req.params.people}, sorry.`);
-          res.end();
-        } else{
-          Acc_bookings.create({
-            "accID": req.params.id,            // hotel id
-            "thedate": req.params.date,                 // date of booking
-            "username": thisUser,      // user that is booking
-            "npeople":  req.params.people       // number of people
-          }).then((results)=>{ 
-            Acc_dates.decrement({"availability": req.params.people},
-                {where:{"accID":req.params.id,"thedate":req.params.date } } ).then((results2)=>{
-              console.log("booking success & reduced availability")
-              res.status(200)
-              res.json(`Booking complete.`)
-              res.end()
-            })
-          })
-        }
-      }
-    })
-  }
 });
 
 // USERS //
