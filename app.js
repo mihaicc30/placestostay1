@@ -83,4 +83,4 @@ process.on("SIGHUP", function () {
 })
 
 const PORT = process.env.PORT || 8001;
-app.listen(PORT, console.log(`NodeJS Server running on ${PORT}`));
+app.listen(PORT, console.log(`PlacesToStay - running on ${PORT}`));
